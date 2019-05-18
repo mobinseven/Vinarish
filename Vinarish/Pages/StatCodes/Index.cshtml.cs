@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -24,7 +25,11 @@ namespace Vinarish.Pages.StatCodes
         public async Task OnGetAsync()
         {
             StatCode = await _context.StatCode
-                .Include(s => s.Cat).ToListAsync();
+                .Include(s => s.Cat).OrderBy(x => x.Cat).OrderBy(x => PadNumbers(x.Code)).ToListAsync();
+        }
+        public static string PadNumbers(string input)
+        {
+            return Regex.Replace(input, "[0-9]+", match => match.Value.PadLeft(10, '0'));
         }
     }
 }
