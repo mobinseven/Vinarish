@@ -1,0 +1,31 @@
+﻿@page
+@model Vinarish.Pages.StatCodes.DetailsModel
+
+<div>
+    <h4>StatCode</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StatCode.Code)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StatCode.Code)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StatCode.Text)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StatCode.Text)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StatCode.Cat)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StatCode.Cat.CategoryName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.StatCode.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

@@ -1,0 +1,22 @@
+﻿@page
+@model Vinarish.Pages.Departments.DeleteModel
+
+<h3>آیا می‌خواهید این بخش را پاک کنید؟</h3>
+<div>
+    <h4>بخش</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Department.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Department.Name)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Department.Id" />
+        <input type="submit" value="زدایش" class="btn btn-danger" /> |
+        <a asp-page="./Index">بازگشت به فهرست</a>
+    </form>
+</div>

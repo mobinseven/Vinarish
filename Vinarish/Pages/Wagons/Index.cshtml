@@ -1,0 +1,33 @@
+﻿@page
+@model Vinarish.Pages.Wagons.IndexModel
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Wagon[0].Train)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Wagon)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Train.TrainId)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.WagonId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.WagonId">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.WagonId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

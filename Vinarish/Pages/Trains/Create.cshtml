@@ -1,0 +1,36 @@
+﻿@page
+@model Vinarish.Pages.Trains.CreateModel
+
+<h4>Train</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Train.TrainId" class="control-label"></label>
+                <input asp-for="Train.TrainId" class="form-control" />
+                <span asp-validation-for="Train.TrainId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Train.HeadId" class="control-label"></label>
+                <select asp-for="Train.HeadId" class ="form-control" asp-items="ViewBag.HeadId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Train.OfficerId" class="control-label"></label>
+                <select asp-for="Train.OfficerId" class ="form-control" asp-items="ViewBag.OfficerId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

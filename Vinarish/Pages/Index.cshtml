@@ -1,0 +1,22 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "ویناریش";
+}
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+    <div class="text-center">
+        <h1 class="display-4">ویناریش</h1>
+        <p>سامانه‌ی نگهداری و بازسازی سازوبرگ راه‌آهن</p>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="btn btn-dark btn-block" asp-page="/Reports/Create">گزارش‌ها</a>
+            <a class="btn btn-dark btn-block" asp-page="/Categories/Index">دسته‌ها</a>
+            <a class="btn btn-dark btn-block" asp-page="/Places/Index">موقعیت‌ها</a>
+            <a class="btn btn-dark btn-block" asp-page="/StatCodes/Index">کد‌ها</a>
+            <a class="btn btn-dark btn-block" asp-page="/Trains/Index">قطارها</a>
+            <a class="btn btn-dark btn-block" asp-page="/Persons/Index">کارکنان</a>
+            <a class="btn btn-dark btn-block" asp-page="/Departments/Index">بخش‌ها</a>
+            <a class="btn btn-dark btn-block" asp-page="/Wagons/Index">واگن‌ها</a>
+        }
+    </div>
