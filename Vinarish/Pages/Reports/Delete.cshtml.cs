@@ -30,6 +30,7 @@ namespace Vinarish.Pages.Reports
             }
 
             Report = await _context.Report
+                .Include(r => r.AppendixReport)
                 .Include(r => r.Cat)
                 .Include(r => r.Code)
                 .Include(r => r.Place)
@@ -40,6 +41,10 @@ namespace Vinarish.Pages.Reports
             {
                 return NotFound();
             }
+            //if(Report.AppendixReports.Count>0) //
+            //{
+            //    // TODO: Should Not let the user delete report with appendix reports.
+            //}
             return Page();
         }
 

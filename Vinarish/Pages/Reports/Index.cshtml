@@ -25,36 +25,44 @@
             <th>
                 @Html.DisplayNameFor(model => model.Report[0].Wagon)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Report[0].AppendixReport)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Report) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cat.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Place.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reporter.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Wagon.WagonId)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Report)
+        {
+            <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cat.CategoryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Place.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reporter.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Wagon.WagonId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AppendixReport.Id)
+                    </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-page="./Create" asp-route-id="@item.Id">Append</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

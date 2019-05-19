@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Vinarish.Migrations
 {
-    public partial class MigrationTcmms : Migration
+    public partial class TcmmsMigrationNullableAppRepID : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,7 +42,7 @@ namespace Vinarish.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CategoryName = table.Column<string>(nullable: false),
-                    OrderNumber = table.Column<byte>(nullable: false),
+                    OrderNumber = table.Column<long>(nullable: true),
                     DepartmentId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -152,11 +152,18 @@ namespace Vinarish.Migrations
                     CodeId = table.Column<int>(nullable: false),
                     PlaceId = table.Column<int>(nullable: false),
                     DateTime = table.Column<DateTime>(nullable: false),
-                    ReporterId = table.Column<int>(nullable: false)
+                    ReporterId = table.Column<int>(nullable: false),
+                    AppendixReportId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Report", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Report_AppendixReport",
+                        column: x => x.AppendixReportId,
+                        principalTable: "Report",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Report_Cat",
                         column: x => x.CatId,
@@ -198,12 +205,18 @@ namespace Vinarish.Migrations
                 name: "IX_Category_OrderNumber",
                 table: "Category",
                 column: "OrderNumber",
-                unique: true);
+                unique: true,
+                filter: "[OrderNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Person_DepartmentId",
                 table: "Person",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Report_AppendixReportId",
+                table: "Report",
+                column: "AppendixReportId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Report_CatId",

@@ -10,8 +10,8 @@ using Vinarish.Data;
 namespace Vinarish.Migrations
 {
     [DbContext(typeof(TCMMSContext))]
-    [Migration("20190517153302_MigrationTcmms")]
-    partial class MigrationTcmms
+    [Migration("20190519112717_TcmmsMigrationNullableAppRepID")]
+    partial class TcmmsMigrationNullableAppRepID
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,7 +34,7 @@ namespace Vinarish.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnName("DepartmentId");
 
-                    b.Property<byte>("OrderNumber")
+                    b.Property<long?>("OrderNumber")
                         .HasColumnName("OrderNumber");
 
                     b.HasKey("Id");
@@ -42,7 +42,8 @@ namespace Vinarish.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("OrderNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[OrderNumber] IS NOT NULL");
 
                     b.ToTable("Category");
                 });
@@ -110,6 +111,8 @@ namespace Vinarish.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("AppendixReportId");
+
                     b.Property<int>("CatId");
 
                     b.Property<int>("CodeId");
@@ -124,6 +127,8 @@ namespace Vinarish.Migrations
                     b.Property<int>("WagonId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppendixReportId");
 
                     b.HasIndex("CatId");
 
@@ -215,6 +220,11 @@ namespace Vinarish.Migrations
 
             modelBuilder.Entity("Vinarish.Models.Report", b =>
                 {
+                    b.HasOne("Vinarish.Models.Report", "AppendixReport")
+                        .WithMany("AppendixReports")
+                        .HasForeignKey("AppendixReportId")
+                        .HasConstraintName("FK_Report_AppendixReport");
+
                     b.HasOne("Vinarish.Models.Category", "Cat")
                         .WithMany("Report")
                         .HasForeignKey("CatId")

@@ -19,8 +19,25 @@ namespace Vinarish.Pages.Reports
             _context = context;
         }
 
-        public IActionResult OnGet()
+        //public IActionResult OnGet()
+        //{
+        //    ViewData["AppendixReportId"] = new SelectList(_context.Report, "Id", "Id");
+        //    ViewData["CatId"] = new SelectList(_context.Category, "Id", "CategoryName");
+        //    ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "Code");
+        //    ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Code");
+        //    ViewData["ReporterId"] = new SelectList(_context.Person, "Id", "FirstName");
+        //    ViewData["WagonId"] = new SelectList(_context.Wagon, "WagonId", "WagonId");
+        //    ViewData["Now"] = Utilities.GetPErsianDateTimeNow();
+        //    return Page();
+        //}
+        public IActionResult OnGetAsync(int? id)
         {
+            if (id == null)
+            {
+                ViewData["AppendixReportId"] = new SelectList(_context.Report, "Id", "Id");
+            }
+            else
+                ViewData["AppendixReportId"] = new SelectList(Enumerable.Repeat(id, 1));
             ViewData["CatId"] = new SelectList(_context.Category, "Id", "CategoryName");
             ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "Code");
             ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Code");
@@ -39,7 +56,7 @@ namespace Vinarish.Pages.Reports
             {
                 return Page();
             }
-
+            Report.DateTime = DateTime.Now;
             _context.Report.Add(Report);
             await _context.SaveChangesAsync();
 

@@ -29,6 +29,7 @@ namespace Vinarish.Pages.Reports
             }
 
             Report = await _context.Report
+                .Include(r => r.AppendixReport)
                 .Include(r => r.Cat)
                 .Include(r => r.Code)
                 .Include(r => r.Place)

@@ -24,6 +24,7 @@ namespace Vinarish.Pages.Reports
         public async Task OnGetAsync()
         {
             Report = await _context.Report
+                .Include(r => r.AppendixReport)
                 .Include(r => r.Cat)
                 .Include(r => r.Code)
                 .Include(r => r.Place)

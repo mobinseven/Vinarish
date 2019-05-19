@@ -117,6 +117,8 @@ namespace Vinarish.Data
 
             modelBuilder.Entity<Report>(entity =>
             {
+                entity.Property(e => e.AppendixReportId).HasDefaultValue(null);
+
                 entity.HasOne(d => d.Cat)
                     .WithMany(p => p.Report)
                     .HasForeignKey(d => d.CatId)
@@ -140,6 +142,12 @@ namespace Vinarish.Data
                     .HasForeignKey(d => d.ReporterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Report_Reporter");
+
+                entity.HasOne(d => d.AppendixReport)
+                    .WithMany(p => p.AppendixReports)
+                    .HasForeignKey(d => d.AppendixReportId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_AppendixReport");
 
                 entity.HasOne(d => d.Wagon)
                     .WithMany(p => p.Report)

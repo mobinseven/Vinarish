@@ -31,6 +31,7 @@ namespace Vinarish.Pages.Reports
             }
 
             Report = await _context.Report
+                .Include(r => r.AppendixReport)
                 .Include(r => r.Cat)
                 .Include(r => r.Code)
                 .Include(r => r.Place)
@@ -41,6 +42,7 @@ namespace Vinarish.Pages.Reports
             {
                 return NotFound();
             }
+           ViewData["AppendixReportId"] = new SelectList(_context.Report, "Id", "Id");
            ViewData["CatId"] = new SelectList(_context.Category, "Id", "CategoryName");
            ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "Code");
            ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Code");

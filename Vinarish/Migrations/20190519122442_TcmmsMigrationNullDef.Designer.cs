@@ -10,8 +10,8 @@ using Vinarish.Data;
 namespace Vinarish.Migrations
 {
     [DbContext(typeof(TCMMSContext))]
-    [Migration("20190518102021_TcmmsMigration2")]
-    partial class TcmmsMigration2
+    [Migration("20190519122442_TcmmsMigrationNullDef")]
+    partial class TcmmsMigrationNullDef
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -111,6 +111,10 @@ namespace Vinarish.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("AppendixReportId")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(null);
+
                     b.Property<int>("CatId");
 
                     b.Property<int>("CodeId");
@@ -125,6 +129,8 @@ namespace Vinarish.Migrations
                     b.Property<int>("WagonId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppendixReportId");
 
                     b.HasIndex("CatId");
 
@@ -216,6 +222,11 @@ namespace Vinarish.Migrations
 
             modelBuilder.Entity("Vinarish.Models.Report", b =>
                 {
+                    b.HasOne("Vinarish.Models.Report", "AppendixReport")
+                        .WithMany("AppendixReports")
+                        .HasForeignKey("AppendixReportId")
+                        .HasConstraintName("FK_Report_AppendixReport");
+
                     b.HasOne("Vinarish.Models.Category", "Cat")
                         .WithMany("Report")
                         .HasForeignKey("CatId")

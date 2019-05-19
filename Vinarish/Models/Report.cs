@@ -8,6 +8,10 @@ namespace Vinarish.Models
     [Table("Report")]
     public partial class Report
     {
+        public Report()
+        {
+            AppendixReports = new HashSet<Report>();
+        }
         public int Id { get; set; }
         [Display(Name = "واگن")]
         public int WagonId { get; set; }
@@ -23,6 +27,8 @@ namespace Vinarish.Models
         public DateTime DateTime { get; set; }
         [Display(Name = "گزارشگر")]
         public int ReporterId { get; set; }
+        [Display(Name = "گزارش پیوست")]
+        public int? AppendixReportId { get; set; }
 
         [ForeignKey("CatId")]
         [InverseProperty("Report")]
@@ -44,5 +50,7 @@ namespace Vinarish.Models
         [InverseProperty("Report")]
         [Display(Name = "واگن")]
         public virtual Wagon Wagon { get; set; }
+        public virtual Report AppendixReport { get; set; }
+        public virtual ICollection<Report> AppendixReports { get; set; }
     }
 }

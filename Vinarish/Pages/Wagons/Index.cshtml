@@ -11,22 +11,28 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Wagon[0].Train)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Wagon[0].WagonId)
+                </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.Wagon)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Train.TrainId)
-                    </td>
-                    <td>
-                        <a asp-page="./Edit" asp-route-id="@item.WagonId">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.WagonId">Details</a> |
-                        <a asp-page="./Delete" asp-route-id="@item.WagonId">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Train.TrainId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WagonId)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.WagonId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.WagonId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.WagonId">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

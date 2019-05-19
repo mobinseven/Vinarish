@@ -109,6 +109,10 @@ namespace Vinarish.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("AppendixReportId")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(null);
+
                     b.Property<int>("CatId");
 
                     b.Property<int>("CodeId");
@@ -123,6 +127,8 @@ namespace Vinarish.Migrations
                     b.Property<int>("WagonId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppendixReportId");
 
                     b.HasIndex("CatId");
 
@@ -214,6 +220,11 @@ namespace Vinarish.Migrations
 
             modelBuilder.Entity("Vinarish.Models.Report", b =>
                 {
+                    b.HasOne("Vinarish.Models.Report", "AppendixReport")
+                        .WithMany("AppendixReports")
+                        .HasForeignKey("AppendixReportId")
+                        .HasConstraintName("FK_Report_AppendixReport");
+
                     b.HasOne("Vinarish.Models.Category", "Cat")
                         .WithMany("Report")
                         .HasForeignKey("CatId")
