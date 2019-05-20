@@ -2,17 +2,17 @@
 @model Vinarish.Pages.Wagons.IndexModel
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create">افزودن</a>
 </p>
 <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Wagon[0].Train)
+                    @Html.DisplayNameFor(model => model.Wagon[0].WagonId)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Wagon[0].WagonId)
+                    @Html.DisplayNameFor(model => model.Wagon[0].Train)
                 </th>
                 <th></th>
             </tr>
@@ -22,15 +22,21 @@
             {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Train.TrainId)
+                    @{
+                        var واگن = Vinarish.Utilities.DigitsToPersian(item.WagonId.ToString());
+                    }
+                    @Html.DisplayFor(modelItem => واگن)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.WagonId)
+                    @{
+                        var رام = Vinarish.Utilities.DigitsToPersian(item.TrainId.ToString());
+                    }
+                    @Html.DisplayFor(modelItem => رام)
                 </td>
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.WagonId">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.WagonId">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.WagonId">Delete</a>
+                    <a asp-page="./Edit" asp-route-id="@item.WagonId">ویرایش</a> |
+                    <a asp-page="./Details" asp-route-id="@item.WagonId">جزئیات</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.WagonId">پاک کردن</a>
                 </td>
             </tr>
             }

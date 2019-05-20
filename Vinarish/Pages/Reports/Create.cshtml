@@ -12,16 +12,16 @@
                 <select asp-for="Report.WagonId" class="form-control" asp-items="ViewBag.WagonId"></select>
             </div>
             <div class="form-group">
+                <label asp-for="Report.PlaceId" class="control-label"></label>
+                <select asp-for="Report.PlaceId" class="form-control" asp-items="ViewBag.PlaceId"></select>
+            </div>
+            <div class="form-group">
                 <label asp-for="Report.CatId" class="control-label"></label>
                 <select asp-for="Report.CatId" class="form-control" asp-items="ViewBag.CatId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Report.CodeId" class="control-label"></label>
                 <select asp-for="Report.CodeId" class="form-control" asp-items="ViewBag.CodeId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Report.PlaceId" class="control-label"></label>
-                <select asp-for="Report.PlaceId" class="form-control" asp-items="ViewBag.PlaceId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Report.DateTime" class="control-label"></label>
@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Report.AppendixReportId" class="control-label"></label>
-                @if (ViewBag.isAppended==true)
+                @if (ViewBag.isAppended == true)
                 {
                     <select asp-for="Report.AppendixReportId" class="form-control" disabled asp-items="ViewBag.AppendixReportId"></select>
                 }
@@ -43,14 +43,14 @@
                 }
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="فرستادن" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">بازگشت به فهرست</a>
 </div>
 
 @section Scripts {

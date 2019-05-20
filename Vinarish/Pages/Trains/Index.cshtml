@@ -1,24 +1,33 @@
 ﻿@page
 @model Vinarish.Pages.Trains.IndexModel
 
-<h4>Train</h4>
+<h4>رام‌ها</h4>
 <p>
-    <a asp-page="Create">افزودن</a>
+    <a asp-page="Create" class="btn btn-success" role="button">افزودن</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Train[0].TrainId)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Train) {
         <tr>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.TrainId">ویرایش</a> |
-                    <a asp-page="./Details" asp-route-id="@item.TrainId">جزئیات</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.TrainId">پاک کردن</a>
-                </td>
+            @{
+                var id = Vinarish.Utilities.DigitsToPersian(item.TrainId.ToString());
+            }
+            <td>
+                @Html.DisplayFor(modelItem => id)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.TrainId">ویرایش</a> |
+                <a asp-page="./Details" asp-route-id="@item.TrainId">جزئیات</a> |
+                <a asp-page="./Delete" asp-route-id="@item.TrainId">پاک کردن</a>
+            </td>
         </tr>
         }
     </tbody>

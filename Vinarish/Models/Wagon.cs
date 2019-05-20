@@ -13,9 +13,9 @@ namespace Vinarish.Models
         }
         [Display(Name = "شماره واگن")]
         public int WagonId { get; set; }
-        [Display(Name = "شماره قطار")]
+        [Display(Name = "شماره رام")]
         public int TrainId { get; set; }
-        [Display(Name = "شماره قطار")]
+        [Display(Name = "شماره رام")]
         public virtual Train Train { get; set; }
         public virtual ICollection<Report> Report { get; set; }
     }

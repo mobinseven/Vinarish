@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Vinarish.Data;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Vinarish.Models;
 
 namespace Vinarish.Pages.Reports
@@ -19,17 +17,6 @@ namespace Vinarish.Pages.Reports
             _context = context;
         }
 
-        //public IActionResult OnGet()
-        //{
-        //    ViewData["AppendixReportId"] = new SelectList(_context.Report, "Id", "Id");
-        //    ViewData["CatId"] = new SelectList(_context.Category, "Id", "CategoryName");
-        //    ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "Code");
-        //    ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Code");
-        //    ViewData["ReporterId"] = new SelectList(_context.Person, "Id", "FirstName");
-        //    ViewData["WagonId"] = new SelectList(_context.Wagon, "WagonId", "WagonId");
-        //    ViewData["Now"] = Utilities.GetPErsianDateTimeNow();
-        //    return Page();
-        //}
         public IActionResult OnGetAsync(int? id)
         {
             if (id == null)

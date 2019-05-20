@@ -11,7 +11,7 @@ namespace Vinarish.Models
         {
             Wagon = new HashSet<Wagon>();
         }
-        [Display(Name = "شماره قطار")]
+        [Display(Name = "شماره رام")]
         public int TrainId { get; set; }
 
         public virtual ICollection<Wagon> Wagon { get; set; }
