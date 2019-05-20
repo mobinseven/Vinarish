@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Vinarish.Migrations
 {
-    public partial class TcmmsMigrationNullableAppRepID : Migration
+    public partial class TcmmsMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,13 +36,23 @@ namespace Vinarish.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Train",
+                columns: table => new
+                {
+                    TrainId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Train", x => x.TrainId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CategoryName = table.Column<string>(nullable: false),
-                    OrderNumber = table.Column<long>(nullable: true),
+                    CategoryName = table.Column<string>(nullable: true),
                     DepartmentId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -78,6 +88,24 @@ namespace Vinarish.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Wagon",
+                columns: table => new
+                {
+                    WagonId = table.Column<int>(nullable: false),
+                    TrainId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wagon", x => x.WagonId);
+                    table.ForeignKey(
+                        name: "FK_Wagon_Train",
+                        column: x => x.TrainId,
+                        principalTable: "Train",
+                        principalColumn: "TrainId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StatCode",
                 columns: table => new
                 {
@@ -99,49 +127,6 @@ namespace Vinarish.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Train",
-                columns: table => new
-                {
-                    TrainId = table.Column<int>(nullable: false),
-                    HeadId = table.Column<int>(nullable: true),
-                    OfficerId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Train", x => x.TrainId);
-                    table.ForeignKey(
-                        name: "FK_Trains_Head",
-                        column: x => x.HeadId,
-                        principalTable: "Person",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Trains_ElecOfficer",
-                        column: x => x.OfficerId,
-                        principalTable: "Person",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Wagon",
-                columns: table => new
-                {
-                    WagonId = table.Column<int>(nullable: false),
-                    TrainId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Wagon", x => x.WagonId);
-                    table.ForeignKey(
-                        name: "FK_Wagon_Train",
-                        column: x => x.TrainId,
-                        principalTable: "Train",
-                        principalColumn: "TrainId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Report",
                 columns: table => new
                 {
@@ -153,7 +138,8 @@ namespace Vinarish.Migrations
                     PlaceId = table.Column<int>(nullable: false),
                     DateTime = table.Column<DateTime>(nullable: false),
                     ReporterId = table.Column<int>(nullable: false),
-                    AppendixReportId = table.Column<int>(nullable: true)
+                    AppendixReportId = table.Column<int>(nullable: true),
+                    IsValid = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -202,13 +188,6 @@ namespace Vinarish.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Category_OrderNumber",
-                table: "Category",
-                column: "OrderNumber",
-                unique: true,
-                filter: "[OrderNumber] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Person_DepartmentId",
                 table: "Person",
                 column: "DepartmentId");
@@ -249,14 +228,10 @@ namespace Vinarish.Migrations
                 column: "CatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Train_HeadId",
-                table: "Train",
-                column: "HeadId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Train_OfficerId",
-                table: "Train",
-                column: "OfficerId");
+                name: "IX_StatCode_Code",
+                table: "StatCode",
+                column: "Code",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Train_TrainId",
@@ -288,6 +263,9 @@ namespace Vinarish.Migrations
                 name: "Place");
 
             migrationBuilder.DropTable(
+                name: "Person");
+
+            migrationBuilder.DropTable(
                 name: "Wagon");
 
             migrationBuilder.DropTable(
@@ -295,9 +273,6 @@ namespace Vinarish.Migrations
 
             migrationBuilder.DropTable(
                 name: "Train");
-
-            migrationBuilder.DropTable(
-                name: "Person");
 
             migrationBuilder.DropTable(
                 name: "Department");

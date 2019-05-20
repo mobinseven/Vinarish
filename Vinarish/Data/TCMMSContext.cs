@@ -59,20 +59,6 @@ namespace Vinarish.Data
                 entity.HasIndex(e => e.TrainId).IsUnique(true);
 
                 entity.Property(e => e.TrainId).ValueGeneratedNever();
-
-                entity.HasIndex(e => e.HeadId);
-
-                entity.HasIndex(e => e.OfficerId);
-
-                entity.HasOne(d => d.Head)
-                    .WithMany(p => p.TrainHead)
-                    .HasForeignKey(d => d.HeadId)
-                    .HasConstraintName("FK_Trains_Head");
-
-                entity.HasOne(d => d.Officer)
-                    .WithMany(p => p.TrainOfficer)
-                    .HasForeignKey(d => d.OfficerId)
-                    .HasConstraintName("FK_Trains_ElecOfficer");
             });
 
             modelBuilder.Entity<Wagon>(entity =>
@@ -94,11 +80,6 @@ namespace Vinarish.Data
             {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.Property(e => e.OrderNumber)
-                    .ValueGeneratedNever().IsRequired(false);
-
-                entity.HasIndex(e => new { e.OrderNumber })
-                    .IsUnique(true);
                 entity.HasOne(d => d.Department)
                     .WithMany(p => p.Category)
                     .HasForeignKey(d => d.DepartmentId)

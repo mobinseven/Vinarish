@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Vinarish.Models
 {
-    [Table("Report")]
     public partial class Report
     {
         public Report()
@@ -21,36 +20,26 @@ namespace Vinarish.Models
         public int CodeId { get; set; }
         [Display(Name = "موقعیت")]
         public int PlaceId { get; set; }
-        [Required]
-        [Column("DateTime")]
         [Display(Name = "زمان")]
         public DateTime DateTime { get; set; }
         [Display(Name = "گزارشگر")]
         public int ReporterId { get; set; }
         [Display(Name = "گزارش پیوست")]
         public int? AppendixReportId { get; set; }
+        [Display(Name = "تایید گزارش")]
         public bool? IsValid { get; set; }
 
-        [ForeignKey("CatId")]
-        [InverseProperty("Report")]
         [Display(Name = "دسته")]
         public virtual Category Cat { get; set; }
-        [ForeignKey("CodeId")]
-        [InverseProperty("Report")]
         [Display(Name = "وضعیت")]
         public virtual StatCode Code { get; set; }
-        [ForeignKey("PlaceId")]
-        [InverseProperty("Report")]
         [Display(Name = "موقعیت")]
         public virtual Place Place { get; set; }
-        [ForeignKey("ReporterId")]
-        [InverseProperty("Report")]
         [Display(Name = "گزارشگر")]
         public virtual Person Reporter { get; set; }
-        [ForeignKey("WagonId")]
-        [InverseProperty("Report")]
         [Display(Name = "واگن")]
         public virtual Wagon Wagon { get; set; }
+        [Display(Name = "گزارش پیوست")]
         public virtual Report AppendixReport { get; set; }
         public virtual ICollection<Report> AppendixReports { get; set; }
     }

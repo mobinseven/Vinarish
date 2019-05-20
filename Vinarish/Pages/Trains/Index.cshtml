@@ -1,38 +1,25 @@
 ﻿@page
 @model Vinarish.Pages.Trains.IndexModel
 
+<h4>Train</h4>
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create">افزودن</a>
 </p>
-<div class="table-responsive">
-  <table class="table">
+<table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Train[0].Head)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Train[0].Officer)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Train) {
+        @foreach (var item in Model.Train) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Head.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Officer.FirstName)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.TrainId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.TrainId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.TrainId">Delete</a>
-            </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.TrainId">ویرایش</a> |
+                    <a asp-page="./Details" asp-route-id="@item.TrainId">جزئیات</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.TrainId">پاک کردن</a>
+                </td>
         </tr>
-}
+        }
     </tbody>
 </table>
-</div>

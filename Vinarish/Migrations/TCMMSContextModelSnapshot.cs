@@ -25,23 +25,13 @@ namespace Vinarish.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnName("CategoryName");
+                    b.Property<string>("CategoryName");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnName("DepartmentId");
-
-                    b.Property<long?>("OrderNumber")
-                        .HasColumnName("OrderNumber");
+                    b.Property<int>("DepartmentId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("OrderNumber")
-                        .IsUnique()
-                        .HasFilter("[OrderNumber] IS NOT NULL");
 
                     b.ToTable("Category");
                 });
@@ -175,15 +165,7 @@ namespace Vinarish.Migrations
                 {
                     b.Property<int>("TrainId");
 
-                    b.Property<int?>("HeadId");
-
-                    b.Property<int?>("OfficerId");
-
                     b.HasKey("TrainId");
-
-                    b.HasIndex("HeadId");
-
-                    b.HasIndex("OfficerId");
 
                     b.HasIndex("TrainId")
                         .IsUnique();
@@ -262,19 +244,6 @@ namespace Vinarish.Migrations
                         .WithMany("StatCode")
                         .HasForeignKey("CatId")
                         .HasConstraintName("FK_Code_Cat");
-                });
-
-            modelBuilder.Entity("Vinarish.Models.Train", b =>
-                {
-                    b.HasOne("Vinarish.Models.Person", "Head")
-                        .WithMany("TrainHead")
-                        .HasForeignKey("HeadId")
-                        .HasConstraintName("FK_Trains_Head");
-
-                    b.HasOne("Vinarish.Models.Person", "Officer")
-                        .WithMany("TrainOfficer")
-                        .HasForeignKey("OfficerId")
-                        .HasConstraintName("FK_Trains_ElecOfficer");
                 });
 
             modelBuilder.Entity("Vinarish.Models.Wagon", b =>

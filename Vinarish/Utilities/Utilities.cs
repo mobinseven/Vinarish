@@ -12,19 +12,7 @@ namespace Vinarish
     {
         static public string GetPErsianDateTimeNow()
         {
-            StringBuilder now = new StringBuilder();
-            var persianDateTime = new PersianDateTime(DateTime.Now)
-            {
-                EnglishNumber = false
-            };
-            now.AppendFormat("{0}, {1}/{2}/{3} {4}:{5}\n",
-                          persianDateTime.GetLongDayOfWeekName,
-                          persianDateTime.Month,
-                          persianDateTime.Day,
-                          persianDateTime.Year,
-                          persianDateTime.Hour,
-                          persianDateTime.Minute);
-            return now.ToString();
+            return ConvertToPersianDate(DateTime.Now);
         }
         static public string ConvertToPersianDate(DateTime dateTime)
         {
@@ -35,15 +23,14 @@ namespace Vinarish
             };
             time.AppendFormat("{0}, {1}/{2}/{3} {4}:{5}\n",
                           persianDateTime.GetLongDayOfWeekName,
+                          persianDateTime.GetShortYear,
                           persianDateTime.Month,
                           persianDateTime.Day,
-                          persianDateTime.GetShortYear,
                           persianDateTime.Hour,
                           persianDateTime.Minute);
             return DigitsToPersian(time.ToString());
         }
         private static readonly CultureInfo persian = new CultureInfo("fa-IR");
-        private static readonly CultureInfo latin = new CultureInfo("en-US");
 
         public static string DigitsToPersian(string input)
         {

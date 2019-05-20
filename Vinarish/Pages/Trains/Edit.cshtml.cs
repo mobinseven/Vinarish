@@ -30,16 +30,12 @@ namespace Vinarish.Pages.Trains
                 return NotFound();
             }
 
-            Train = await _context.Train
-                .Include(t => t.Head)
-                .Include(t => t.Officer).FirstOrDefaultAsync(m => m.TrainId == id);
+            Train = await _context.Train.FirstOrDefaultAsync(m => m.TrainId == id);
 
             if (Train == null)
             {
                 return NotFound();
             }
-           ViewData["HeadId"] = new SelectList(_context.Person, "Id", "FirstName");
-           ViewData["OfficerId"] = new SelectList(_context.Person, "Id", "FirstName");
             return Page();
         }
 

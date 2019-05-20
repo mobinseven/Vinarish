@@ -21,8 +21,6 @@ namespace Vinarish.Pages.Trains
 
         public IActionResult OnGet()
         {
-        ViewData["HeadId"] = new SelectList(_context.Person, "Id", "FirstName");
-        ViewData["OfficerId"] = new SelectList(_context.Person, "Id", "FirstName");
             return Page();
         }
 

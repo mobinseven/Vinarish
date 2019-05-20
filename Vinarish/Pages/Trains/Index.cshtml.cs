@@ -23,9 +23,7 @@ namespace Vinarish.Pages.Trains
 
         public async Task OnGetAsync()
         {
-            Train = await _context.Train
-                .Include(t => t.Head)
-                .Include(t => t.Officer).ToListAsync();
+            Train = await _context.Train.ToListAsync();
         }
     }
 }
