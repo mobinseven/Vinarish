@@ -27,7 +27,7 @@ namespace Vinarish.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=tcmms;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                optionsBuilder.UseSqlServer("Data Source=185.10.75.8;User ID=vinarish;Password=Hibernate70!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             }
         }
 
@@ -108,6 +108,8 @@ namespace Vinarish.Data
 
             modelBuilder.Entity<StatCode>(entity =>
             {
+                entity.HasIndex(e => e.Code).IsUnique(true);
+
                 entity.HasOne(d => d.Cat)
                     .WithMany(p => p.StatCode)
                     .HasForeignKey(d => d.CatId)

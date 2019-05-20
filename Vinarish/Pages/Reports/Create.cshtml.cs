@@ -37,7 +37,10 @@ namespace Vinarish.Pages.Reports
                 ViewData["AppendixReportId"] = new SelectList(_context.Report, "Id", "Id");
             }
             else
+            {
+                ViewData["isAppended"] = true;
                 ViewData["AppendixReportId"] = new SelectList(Enumerable.Repeat(id, 1));
+            }
             ViewData["CatId"] = new SelectList(_context.Category, "Id", "CategoryName");
             ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "Code");
             ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Code");

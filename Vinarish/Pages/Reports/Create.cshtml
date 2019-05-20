@@ -4,7 +4,7 @@
 <h4>Report</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -33,8 +33,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="Report.AppendixReportId" class="control-label"></label>
-                @*<select asp-for="Report.AppendixReportId" class="form-control" asp-items="ViewBag.AppendixReportId"></select>*@
-                @Html.DropDownListFor(model => model.Report.AppendixReportId, (SelectList)ViewBag.AppendixReportId, "", new { @class = "form-control" })
+                @if (ViewBag.isAppended==true)
+                {
+                    <select asp-for="Report.AppendixReportId" class="form-control" disabled asp-items="ViewBag.AppendixReportId"></select>
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Report.AppendixReportId, (SelectList)ViewBag.AppendixReportId, "", new { @class = "form-control" })
+                }
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

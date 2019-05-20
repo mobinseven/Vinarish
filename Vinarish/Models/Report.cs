@@ -29,6 +29,7 @@ namespace Vinarish.Models
         public int ReporterId { get; set; }
         [Display(Name = "گزارش پیوست")]
         public int? AppendixReportId { get; set; }
+        public bool? IsValid { get; set; }
 
         [ForeignKey("CatId")]
         [InverseProperty("Report")]
