@@ -17,10 +17,10 @@
     <tbody>
 @foreach (var item in Model.Department) {
         <tr>
-            <td>
+            <td class="align-middle">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="align-middle">
                 <a asp-page="./Edit" asp-route-id="@item.Id">ویرایش</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">ریزگان</a> |
                 <a asp-page="./Delete" asp-route-id="@item.Id">زدایش</a>

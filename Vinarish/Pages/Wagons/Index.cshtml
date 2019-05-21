@@ -21,19 +21,19 @@
             @foreach (var item in Model.Wagon)
             {
             <tr>
-                <td>
+                <td class="align-middle">
                     @{
                         var واگن = Vinarish.Utilities.DigitsToPersian(item.WagonId.ToString());
                     }
                     @Html.DisplayFor(modelItem => واگن)
                 </td>
-                <td>
+                <td class="align-middle">
                     @{
                         var رام = Vinarish.Utilities.DigitsToPersian(item.TrainId.ToString());
                     }
                     @Html.DisplayFor(modelItem => رام)
                 </td>
-                <td>
+                <td class="align-middle">
                     <a asp-page="./Edit" asp-route-id="@item.WagonId">ویرایش</a> |
                     <a asp-page="./Details" asp-route-id="@item.WagonId">جزئیات</a> |
                     <a asp-page="./Delete" asp-route-id="@item.WagonId">پاک کردن</a>

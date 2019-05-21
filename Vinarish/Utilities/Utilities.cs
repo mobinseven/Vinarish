@@ -41,5 +41,10 @@ namespace Vinarish
             }
             return input;
         }
+
+        public static string PadNumbers(string input)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(input, "[0-9]+", match => match.Value.PadLeft(10, '0'));
+        }
     }
 }

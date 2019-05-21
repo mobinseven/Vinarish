@@ -1,0 +1,62 @@
+﻿@model Vinarish.Pages.Reports.CreateModel
+
+<h4>گزارش</h4>
+<hr />
+<div class="row">
+    <div class="col-md-3">
+        <form name="createform" method="post" asp-controller="CodeController" asp-action="GetStatCodes">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Report.WagonId" class="control-label"></label>
+                <select asp-for="Report.WagonId" class="form-control" asp-items="ViewBag.WagonId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Report.PlaceId" class="control-label"></label>
+                <select asp-for="Report.PlaceId" class="form-control" asp-items="ViewBag.PlaceId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Report.CatId" class="control-label"></label>
+                <select id="CatIdSelect" asp-for="Report.CatId" class="form-control" asp-items="ViewBag.CatId" onchange="DoPostBack();"></select>
+                <script>
+    function DoPostBack() {
+        document.createform.submit();
+    };
+                </script>
+            </div>
+            <div class="form-group">
+                <label asp-for="Report.CodeId" class="control-label"></label>
+                <select asp-for="Report.CodeId" class="form-control" asp-items="ViewBag.CodeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Report.DateTime" class="control-label"></label>
+                @ViewBag.Now
+            </div>
+            <div class="form-group">
+                <label asp-for="Report.ReporterId" class="control-label"></label>
+                <select asp-for="Report.ReporterId" class="form-control" asp-items="ViewBag.ReporterId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Report.AppendixReportId" class="control-label"></label>
+                @if (ViewBag.isAppended == true)
+                {
+                    <select asp-for="Report.AppendixReportId" class="form-control" disabled asp-items="ViewBag.AppendixReportId"></select>
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Report.AppendixReportId, (SelectList)ViewBag.AppendixReportId, "", new { @class = "form-control" })
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="فرستادن" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">بازگشت به فهرست</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

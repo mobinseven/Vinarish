@@ -1,0 +1,39 @@
+﻿@model VinarishMvc.Models.StatCode
+
+@{
+    ViewData["Title"] = "پاک کردن کد وضعیت";
+}
+
+<h1>پاک کردن</h1>
+
+<h3>آیا می‌خواهید این داده را پاک کنید؟</h3>
+<div>
+    <h4>کد وضعیت</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cat)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cat.CategoryName)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="پاک شود" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary" role="button">بازگشت به فهرست</a>
+    </form>
+</div>

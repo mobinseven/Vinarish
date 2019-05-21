@@ -20,13 +20,13 @@
     <tbody>
         @foreach (var item in Model.Category) {
         <tr>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.CategoryName)
                     </td>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.Department.Name)
                     </td>
-                <td>
+                <td class="align-middle">
                     <a asp-page="./Edit" asp-route-id="@item.Id">ویرایش</a> |
                     <a asp-page="./Details" asp-route-id="@item.Id">جزئیات</a> |
                     <a asp-page="./Delete" asp-route-id="@item.Id">پاک کردن</a>
