@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace VinarishMvc.Models
 {
@@ -11,8 +12,11 @@ namespace VinarishMvc.Models
         }
 
         public int Id { get; set; }
+        [Display(Name = "کد موقعیت")]
         public string Code { get; set; }
+        [Display(Name = "موقعیت")]
         public string Text { get; set; }
+        public string FullName => Code + " " + Text;
 
         public virtual ICollection<Report> Report { get; set; }
     }

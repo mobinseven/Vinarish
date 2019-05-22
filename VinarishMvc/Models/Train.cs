@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace VinarishMvc.Models
 {
@@ -9,7 +10,8 @@ namespace VinarishMvc.Models
         {
             Wagon = new HashSet<Wagon>();
         }
-
+        public int Id { get; set; }
+        [Display(Name = "شماره رام")]
         public int TrainId { get; set; }
 
         public virtual ICollection<Wagon> Wagon { get; set; }

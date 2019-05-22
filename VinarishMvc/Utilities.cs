@@ -28,7 +28,7 @@ namespace VinarishMvc
                           persianDateTime.Day,
                           persianDateTime.Hour,
                           persianDateTime.Minute);
-            return DigitsToPersian(time.ToString());
+            return time.ToString();
         }
         private static readonly CultureInfo persian = new CultureInfo("fa-IR");
 

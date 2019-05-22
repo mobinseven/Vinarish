@@ -3,28 +3,41 @@
 }
 
     <div class="text-center">
+        <img src="~/img/ویناریش.png" width="200" />
         <h1 class="display-3">ویناریش</h1>
         <h1 class="display-4">سامانگر نگهداری و بازسازی سازوبرگ راه‌آهن</h1>
 
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">سازماندهی افزارها</h5>
-                <p class="card-text">تعریف بخش‌ها و افزارهای هر بخش</p>
-                <p class="card-text">تعریف کدهای وضعیت خرابی و بازسازی و رفع عیب</p>
-                <a asp-action="Index" asp-controller="Departments" class="btn btn-outline-dark btn-lg btn-block" role="button">بخش‌ها</a>
-                <a asp-action="Index" asp-controller="Categories" class="btn btn-outline-dark btn-lg btn-block" role="button">افزارها</a>
-                <a asp-action="Index" asp-controller="StatCodes" class="btn btn-outline-dark btn-lg btn-block" role="button">کدهای وضعیت</a>
+        <div class="card-group">
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">افزارها</h5>
+                    <p class="card-text">تعریف بخش‌ها و افزارهای هر بخش</p>
+                    <p class="card-text">تعریف کدهای وضعیت خرابی و بازسازی و رفع عیب</p>
+                    <a asp-action="Index" asp-controller="Departments" class="btn btn-outline-dark btn-lg btn-block" role="button">بخش‌ها</a>
+                    <a asp-action="Index" asp-controller="Categories" class="btn btn-outline-dark btn-lg btn-block" role="button">افزارها</a>
+                    <a asp-action="Index" asp-controller="StatCodes" class="btn btn-outline-dark btn-lg btn-block" role="button">کدهای وضعیت</a>
+                </div>
             </div>
-        </div>
 
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">سازماندهی افزارها</h5>
-                <p class="card-text">تعریف بخش‌ها و افزارهای هر بخش</p>
-                <p class="card-text">تعریف کدهای وضعیت خرابی و بازسازی و رفع عیب</p>
-                <a asp-action="Index" asp-controller="Departments" class="btn btn-outline-dark btn-lg btn-block" role="button">بخش‌ها</a>
-                <a asp-action="Index" asp-controller="Categories" class="btn btn-outline-dark btn-lg btn-block" role="button">افزارها</a>
-                <a asp-action="Index" asp-controller="StatCodes" class="btn btn-outline-dark btn-lg btn-block" role="button">کدهای وضعیت</a>
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">نیروی انسانی</h5>
+                    <p class="card-text">تعریف کارکنان بخش‌ها و کارهای هر فرد</p>
+                    <p class="card-text">مشاهده گزارش‌های کارکرد</p>
+                    <a asp-action="Index" asp-controller="People" class="btn btn-outline-dark btn-lg btn-block" role="button">کارکنان</a>
+                    <a asp-action="Index" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">گزارش‌ها</a>
+                </div>
+            </div>
+
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">رام‌ها و واگن‌ها</h5>
+                    <p class="card-text">تعریف رام‌ها و واگن‌های هر رام</p>
+                    <p class="card-text">مشاهده گزارش‌های وضعیت واگن‌ها</p>
+                    <a asp-action="Index" asp-controller="Places" class="btn btn-outline-dark btn-lg btn-block" role="button">موقعیت‌ها</a>
+                    <a asp-action="Index" asp-controller="Trains" class="btn btn-outline-dark btn-lg btn-block" role="button">رام‌ها</a>
+                    <a asp-action="Index" asp-controller="واگن" class="btn btn-outline-dark btn-lg btn-block" role="button">واگن‌ها</a>
+                </div>
             </div>
         </div>
     </div>

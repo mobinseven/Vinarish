@@ -43,7 +43,7 @@ namespace Vinarish.Pages.Reports
             }
             //if(Report.AppendixReports.Count>0) //
             //{
-            //    // TODO: Should Not let the user delete report with appendix reports.
+            //    // TODO: message for deleting report with appendix reports.
             //}
             return Page();
         }

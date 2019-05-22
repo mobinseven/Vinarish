@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using VinarishMvc.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 
 namespace VinarishMvc
 {
@@ -62,7 +63,9 @@ namespace VinarishMvc
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            var cultureInfo = new CultureInfo("fa-IR");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

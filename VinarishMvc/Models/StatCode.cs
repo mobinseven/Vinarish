@@ -18,6 +18,7 @@ namespace VinarishMvc.Models
         public string Text { get; set; }
         [Display(Name = "افزار")]
         public int CatId { get; set; }
+        public string FullName => Code + " " + Text;
 
         [Display(Name = "افزار")]
         public virtual Category Cat { get; set; }
