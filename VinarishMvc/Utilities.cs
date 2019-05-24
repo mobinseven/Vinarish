@@ -1,10 +1,11 @@
 ﻿using MD.PersianDateTime.Core;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace VinarishMvc
 {
@@ -45,6 +46,15 @@ namespace VinarishMvc
         public static string PadNumbers(string input)
         {
             return System.Text.RegularExpressions.Regex.Replace(input, "[0-9]+", match => match.Value.PadLeft(10, '0'));
+        }
+        public static void LoadSearchViewBag(IEnumerable<VinarishMvc.Models.Report> reports, dynamic ViewData)
+        {
+            ViewData["Cats"] = new SelectList(reports.Select(r => r.Cat).Distinct(), "Id", "CategoryName");
+            ViewData["Codes"] = new SelectList(reports.Select(r => r.Code).Distinct(), "Id", "FullName");
+            ViewData["Places"] = new SelectList(reports.Select(r => r.Place).Distinct(), "Id", "FullName");
+            ViewData["Reporters"] = new SelectList(reports.Select(r => r.Reporter).Distinct(), "Id", "FullName");
+            ViewData["Wagons"] = new SelectList(reports.Select(r => r.Wagon).Distinct(), "Id", "WagonId");
+            ViewData["Trains"] = new SelectList(reports.Select(r => r.Wagon.Train).Distinct(), "Id", "Train");
         }
     }
 }

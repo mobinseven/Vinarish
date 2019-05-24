@@ -69,7 +69,21 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $('td[data-href]').on("click", function () {
+            document.location = $(this).data('href');
+        });
+        $('tr[data-href]').on("click", function () {
+            document.location = $(this).data('href');
+        });
+    </script>
+    <script>
+        $('.SelCatCk').change(function () {
 
+            $(this).parent().nextUntil().find('.form-control').prop('disabled', function (i, v) { return !v; });
+        });
+
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -35,8 +35,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="DateTime" class="control-label"></label>
-                <input asp-for="DateTime" class="form-control" />
-                <span asp-validation-for="DateTime" class="text-danger"></span>
+                <input class="form-control" value="@Model.DateTime" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="ReporterId" class="control-label"></label>
@@ -50,8 +49,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="IsValid" class="control-label"></label>
-                <input asp-for="IsValid" class="form-control" />
-                <span asp-validation-for="IsValid" class="text-danger"></span>
+                @*<input asp-for="IsValid" class="form-control" />
+        <span asp-validation-for="IsValid" class="text-danger"></span>*@
+                @Html.EditorFor(x => x.IsValid)
             </div>
             <div class="form-group">
                 <input type="submit" value="ویرایش" class="btn btn-primary" />

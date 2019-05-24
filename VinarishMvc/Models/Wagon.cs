@@ -13,12 +13,12 @@ namespace VinarishMvc.Models
             Report = new HashSet<Report>();
         }
         public int Id { get; set; }
-        [Display(Name = "شماره واگن")]
+        [Display(Name = "واگن")]
         public int WagonId { get; set; }
-        [Display(Name = "شماره رام")]
+        [Display(Name = "رام")]
         public int TrainId { get; set; }
-
-        [Display(Name = "شماره رام")]
+        public string Full => Train.TrainId.ToString() + "-" + WagonId.ToString();
+        [Display(Name = "رام")]
         public virtual Train Train { get; set; }
         public virtual ICollection<Report> Report { get; set; }
     }

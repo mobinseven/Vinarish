@@ -1,0 +1,40 @@
+﻿@model IEnumerable<VinarishMvc.Models.Report>
+
+<h3>چکیده‌ی گزارش‌های امروز</h3>
+<h5>@Utilities.DigitsToPersian(DateTime.Now.Date.ToString("yy/MM/dd"))</h5>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Wagon)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Place)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model
+                .Where(r => r.DateTime.Date == DateTime.Now.Date)
+                .OrderByDescending(r=>r.WagonId)
+                .OrderByDescending(r=>r.PlaceId))
+            {
+                <tr>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Wagon.WagonId)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Place.Text)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Code.Text)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

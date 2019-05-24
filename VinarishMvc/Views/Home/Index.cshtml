@@ -3,40 +3,39 @@
 }
 
     <div class="text-center">
-        <img src="~/img/ویناریش.png" width="200" />
-        <h1 class="display-3">ویناریش</h1>
-        <h1 class="display-4">سامانگر نگهداری و بازسازی سازوبرگ راه‌آهن</h1>
+        <img src="~/img/ویناریش.png" width="150" />
+        <h1>ویناریش</h1>
+        <h4>سامانه‌ی نگهداری و بازسازی سازوبرگ راه‌آهن</h4>
 
-        <div class="card-group">
-            <div class="card text-center" style="width: 18rem;">
+        <div class="card-group align-middle">
+            <div class="card text-center text-white bg-dark mr-1 rounded-lg">
                 <div class="card-body">
-                    <h5 class="card-title">افزارها</h5>
-                    <p class="card-text">تعریف بخش‌ها و افزارهای هر بخش</p>
-                    <p class="card-text">تعریف کدهای وضعیت خرابی و بازسازی و رفع عیب</p>
-                    <a asp-action="Index" asp-controller="Departments" class="btn btn-outline-dark btn-lg btn-block" role="button">بخش‌ها</a>
-                    <a asp-action="Index" asp-controller="Categories" class="btn btn-outline-dark btn-lg btn-block" role="button">افزارها</a>
-                    <a asp-action="Index" asp-controller="StatCodes" class="btn btn-outline-dark btn-lg btn-block" role="button">کدهای وضعیت</a>
+                    <h5 class="card-title">چشم‌انداز</h5>
+                    <a asp-action="MalfunctionOverview" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">آمار خرابی‌ها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">آمار خسارتی‌ها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">نمودارها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">کارکردها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">پیام‌ها</a>
                 </div>
             </div>
-
-            <div class="card text-center" style="width: 18rem;">
+            <div class="card text-center text-white bg-dark mr-1 rounded-lg">
                 <div class="card-body">
-                    <h5 class="card-title">نیروی انسانی</h5>
-                    <p class="card-text">تعریف کارکنان بخش‌ها و کارهای هر فرد</p>
-                    <p class="card-text">مشاهده گزارش‌های کارکرد</p>
-                    <a asp-action="Index" asp-controller="People" class="btn btn-outline-dark btn-lg btn-block" role="button">کارکنان</a>
-                    <a asp-action="Index" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">گزارش‌ها</a>
+                    <h5 class="card-title">گزارش</h5>
+                    <a asp-action="Abstract" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">گزارش‌های امروز</a>
+                    <a asp-action="Index" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">فهرست گزارش‌ها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">سرنوشت گزارش‌ها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">گزارش وضعیت برق</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">گزارش‌های راه</a>
                 </div>
             </div>
-
-            <div class="card text-center" style="width: 18rem;">
+            <div class="card text-center text-white bg-dark mr-1 rounded-lg">
                 <div class="card-body">
-                    <h5 class="card-title">رام‌ها و واگن‌ها</h5>
-                    <p class="card-text">تعریف رام‌ها و واگن‌های هر رام</p>
-                    <p class="card-text">مشاهده گزارش‌های وضعیت واگن‌ها</p>
-                    <a asp-action="Index" asp-controller="Places" class="btn btn-outline-dark btn-lg btn-block" role="button">موقعیت‌ها</a>
-                    <a asp-action="Index" asp-controller="Trains" class="btn btn-outline-dark btn-lg btn-block" role="button">رام‌ها</a>
-                    <a asp-action="Index" asp-controller="واگن" class="btn btn-outline-dark btn-lg btn-block" role="button">واگن‌ها</a>
+                    <h5 class="card-title">سازماندهی</h5>
+                    <a asp-action="Index" asp-controller="Trains" class="btn btn-outline-light btn-lg btn-block" role="button">رام</a>
+                    <a asp-action="Index" asp-controller="Wagons" class="btn btn-outline-light btn-lg btn-block" role="button">واگن</a>
+                    <a asp-action="Index" asp-controller="Categories" class="btn btn-outline-light btn-lg btn-block" role="button">رده‌ی دستگاه</a>
+                    <a asp-action="Index" asp-controller="Places" class="btn btn-outline-light btn-lg btn-block" role="button">دستگاه</a>
+                    <a asp-action="Index" asp-controller="StatCodes" class="btn btn-outline-light btn-lg btn-block" role="button">وضعیت</a>
                 </div>
             </div>
         </div>

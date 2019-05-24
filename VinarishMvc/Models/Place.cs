@@ -12,9 +12,9 @@ namespace VinarishMvc.Models
         }
 
         public int Id { get; set; }
-        [Display(Name = "کد موقعیت")]
+        [Display(Name = "کد دستگاه")]
         public string Code { get; set; }
-        [Display(Name = "موقعیت")]
+        [Display(Name = "دستگاه")]
         public string Text { get; set; }
         public string FullName => Code + " " + Text;
 

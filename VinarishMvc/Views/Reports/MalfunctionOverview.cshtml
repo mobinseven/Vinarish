@@ -1,0 +1,43 @@
+﻿@model IEnumerable<VinarishMvc.Models.Report>
+
+<h3>آمار خرابی‌ها</h3>
+<div class="table-responsive">
+    <table class="table table-bordered table-dark">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Wagon.TrainId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Wagon)
+                </th>
+                <th>
+                    شمار خرابی
+                </th>
+                <th>
+                    رفع‌نشده
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var trains = Model.Select(r => r.Wagon.Train).Distinct();
+            }
+            @foreach(var train in trains)
+            {
+                <tr>
+                    <td class="align-middle">@train.TrainId</td>
+                    <td class="align-middle">
+                        @Model.Where(r => r.Wagon.TrainId == train.Id).Select(r=>r.Wagon).Distinct().Count()
+                    </td>
+                    <td class="align-middle">
+                        @Model.Where(r => r.Wagon.TrainId == train.Id).Count()
+                    </td>
+                    <td class="align-middle" data-href="MalfunctionList" style="cursor: pointer;">
+                        @Model.Where(r => r.Wagon.TrainId == train.Id).Where(r => r.AppendixReportId == null).Count()
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

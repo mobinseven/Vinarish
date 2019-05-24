@@ -21,10 +21,96 @@ namespace VinarishMvc.Views
         // GET: Reports
         public async Task<IActionResult> Index()
         {
-            var vinarishContext = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon);
+            var vinarishContext = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon).Include(r => r.Wagon.Train);
             return View(await vinarishContext.ToListAsync());
         }
+        // GET: Abstract
+        public async Task<IActionResult> Abstract()
+        {
+            var vinarishContext = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon)
+                .Include(r=>r.Wagon.Train);
+            return View(await vinarishContext.ToListAsync());
+        }
+        // GET: MalfunctionOverview
+        public async Task<IActionResult> MalfunctionOverview()
+        {
+            var vinarishContext = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon).Include(r=>r.Wagon.Train);
+            return View(await vinarishContext.ToListAsync());
+        }
+        // GET: MalfunctionList
+        public async Task<IActionResult> MalfunctionList()
+        {
+            var vinarishContext = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon)
+                .Where(r => r.AppendixReportId == null);
+            return View(await vinarishContext.ToListAsync());
+        }
+        // TODO: make a view for Reports list
 
+        public void ReadyForSearch()
+        {
+            ViewData["Cats"] = new SelectList(_context.Report.Select(r => r.Cat).Distinct(), "Id", "CategoryName");
+            ViewData["Codes"] = new SelectList(_context.Report.Select(r => r.Code).Distinct(), "Id", "FullName");
+            ViewData["Places"] = new SelectList(_context.Report.Select(r => r.Place).Distinct(), "Id", "FullName");
+            ViewData["Reporters"] = new SelectList(_context.Report.Select(r => r.Reporter).Distinct(), "Id", "FullName");
+            ViewData["Wagons"] = new SelectList(_context.Report.Select(r => r.Wagon).Include(w => w.Train).Distinct(), "Id", "Full");
+            ViewData["Trains"] = new SelectList(_context.Report.Select(r => r.Wagon.Train).Distinct(), "Id", "TrainId");
+        }
+        // GET: Search
+        public async Task<IActionResult> Search()
+        {
+            var vinarishContext = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon);
+            ReadyForSearch();
+            return View(await vinarishContext.ToListAsync());
+        }
+        [HttpPost]
+        public IActionResult Index([Bind("WagonId,PlaceId,CatId,CodeId,ReporterId")] Report report,int TrainId, DateTime from, DateTime to)
+        {
+            IQueryable<Report> result = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon);
+            if (report.CatId != 0)
+                result = result.Where(r => r.CatId == report.CatId);
+            if (report.CodeId != 0)
+                result = result.Where(r => r.CodeId == report.CodeId);
+            if (report.PlaceId != 0)
+                result = result.Where(r => r.PlaceId == report.PlaceId);
+            if (report.ReporterId != 0)
+                result = result.Where(r => r.ReporterId == report.ReporterId);
+            if (TrainId != 0)
+                result = result.Where(r => r.Wagon.TrainId == TrainId);
+            if (report.WagonId != 0)
+                result = result.Where(r => r.WagonId == report.WagonId);
+            if (from != DateTime.MinValue)
+                result = result.Where(r => (r.DateTime >= from.Date));
+            if (to != DateTime.MinValue)
+                result = result.Where(r => r.DateTime.Date <= to.Date);
+            if (result == _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon))
+                return NotFound();
+            ReadyForSearch();
+            return View(result.ToList());
+        }
+        [HttpPost]
+        public IActionResult Search([Bind("WagonId,PlaceId,CatId,CodeId,ReporterId")] Report report, DateTime from, DateTime to)
+        {
+            IQueryable<Report> result = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon);
+            if (report.CatId != 0)
+                result = result.Where(r => r.CatId == report.CatId);
+            if (report.CodeId != 0)
+                result = result.Where(r => r.CodeId == report.CodeId);
+            if (report.PlaceId != 0)
+                result = result.Where(r => r.PlaceId == report.PlaceId);
+            if (report.ReporterId != 0)
+                result = result.Where(r => r.ReporterId == report.ReporterId);
+            if (report.WagonId != 0)
+                result = result.Where(r => r.WagonId == report.WagonId);
+            if (from != DateTime.MinValue)
+                result = result.Where(r => (r.DateTime >= from.Date));
+            if (to != DateTime.MinValue)
+                result = result.Where(r => r.DateTime.Date <= to.Date);
+            if (result == _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon))
+                return NotFound();
+            ReadyForSearch();
+            return View(result.ToList());
+        }
+        [HttpPost]
         // GET: Reports/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -35,6 +121,8 @@ namespace VinarishMvc.Views
 
             var report = await _context.Report
                 .Include(r => r.AppendixReport)
+                .Include(r => r.AppendixReport.Code)
+                .Include(r => r.InverseAppendixReport)
                 .Include(r => r.Cat)
                 .Include(r => r.Code)
                 .Include(r => r.Place)
@@ -46,13 +134,12 @@ namespace VinarishMvc.Views
                 return NotFound();
             }
 
-            return View(report);
+            return PartialView(report);
         }
 
         // GET: Reports/Create
         public IActionResult Create()
         {
-
             List<SelectListItem> items = new SelectList(_context.Report, "Id", "Id").ToList<SelectListItem>();
             items.Insert(0, new SelectListItem("هیچکدام", ""));
             ViewData["AppendixReportId"] = new SelectList(items, "Value", "Text");
@@ -60,7 +147,7 @@ namespace VinarishMvc.Views
             ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "FullName");
             ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "FullName");
             ViewData["ReporterId"] = new SelectList(_context.Person, "Id", "FullName");
-            ViewData["WagonId"] = new SelectList(_context.Wagon, "Id", "WagonId");
+            ViewData["WagonId"] = new SelectList(_context.Wagon.Include(w => w.Train), "Id", "Full");
             return View();
         }
 
@@ -74,7 +161,6 @@ namespace VinarishMvc.Views
         {
             if (ModelState.IsValid)
             {
-                report.DateTime = DateTime.Now;
                 _context.Add(report);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -84,10 +170,10 @@ namespace VinarishMvc.Views
             ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "FullName", report.CodeId);
             ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "FullName", report.PlaceId);
             ViewData["ReporterId"] = new SelectList(_context.Person, "Id", "FullName", report.ReporterId);
-            ViewData["WagonId"] = new SelectList(_context.Wagon, "Id", "WagonId", report.WagonId);
+            ViewData["WagonId"] = new SelectList(_context.Wagon.Include(w => w.Train), "Id", "Full", report.WagonId);
             return View(report);
         }
-
+        // TODO: to filter statcodes list by category and place
         // GET: Reports/Append/5
         public async Task<IActionResult> Append(int? id)
         {
@@ -120,7 +206,6 @@ namespace VinarishMvc.Views
         {
             if (ModelState.IsValid)
             {
-                report.DateTime = DateTime.Now;
                 _context.Add(report);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -158,7 +243,7 @@ namespace VinarishMvc.Views
             ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "FullName", report.CodeId);
             ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "FullName", report.PlaceId);
             ViewData["ReporterId"] = new SelectList(_context.Person, "Id", "FullName", report.ReporterId);
-            ViewData["WagonId"] = new SelectList(_context.Wagon, "Id", "WagonId", report.WagonId);
+            ViewData["WagonId"] = new SelectList(_context.Wagon.Include(w => w.Train), "Id", "Full", report.WagonId);
             return View(report);
         }
 
@@ -199,7 +284,7 @@ namespace VinarishMvc.Views
             ViewData["CodeId"] = new SelectList(_context.StatCode, "Id", "FullName", report.CodeId);
             ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "FullName", report.PlaceId);
             ViewData["ReporterId"] = new SelectList(_context.Person, "Id", "FullName", report.ReporterId);
-            ViewData["WagonId"] = new SelectList(_context.Wagon, "Id", "WagonId", report.WagonId);
+            ViewData["WagonId"] = new SelectList(_context.Wagon.Include(w => w.Train), "Id", "Full", report.WagonId);
             return View(report);
         }
 
