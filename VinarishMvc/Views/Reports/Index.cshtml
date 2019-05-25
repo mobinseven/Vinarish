@@ -83,8 +83,19 @@
                 $mymodal = $("#exampleModal");
                 //update the modal's body with the response received
                 $("#modalcontent").html(res);
+                var $gotoappendixButton = $("button[name=GoToAppendixDetails]");
+                $gotoappendixButton.click(function () {
+                    var $form = $gotoappendixButton.parent();
+                    $form.submit(function (e) {
+                        return false;
+                    });
+                    $.post($form.attr("action"), $form.serialize()).done(function (res) {
+                        $mymodal = $("#det");
+                        //update the modal's body with the response received
+                        $("#det").html(res);
+                    });
+                });
             });
         });
-
     </script>
 }

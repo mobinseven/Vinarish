@@ -1,5 +1,9 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+@font-face {
+    font-family: bnazanin;
+    src: url(../font/BNazanin.woff);
+}
 
 a.navbar-brand {
   white-space: normal;
@@ -46,8 +50,8 @@ body {
     margin-bottom: 60px;
     direction: rtl;
     text-align: right;
-    font-family: 'B Nazanin', serif;
-    font-size:larger;
+    font-family: bnazanin, serif;
+    font-size: larger;
 }
 .footer {
   position: absolute;

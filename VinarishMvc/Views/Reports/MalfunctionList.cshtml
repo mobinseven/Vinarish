@@ -14,12 +14,16 @@
         <div class="col">
             زمان گذشته
         </div>
+        <div class="col">
+        </div>
     </div>
     @foreach (var item in Model
 .OrderByDescending(r => r.WagonId)
 .OrderByDescending(r => r.PlaceId))
     {
-        <a asp-action="Details" asp-route-id="@item.Id">
+
+        @using (Html.BeginForm("Details", "Reports", new { Id = item.Id }, FormMethod.Post))
+        {
             <div class="row p-3 mb-2 bg-light text-dark">
 
                 <div class="col">
@@ -38,9 +42,53 @@
                     }
                     @elapsedHrs ساعت
                     - @elapsedMin دقیقه
+
+                </div>
+
+                <div class="col">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" type="submit" name="submit">
+                        جزئیات
+                    </button>
                 </div>
             </div>
-        </a>
+        }
     }
 </div>
 <a asp-action="MalfunctionOverview" asp-controller="Reports" class="btn btn-secondary" role="button">بازگشت به آمار</a>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div id="modalcontent" class="modal-content p-3">
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <script>
+        $("button[name=submit]").click(function () {
+            var $form = $(this).parent().parent().parent();
+            $form.submit(function (e) {
+                return false;
+                var $form = $(this);
+            });
+            $.post($form.attr("action"), $form.serialize()).done(function (res) {
+                $mymodal = $("#exampleModal");
+                //update the modal's body with the response received
+                $("#modalcontent").html(res);
+                var $gotoappendixButton = $("button[name=GoToAppendixDetails]");
+                $gotoappendixButton.click(function () {
+                    var $form = $gotoappendixButton.parent();
+                    $form.submit(function (e) {
+                        return false;
+                    });
+                    $.post($form.attr("action"), $form.serialize()).done(function (res) {
+                        $mymodal = $("#det");
+                        //update the modal's body with the response received
+                        $("#det").html(res);
+                    });
+                });
+            });
+        });
+    </script>
+}
