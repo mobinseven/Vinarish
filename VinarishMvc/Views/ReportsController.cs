@@ -34,7 +34,7 @@ namespace VinarishMvc.Views
         // GET: MalfunctionOverview
         public async Task<IActionResult> MalfunctionOverview()
         {
-            var vinarishContext = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon).Include(r=>r.Wagon.Train);
+            var vinarishContext = _context.Report.Include(r => r.AppendixReport).Include(r => r.Cat).Include(r => r.Code).Include(r => r.Place).Include(r => r.Reporter).Include(r => r.Wagon).Include(r => r.Wagon.Train);
             return View(await vinarishContext.ToListAsync());
         }
         // GET: MalfunctionList
