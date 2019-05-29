@@ -41,3 +41,32 @@
         </tbody>
     </table>
 </div>
+
+<div class="treeview w-20 border">
+    <h6 class="pt-3 pr-3 h4">نمودار درختی گزارش‌های خرابی</h6>
+    <hr>
+    <ul class="mb-1 pl-3 pb-2">
+        @foreach (var train in trains)
+        {
+        <li>
+            <span class="rotate" style="font-size:x-large !important">رام @train.TrainId</span>
+            <ul class="nested">
+                @{var wagons = Model.Where(r => r.Wagon.TrainId == train.Id).Select(r => r.Wagon).Distinct();}
+                @foreach (var wagon in wagons)
+                {
+                <li>
+                    <span class="rotate" style="font-size:large !important">واگن @wagon.WagonId</span>
+                    <ul class="nested">
+                        @{ var devices = Model.Where(r => r.Wagon.TrainId == train.Id).Where(r => r.Wagon.WagonId == wagon.WagonId).Where(r => r.AppendixReportId == null).Distinct();}
+                        @foreach (var device in devices)
+                        {
+                            <li>@device.Place.Text</li>
+                        }
+                    </ul>
+                </li>
+                }
+            </ul>
+        </li>
+        }
+        </ul>
+</div>
