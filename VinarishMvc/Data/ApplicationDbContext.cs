@@ -16,6 +16,7 @@ namespace VinarishMvc.Data
         {
         }
         public virtual DbSet<UserProfile> UserProfile { get; set; }
+        public DbSet<VinarishUser> VinarishUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

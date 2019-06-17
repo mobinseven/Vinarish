@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using VinarishMvc.Areas.Identity.Models;
 using VinarishMvc.Data;
+using VinarishMvc.Areas.Authentication.Services;
+
 namespace VinarishMvc
 {
     public class Startup
@@ -47,10 +49,16 @@ namespace VinarishMvc
             services.AddDbContext<Models.VinarishContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
-            services.AddIdentity<VinarishUser, IdentityRole<Guid>>()
+            services.AddIdentity<VinarishUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            // Get Super Admin Default options
+            services.Configure<SuperAdminDefaultOptions>(Configuration.GetSection("SuperAdminDefaultOptions"));
+
+            services.AddTransient<IRoles, Roles>();
+
+            services.AddTransient<IFunctional, Functional>();
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()

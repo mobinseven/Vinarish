@@ -7,6 +7,8 @@ using System.Linq;
 using VinarishMvc.Data;
 using VinarishMvc.Areas.Identity.Models;
 using System;
+using VinarishMvc.Areas.Authentication.Services;
+using Microsoft.Extensions.Logging;
 
 namespace VinarishMvc
 {
@@ -20,27 +22,12 @@ namespace VinarishMvc
             {
                 var dbContext = services.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 var userMgr = services.ServiceProvider.GetRequiredService<UserManager<VinarishUser>>();
-                var roleMgr = services.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+                var roleMgr = services.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
                 dbContext.Database.Migrate();
+                var functional = services.ServiceProvider.GetRequiredService<IFunctional>();
 
-                var adminRole = new IdentityRole<Guid>("Admin");
-
-                if (!dbContext.Roles.Any())
-                {
-                    roleMgr.CreateAsync(adminRole).GetAwaiter().GetResult();
-                }
-
-                if (!dbContext.Users.Any(u => u.UserName == "admin"))
-                {
-                    var adminUser = new VinarishUser
-                    {
-                        UserName = "admin@vinarish.com",
-                        Email = "admin@vinarish.com"
-                    };
-                    var result = userMgr.CreateAsync(adminUser, "Hibernate70!").GetAwaiter().GetResult();
-                    userMgr.AddToRoleAsync(adminUser, adminRole.Name).GetAwaiter().GetResult();
-                }
+                DbInitializer.Initialize(dbContext, functional).Wait();
             }
 
             host.Run();

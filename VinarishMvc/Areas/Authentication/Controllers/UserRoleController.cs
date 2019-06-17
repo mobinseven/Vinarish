@@ -6,6 +6,7 @@ using VinarishMvc.Areas.Identity.Models;
 using VinarishMvc.Areas.Authentication.Data;
 namespace VinarishMvc.Areas.Authentication.Controllers
 {
+    [Area("Authentication")]
     [Authorize(Roles = RolesList.UserRoleManagement.RoleName)]
     public class UserRoleController : Controller
     {

@@ -13,9 +13,10 @@ using VinarishMvc.Models.Syncfusion;
 
 namespace VinarishMvc.Areas.Authentication.Controllers.Api
 {
+    [Area("Authentication")]
     [Authorize]
     [Produces("application/json")]
-    [Route("api/User")]
+    [Route("[area]/api/User")]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -35,10 +36,10 @@ namespace VinarishMvc.Areas.Authentication.Controllers.Api
         [HttpGet]
         public IActionResult GetUser()
         {
-            List<UserProfile> Items = new List<UserProfile>();
-            Items = _context.UserProfile.ToList();
-            int Count = Items.Count();
-            return Ok(new { Items, Count });
+            List<UserProfile> result = new List<UserProfile>();
+            result = _context.UserProfile.ToList();
+            int Count = result.Count();
+            return Ok(new { result, Count });
         }
 
         [HttpGet("[action]/{id}")]

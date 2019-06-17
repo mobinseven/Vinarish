@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html dir="rtl">
 <head>
     <meta charset="utf-8" />
@@ -15,11 +15,8 @@
               crossorigin="anonymous"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
     </environment>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/treeview.css" />
 @* Syncfusion Essential JS 2 Styles *@
 
 <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/bootstrap.css" />
@@ -83,7 +80,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/js/mdb.min.js"></script>
     <script>
         $('td[data-href]').on("click", function () {
             document.location = $(this).data('href');
@@ -91,13 +87,6 @@
         $('tr[data-href]').on("click", function () {
             document.location = $(this).data('href');
         });
-    </script>
-    <script>
-        $('.SelCatCk').change(function () {
-
-            $(this).parent().nextUntil().find('.form-control').prop('disabled', function (i, v) { return !v; });
-        });
-
     </script>
     @RenderSection("Scripts", required: false)
 <ejs-scripts></ejs-scripts>
