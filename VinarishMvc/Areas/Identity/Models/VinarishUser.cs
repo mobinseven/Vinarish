@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VinarishMvc.Areas.Identity.Models
 {
-    public class VinarishUser : IdentityUser<Guid>
+    public class VinarishUser : IdentityUser
     {
     }
 }
