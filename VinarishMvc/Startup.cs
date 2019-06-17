@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Syncfusion.Licensing;
 using System.Collections.Generic;
 using System.Globalization;
 using VinarishMvc.Areas.Identity.Models;
@@ -20,6 +21,7 @@ namespace VinarishMvc
     {
         public Startup(IConfiguration configuration)
         {
+            SyncfusionLicenseProvider.RegisterLicense("MDAxQDMxMzcyZTMxMmUzMFNaZHJaa0JqRjBNa3RXNi9lMTZBUi92NEl4bEFYcGNuK2c4UDVMTjlxcnM9");
             Configuration = configuration;
         }
 
