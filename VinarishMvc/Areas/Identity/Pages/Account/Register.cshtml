@@ -1,12 +1,14 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "عضویت";
 }
 
 <h1>@ViewData["Title"]</h1>
-
-<div class="row">
+<div class="alert alert-danger" role="alert">
+    برای عضویت در سامانه نزد مدیر سامانه بروید.
+</div>
+@*<div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h4>Create a new account.</h4>
@@ -34,4 +36,4 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
+}*@

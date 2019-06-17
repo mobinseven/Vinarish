@@ -40,12 +40,15 @@ namespace VinarishMvc.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Display(Name = "نام کاربری")]
+            public string Username { get; set; }
+
             [Required]
             [EmailAddress]
             public string Email { get; set; }
 
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "شماره‌ی همراه")]
             public string PhoneNumber { get; set; }
         }
 
@@ -110,7 +113,7 @@ namespace VinarishMvc.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "پرونده به‌روزرسانی شد.";
             return RedirectToPage();
         }
 

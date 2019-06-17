@@ -1,0 +1,27 @@
+﻿@model Roles.Controllers.UpdateUserRoleViewModel
+
+@{ }
+
+<div>
+    <form asp-controller="UserManagement" asp-action="UpdateUserRole" method="post">
+        <div class="list-group">
+            @{ int i = 0;}
+            @foreach (var user in Model.Users)
+            {
+                { i++; }
+                <input type="radio" asp-for="UserEmail" value="@user.Email" id="user-radio-@i" />
+                <label class="list-group-item" data-target="#item-@i" data-toggle="collapse" for="user-radio-@i">
+                    @user.Email
+                </label>
+                <div class="list-group collapse" id="item-@i">
+                    @foreach (var role in user.Roles)
+                    {
+                        <div class="list-group-item list-group-item-secondary">
+                            @role.Name
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </form>
+</div>

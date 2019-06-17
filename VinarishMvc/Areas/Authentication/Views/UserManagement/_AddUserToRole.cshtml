@@ -1,0 +1,70 @@
+﻿@model Roles.Controllers.UpdateUserRoleViewModel
+
+@{
+}
+<style>
+    .list-group input[type="radio"] {
+        display: none;
+    }
+
+        .list-group input[type="radio"] + .list-group-item {
+            cursor: pointer;
+        }
+
+            .list-group input[type="radio"] + .list-group-item:before {
+                content: "\2022";
+                color: transparent;
+                font-weight: bold;
+                margin-right: 1em;
+            }
+
+        .list-group input[type="radio"]:checked + .list-group-item {
+            background-color: #0275D8;
+            color: #FFF;
+        }
+
+            .list-group input[type="radio"]:checked + .list-group-item:before {
+                color: inherit;
+            }
+</style>
+<div>
+    <form asp-controller="UserManagement" asp-action="UpdateUserRole" method="post">
+        <h2>نقش‌های کاربران</h2>
+        <h6 class="pt-3 pr-3 h4">کدام کاربر؟</h6>
+
+        <div class="list-group">
+            @{ int i = 0;}
+            @foreach (var user in Model.Users)
+            {
+                { i++; }
+                <input type="radio" asp-for="UserEmail" value="@user.Email" id="user-radio-@i" />
+                <label class="list-group-item" data-target="#item-@i" data-toggle="collapse" for="user-radio-@i">
+                    @user.Email
+                </label>
+                <div class="list-group collapse" id="item-@i">
+                    @foreach (var role in user.Roles)
+                    {
+                        <div class="list-group-item list-group-item-secondary">
+                            @role.Name
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <h4>کدام نقش؟</h4>
+        <div class="list-group list-group-root well">
+            @{ int r = 0;}
+            @foreach (var role in Model.Roles)
+            {
+                { r++; }
+                <input type="radio" asp-for="Role" value="@role" id="role-radio-@r" />
+                <label class="list-group-item list-group-item-action" for="role-radio-@r">
+                    @role
+                </label>
+            }
+        </div>
+        <input type="submit" value="افزودن نقش" />
+        <input type="hidden" asp-for="Delete" value="false" id="delete" />
+        <input type="submit" value="پس گرفتن نقش" onclick="document.getElementById('delete').value = 'true'" />
+    </form>
+</div>
