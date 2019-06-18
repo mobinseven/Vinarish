@@ -71,7 +71,7 @@ namespace VinarishMvc.Areas.Authentication.Controllers.Api
         [HttpPost("[action]")]
         public async Task<IActionResult> UpdateUserRole([FromBody]CrudViewModel<UserRoleViewModel> payload)
         {
-            UserRoleViewModel userRole = payload.Value;
+            UserRoleViewModel userRole = payload.value;
             if (userRole != null)
             {
                 var user = await _userManager.FindByIdAsync(userRole.VinarishUserId);

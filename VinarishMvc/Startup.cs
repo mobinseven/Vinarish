@@ -9,13 +9,12 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Syncfusion.Licensing;
 using System.Collections.Generic;
 using System.Globalization;
+using VinarishMvc.Areas.Authentication.Services;
 using VinarishMvc.Areas.Identity.Models;
 using VinarishMvc.Data;
-using VinarishMvc.Areas.Authentication.Services;
 
 namespace VinarishMvc
 {
@@ -61,11 +60,15 @@ namespace VinarishMvc
             services.AddTransient<IFunctional, Functional>();
             services.AddMvc(config =>
             {
-                var policy = new AuthorizationPolicyBuilder()
+                AuthorizationPolicy policy = new AuthorizationPolicyBuilder()
                                  .RequireAuthenticatedUser()
                                  .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+            }); ;
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminAccess", policy => policy.RequireRole("Admin"));
@@ -97,7 +100,7 @@ namespace VinarishMvc
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            var cultureInfo = new CultureInfo("fa-IR");
+            CultureInfo cultureInfo = new CultureInfo("fa-IR");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             app.UseHttpsRedirection();

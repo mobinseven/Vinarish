@@ -1,0 +1,19 @@
+﻿@using VinarishMvc.Areas.Authentication.Models
+<h1>Index</h1>
+
+<ejs-grid id="Grid" toolbar="@(new List<string>() { "Add","Delete","Update", "Cancel" })" dataBound="dataBound">
+    <e-data-manager adaptor="RemoteSaveAdaptor" json="@ViewBag.dataSource.ToArray()" insertUrl="/Authentication/UserProfiles/Insert" updateUrl="/Authentication/UserProfiles/Update" removeUrl="/Authentication/UserProfiles/Delete"></e-data-manager>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true"></e-grid-editSettings>
+    <e-grid-columns>
+        <e-grid-column field="UserProfileId" headerText="Id" isPrimaryKey="true" visible="false"></e-grid-column>
+        <e-grid-column field="Email" headerText="email"></e-grid-column>
+        <e-grid-column field="FirstName" headerText="FirstName"></e-grid-column>
+        <e-grid-column field="LastName" headerText="LastName"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+<script>
+    function dataBound(args) {
+        this.autoFitColumns(['Email', 'FirstName', 'LastName']);
+    }
+</script>
