@@ -1,19 +1,48 @@
-﻿@using VinarishMvc.Areas.Authentication.Models
+﻿@model IEnumerable<VinarishMvc.Areas.Authentication.Models.UserProfile>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
 <h1>Index</h1>
 
-<ejs-grid id="Grid" toolbar="@(new List<string>() { "Add","Delete","Update", "Cancel" })" dataBound="dataBound">
-    <e-data-manager adaptor="RemoteSaveAdaptor" json="@ViewBag.dataSource.ToArray()" insertUrl="/Authentication/UserProfiles/Insert" updateUrl="/Authentication/UserProfiles/Update" removeUrl="/Authentication/UserProfiles/Delete"></e-data-manager>
-    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true"></e-grid-editSettings>
-    <e-grid-columns>
-        <e-grid-column field="UserProfileId" headerText="Id" isPrimaryKey="true" visible="false"></e-grid-column>
-        <e-grid-column field="Email" headerText="email"></e-grid-column>
-        <e-grid-column field="FirstName" headerText="FirstName"></e-grid-column>
-        <e-grid-column field="LastName" headerText="LastName"></e-grid-column>
-    </e-grid-columns>
-</ejs-grid>
-
-<script>
-    function dataBound(args) {
-        this.autoFitColumns(['Email', 'FirstName', 'LastName']);
-    }
-</script>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfilePicture)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                <img src="@item.ProfilePicture" width="50" />
+            </td>
+            <td>
+                <a asp-action="ChangeRole" asp-route-id="@item.UserProfileId">ChangeRole</a> |
+                <a asp-action="Edit" asp-route-id="@item.UserProfileId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.UserProfileId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.UserProfileId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -10,11 +10,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Syncfusion.Licensing;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using VinarishMvc.Areas.Authentication.Services;
 using VinarishMvc.Areas.Identity.Models;
 using VinarishMvc.Data;
+using VinarishMvc.Services;
 
 namespace VinarishMvc
 {
@@ -48,7 +50,33 @@ namespace VinarishMvc
             services.AddDbContext<Models.VinarishContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
-            services.AddIdentity<VinarishUser, IdentityRole>()
+            // Get Identity Default Options
+            IConfigurationSection identityDefaultOptionsConfigurationSection = Configuration.GetSection("IdentityDefaultOptions");
+
+            services.Configure<IdentityDefaultOptions>(identityDefaultOptionsConfigurationSection);
+
+            var identityDefaultOptions = identityDefaultOptionsConfigurationSection.Get<IdentityDefaultOptions>();
+            services.AddIdentity<VinarishUser, IdentityRole>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = identityDefaultOptions.PasswordRequireDigit;
+                options.Password.RequiredLength = identityDefaultOptions.PasswordRequiredLength;
+                options.Password.RequireNonAlphanumeric = identityDefaultOptions.PasswordRequireNonAlphanumeric;
+                options.Password.RequireUppercase = identityDefaultOptions.PasswordRequireUppercase;
+                options.Password.RequireLowercase = identityDefaultOptions.PasswordRequireLowercase;
+                options.Password.RequiredUniqueChars = identityDefaultOptions.PasswordRequiredUniqueChars;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(identityDefaultOptions.LockoutDefaultLockoutTimeSpanInMinutes);
+                options.Lockout.MaxFailedAccessAttempts = identityDefaultOptions.LockoutMaxFailedAccessAttempts;
+                options.Lockout.AllowedForNewUsers = identityDefaultOptions.LockoutAllowedForNewUsers;
+
+                // User settings
+                options.User.RequireUniqueEmail = identityDefaultOptions.UserRequireUniqueEmail;
+
+                // email confirmation require
+                options.SignIn.RequireConfirmedEmail = identityDefaultOptions.SignInRequireConfirmedEmail;
+            })
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -69,21 +97,7 @@ namespace VinarishMvc
             {
                 options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
             }); ;
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("AdminAccess", policy => policy.RequireRole("Admin"));
-
-                options.AddPolicy("ManagerAccess", policy =>
-                    policy.RequireAssertion(context =>
-                                context.User.IsInRole("Admin")
-                                || context.User.IsInRole("Manager")));
-
-                options.AddPolicy("UserAccess", policy =>
-                    policy.RequireAssertion(context =>
-                                context.User.IsInRole("Admin")
-                                || context.User.IsInRole("Manager")
-                                || context.User.IsInRole("User")));
-            });
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
