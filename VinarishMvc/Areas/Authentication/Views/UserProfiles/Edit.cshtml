@@ -13,6 +13,9 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UserProfileId" />
+            <input type="hidden" asp-for="VinarishUserId" />
+            <input type="hidden" asp-for="Password" />
+            <input type="hidden" asp-for="ProfilePicture" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -29,21 +32,6 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <ejs-treeview id="treedata" showCheckBox="true" nodeChecked="nodeChecked">
-                    <e-treeview-fields dataSource="ViewBag.roleslist" id="RoleName"  text="RoleName" expanded="expanded"></e-treeview-fields>
-                </ejs-treeview>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -57,8 +45,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-<script>
-    function nodeChecked(args) {
-        alert("The checked node's id: " + this.checkedNodes); // To alert the checked node's id.
-    }
-</script>

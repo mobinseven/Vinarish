@@ -37,10 +37,18 @@
                 <img src="@item.ProfilePicture" width="50" />
             </td>
             <td>
-                <a asp-action="ChangeRole" asp-route-id="@item.UserProfileId">ChangeRole</a> |
-                <a asp-action="Edit" asp-route-id="@item.UserProfileId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserProfileId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserProfileId">Delete</a>
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                        Options
+                    </button>
+                    <div class="dropdown-menu">
+                        <a asp-action="ChangeRole" asp-route-id="@item.UserProfileId" class="dropdown-item">Accesses</a>
+                        <a asp-action="ChangePassword" asp-route-id="@item.UserProfileId" class="dropdown-item">Change Password</a>
+                        <a asp-action="Edit" asp-route-id="@item.UserProfileId" class="dropdown-item">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.UserProfileId" class="dropdown-item">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.UserProfileId" class="dropdown-item">Delete</a>
+                    </div>
+                </div>
             </td>
         </tr>
 }

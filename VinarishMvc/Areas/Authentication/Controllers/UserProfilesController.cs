@@ -239,6 +239,62 @@ namespace VinarishMvc.Areas.Authentication.Controllers
             }
             return View(userProfile);
         }
+        // GET: Authentication/UserProfiles/ChangePassword/5
+        public async Task<IActionResult> ChangePassword(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userProfile = await _context.UserProfile.FindAsync(id);
+            if (userProfile == null)
+            {
+                return NotFound();
+            }
+            userProfile.OldPassword = userProfile.Password;
+            userProfile.Password = null;
+            userProfile.ConfirmPassword = null;
+            return View(userProfile);
+        }
+        // POST: Authentication/UserProfiles/ChangePassword/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(int id, [Bind("UserProfileId,FirstName,LastName,Email,Password,ConfirmPassword,OldPassword,ProfilePicture,VinarishUserId")] UserProfile userProfile)
+        {
+            if (id != userProfile.UserProfileId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (userProfile.Password.Equals(userProfile.ConfirmPassword))
+                    {
+                        var user = await _userManager.FindByIdAsync(userProfile.VinarishUserId);
+                        await _userManager.RemovePasswordAsync(user);
+                        var result = await _userManager.AddPasswordAsync(user, userProfile.Password);
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserProfileExists(userProfile.UserProfileId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(userProfile);
+        }
 
     }
 }
