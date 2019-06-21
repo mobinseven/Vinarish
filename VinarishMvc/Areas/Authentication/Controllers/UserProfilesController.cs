@@ -201,9 +201,11 @@ namespace VinarishMvc.Areas.Authentication.Controllers
             await _roles.GenerateRolesFromPagesAsync();
             var user = await _userManager.FindByIdAsync(userProfile.VinarishUserId);
             var roles = _roleManager.Roles.ToList();
-            UserRoleViewModel Item = new UserRoleViewModel();
-            Item.Profile = userProfile;
-            Item.VinarishUserId = userProfile.VinarishUserId;
+            UserRoleViewModel Item = new UserRoleViewModel
+            {
+                Profile = userProfile,
+                VinarishUserId = userProfile.VinarishUserId
+            };
             foreach (var role in roles)
             {
                 bool isInRole = (await _userManager.IsInRoleAsync(user, role.Name)) ? true : false;

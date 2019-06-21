@@ -49,12 +49,12 @@ namespace VinarishMvc
         }
         public static void LoadSearchViewBag(IEnumerable<VinarishMvc.Models.Report> reports, dynamic ViewData)
         {
-            ViewData["Cats"] = new SelectList(reports.Select(r => r.Cat).Distinct(), "Id", "CategoryName");
-            ViewData["Codes"] = new SelectList(reports.Select(r => r.Code).Distinct(), "Id", "FullName");
-            ViewData["Places"] = new SelectList(reports.Select(r => r.Place).Distinct(), "Id", "FullName");
-            ViewData["Reporters"] = new SelectList(reports.Select(r => r.Reporter).Distinct(), "Id", "FullName");
-            ViewData["Wagons"] = new SelectList(reports.Select(r => r.Wagon).Distinct(), "Id", "WagonId");
-            ViewData["Trains"] = new SelectList(reports.Select(r => r.Wagon.Train).Distinct(), "Id", "Train");
+            //ViewData["Cats"] = new SelectList(reports.Select(r => r.Device).Distinct(), "DeviceId", "CategoryName");
+            //ViewData["Codes"] = new SelectList(reports.Select(r => r.Code).Distinct(), "Id", "FullName");
+            //ViewData["Places"] = new SelectList(reports.Select(r => r.Place).Distinct(), "Id", "FullName");
+            //ViewData["Reporters"] = new SelectList(reports.Select(r => r.Reporter).Distinct(), "Id", "FullName");
+            //ViewData["Wagons"] = new SelectList(reports.Select(r => r.Wagon).Distinct(), "Id", "WagonId");
+            //ViewData["Trains"] = new SelectList(reports.Select(r => r.Wagon.Train).Distinct(), "Id", "Train");
         }
     }
 }

@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vinarish", "Vinarish\Vinarish.csproj", "{EF706827-186B-4FC0-997C-697B86E94C14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinarishMvc", "VinarishMvc\VinarishMvc.csproj", "{5C4E25D3-6050-4B31-B3CB-9B0DA55FC33F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinarishMvc", "VinarishMvc\VinarishMvc.csproj", "{5C4E25D3-6050-4B31-B3CB-9B0DA55FC33F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinarishContext", "..\VinarishContext\VinarishContext\VinarishContext.csproj", "{A05D3EE9-77DB-423A-B2FB-DD18A8573D69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5C4E25D3-6050-4B31-B3CB-9B0DA55FC33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C4E25D3-6050-4B31-B3CB-9B0DA55FC33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C4E25D3-6050-4B31-B3CB-9B0DA55FC33F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A05D3EE9-77DB-423A-B2FB-DD18A8573D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A05D3EE9-77DB-423A-B2FB-DD18A8573D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A05D3EE9-77DB-423A-B2FB-DD18A8573D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A05D3EE9-77DB-423A-B2FB-DD18A8573D69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
