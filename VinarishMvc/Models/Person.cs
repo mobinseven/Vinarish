@@ -20,6 +20,7 @@ namespace VinarishMvc.Models
         [Display(Name = "بخش")]
         public int? DepartmentId { get; set; }
 
+        public string VinarishUserId { get; set; }
         [Display(Name = "بخش")]
         public virtual Department Department { get; set; }
         public virtual ICollection<Report> Report { get; set; }

@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "unpkg",
+      "library": "persian-datepicker@1.1.3",
+      "destination": "wwwroot/lib/persian-datepicker/",
+      "files": [
+        "assets/persian-date.min.js",
+        "dist/js/persian-datepicker.min.js",
+        "dist/css/persian-datepicker.min.css"
+      ]
+    }
+  ]
+}
