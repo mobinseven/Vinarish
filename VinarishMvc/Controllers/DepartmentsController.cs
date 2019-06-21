@@ -190,10 +190,10 @@ namespace VinarishMvc.Controllers
             }
             return View(payload.value);
         }
-        // POST: Departments/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: Departments/Remove/5
+        [HttpPost, ActionName("Remove")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete([Bind("key")][FromBody]CrudViewModel<Department> payload)
+        public async Task<IActionResult> Remove([Bind("key")][FromBody]CrudViewModel<Department> payload)
         {
             var Departments = await _context.Departments.FindAsync(Convert.ToInt32(payload.key));
             _context.Departments.Remove(Departments);

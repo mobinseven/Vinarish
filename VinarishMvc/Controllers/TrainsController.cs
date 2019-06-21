@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
+using VinarishMvc.Models.Syncfusion;
 
 namespace VinarishMvc.Controllers
 {
@@ -148,6 +149,55 @@ namespace VinarishMvc.Controllers
         private bool TrainExists(int id)
         {
             return _context.Trains.Any(e => e.TrainId == id);
+        }
+
+        // GET: Trains
+        public ActionResult IndexSync()
+        {
+            ViewBag.dataSource = _context.Trains.ToList();
+            return View();
+        }
+
+
+        // POST: Trains/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Insert([FromBody]CrudViewModel<Train> payload)
+        {
+            _context.Add(payload.value);
+            await _context.SaveChangesAsync();
+            ViewBag.dataSource = await _context.Trains.ToListAsync();
+            return Json(payload.value);
+        }
+
+        // POST: Trains/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update([Bind("value")][FromBody]CrudViewModel<Train> payload)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(payload.value);
+                await _context.SaveChangesAsync();
+                // TODO: DbUpdateConcurrencyException
+                return RedirectToAction(nameof(Index));
+            }
+            return View(payload.value);
+        }
+        // POST: Trains/Remove/5
+        [HttpPost, ActionName("Remove")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Remove([Bind("key")][FromBody]CrudViewModel<Train> payload)
+        {
+            var Train = await _context.Trains.FindAsync(Convert.ToInt32(payload.key));
+            _context.Trains.Remove(Train);
+            await _context.SaveChangesAsync();
+            var data = _context.Trains.ToList();
+            return Json(data);
         }
     }
 }

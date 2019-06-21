@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "ویناریش";
+    ViewData["Title"] = "خانه";
 }
 @using VinarishMvc.Areas.Identity.Models
 
@@ -36,8 +36,8 @@
                 <div class="card-body">
                     <h5 class="card-title">سازماندهی</h5>
                     <a asp-action="IndexSync" asp-controller="Departments" class="btn btn-outline-light btn-lg btn-block" role="button">بخش‌ها</a>
-                    <a asp-action="Index" asp-controller="Trains" class="btn btn-outline-light btn-lg btn-block" role="button">رام</a>
-                    <a asp-action="Index" asp-controller="Wagons" class="btn btn-outline-light btn-lg btn-block" role="button">واگن</a>
+                    <a asp-action="IndexSync" asp-controller="Trains" class="btn btn-outline-light btn-lg btn-block" role="button">رام</a>
+                    <a asp-action="IndexSync" asp-controller="Wagons" class="btn btn-outline-light btn-lg btn-block" role="button">واگن</a>
                     <a asp-action="Index" asp-controller="Categories" class="btn btn-outline-light btn-lg btn-block" role="button">رده‌ی دستگاه</a>
                     <a asp-action="Index" asp-controller="Places" class="btn btn-outline-light btn-lg btn-block" role="button">دستگاه</a>
                     <a asp-action="Index" asp-controller="StatCodes" class="btn btn-outline-light btn-lg btn-block" role="button">وضعیت</a>
