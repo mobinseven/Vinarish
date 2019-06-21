@@ -18,40 +18,45 @@ using System.Collections.Generic;
 
 namespace VinarishMvc.Models
 {
-    public partial class Wagon {
+    public partial class DevicePlace {
 
-        public Wagon()
+        public DevicePlace()
         {
             this.Devices = new List<Device>();
-            this.Trips = new List<WagonTrip>();
             OnCreated();
         }
 
-        public virtual int WagonId
+        public virtual int DevicePlaceId
         {
             get;
             set;
         }
 
-        public virtual int Number
+        public virtual string Code
         {
             get;
             set;
         }
 
-        public virtual string Name
+        public virtual string Description
+        {
+            get;
+            set;
+        }
+
+        public virtual int DeviceTypeId
+        {
+            get;
+            set;
+        }
+
+        public virtual DeviceType DeviceType
         {
             get;
             set;
         }
 
         public virtual IList<Device> Devices
-        {
-            get;
-            set;
-        }
-
-        public virtual IList<WagonTrip> Trips
         {
             get;
             set;

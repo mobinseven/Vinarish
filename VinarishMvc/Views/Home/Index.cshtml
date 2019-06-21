@@ -12,36 +12,37 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <div class="card-group align-middle">
-            <div class="card text-center text-white bg-dark mr-1 rounded-lg">
+            <div class="card text-center text-dark bg-light mr-1 rounded-lg">
                 <div class="card-body">
                     <h5 class="card-title">چشم‌انداز</h5>
-                    <a asp-action="MalfunctionOverview" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">آمار خرابی‌ها</a>
-                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">آمار خسارتی‌ها</a>
-                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">نمودارها</a>
-                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">کارکردها</a>
-                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">پیام‌ها</a>
+                    <a asp-action="MalfunctionOverview" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">آمار خرابی‌ها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">آمار خسارتی‌ها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">نمودارها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">کارکردها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">پیام‌ها</a>
                 </div>
             </div>
-            <div class="card text-center text-white bg-dark mr-1 rounded-lg">
+            <div class="card text-center text-dark bg-light mr-1 rounded-lg">
                 <div class="card-body">
                     <h5 class="card-title">گزارش</h5>
-                    <a asp-action="Abstract" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">گزارش‌های امروز</a>
-                    <a asp-action="Index" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">فهرست گزارش‌ها</a>
-                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">سرنوشت گزارش‌ها</a>
-                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">گزارش وضعیت برق</a>
-                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-light btn-lg btn-block" role="button">گزارش‌های راه</a>
+                    <a asp-action="Abstract" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">گزارش‌های امروز</a>
+                    <a asp-action="Index" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">فهرست گزارش‌ها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">سرنوشت گزارش‌ها</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">گزارش وضعیت برق</a>
+                    <a asp-action="" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">گزارش‌های راه</a>
                 </div>
             </div>
-            <div class="card text-center text-white bg-dark mr-1 rounded-lg">
+            <div class="card text-center text-dark bg-light mr-1 rounded-lg">
                 <div class="card-body">
                     <h5 class="card-title">سازماندهی</h5>
-                    <a asp-action="IndexSync" asp-controller="Departments" class="btn btn-outline-light btn-lg btn-block" role="button">بخش‌ها</a>
-                    <a asp-action="IndexSync" asp-controller="Trains" class="btn btn-outline-light btn-lg btn-block" role="button">رام</a>
-                    <a asp-action="IndexSync" asp-controller="Wagons" class="btn btn-outline-light btn-lg btn-block" role="button">واگن</a>
-                    <a asp-action="Index" asp-controller="Categories" class="btn btn-outline-light btn-lg btn-block" role="button">رده‌ی دستگاه</a>
-                    <a asp-action="Index" asp-controller="Places" class="btn btn-outline-light btn-lg btn-block" role="button">دستگاه</a>
-                    <a asp-action="Index" asp-controller="StatCodes" class="btn btn-outline-light btn-lg btn-block" role="button">وضعیت</a>
-                    <a asp-area="Authentication" asp-controller="UserProfiles" asp-action="Index" class="btn btn-outline-light btn-lg btn-block">کاربران</a>
+                    <a asp-action="IndexSync" asp-controller="Departments" class="btn btn-outline-dark btn-lg btn-block" role="button">بخش‌ها</a>
+                    <a asp-action="IndexSync" asp-controller="Trains" class="btn btn-outline-dark btn-lg btn-block" role="button">رام</a>
+                    <a asp-action="IndexSync" asp-controller="Wagons" class="btn btn-outline-dark btn-lg btn-block" role="button">واگن</a>
+                    <a asp-action="Index" asp-controller="DeviceTypes" class="btn btn-outline-dark btn-lg btn-block" role="button">رده‌ی دستگاه</a>
+                    <a asp-action="Index" asp-controller="DevicePlaces" class="btn btn-outline-dark btn-lg btn-block" role="button">جای دستگاه</a>
+                    <a asp-action="IndexSync" asp-controller="Devices" class="btn btn-outline-dark btn-lg btn-block" role="button">دستگاه</a>
+                    <a asp-action="Index" asp-controller="StatCodes" class="btn btn-outline-dark btn-lg btn-block" role="button">وضعیت</a>
+                    <a asp-area="Authentication" asp-controller="UserProfiles" asp-action="Index" class="btn btn-outline-dark btn-lg btn-block">کاربران</a>
 
                 </div>
             </div>

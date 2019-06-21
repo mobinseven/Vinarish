@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VinarishMvc.Data;
 
 namespace VinarishMvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190621153724_DeviceCode")]
+    partial class DeviceCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,8 +235,16 @@ namespace VinarishMvc.Migrations
                         .HasColumnName("DeviceId")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DevicePlaceId")
-                        .HasColumnName("DevicePlaceId");
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnName("Code");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnName("Description");
+
+                    b.Property<int>("DeviceTypeId")
+                        .HasColumnName("DeviceTypeId");
 
                     b.Property<DateTime?>("GuaranteeDate")
                         .HasColumnName("GuaranteeDate");
@@ -247,7 +257,7 @@ namespace VinarishMvc.Migrations
 
                     b.HasKey("DeviceId");
 
-                    b.HasIndex("DevicePlaceId");
+                    b.HasIndex("DeviceTypeId");
 
                     b.HasIndex("Serial")
                         .IsUnique()
@@ -256,34 +266,6 @@ namespace VinarishMvc.Migrations
                     b.HasIndex("WagonId");
 
                     b.ToTable("Devices");
-                });
-
-            modelBuilder.Entity("VinarishMvc.Models.DevicePlace", b =>
-                {
-                    b.Property<int>("DevicePlaceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("DevicePlaceId")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnName("Code");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnName("Description");
-
-                    b.Property<int>("DeviceTypeId")
-                        .HasColumnName("DeviceTypeId");
-
-                    b.HasKey("DevicePlaceId");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("DeviceTypeId");
-
-                    b.ToTable("DevicePlaces");
                 });
 
             modelBuilder.Entity("VinarishMvc.Models.DeviceStatus", b =>
@@ -546,22 +528,14 @@ namespace VinarishMvc.Migrations
 
             modelBuilder.Entity("VinarishMvc.Models.Device", b =>
                 {
-                    b.HasOne("VinarishMvc.Models.DevicePlace", "DevicePlace")
+                    b.HasOne("VinarishMvc.Models.DeviceType", "DeviceType")
                         .WithMany("Devices")
-                        .HasForeignKey("DevicePlaceId")
+                        .HasForeignKey("DeviceTypeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("VinarishMvc.Models.Wagon", "Wagon")
                         .WithMany("Devices")
                         .HasForeignKey("WagonId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("VinarishMvc.Models.DevicePlace", b =>
-                {
-                    b.HasOne("VinarishMvc.Models.DeviceType", "DeviceType")
-                        .WithMany("DevicePlaces")
-                        .HasForeignKey("DeviceTypeId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

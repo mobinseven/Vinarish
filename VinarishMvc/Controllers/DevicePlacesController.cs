@@ -13,23 +13,23 @@ using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
-    public class DevicesController : Controller
+    public class DevicePlacesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public DevicesController(ApplicationDbContext context)
+        public DevicePlacesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Devices
+        // GET: DevicePlaces
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Devices.Include(d => d.DevicePlace).Include(d => d.Wagon);
+            var applicationDbContext = _context.DevicePlaces.Include(d => d.DeviceType);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Devices/Details/5
+        // GET: DevicePlaces/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,45 +37,42 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            var device = await _context.Devices
-                .Include(d => d.DevicePlace)
-                .Include(d => d.Wagon)
-                .FirstOrDefaultAsync(m => m.DeviceId == id);
-            if (device == null)
+            var devicePlace = await _context.DevicePlaces
+                .Include(d => d.DeviceType)
+                .FirstOrDefaultAsync(m => m.DevicePlaceId == id);
+            if (devicePlace == null)
             {
                 return NotFound();
             }
 
-            return View(device);
+            return View(devicePlace);
         }
 
-        // GET: Devices/Create
+        // GET: DevicePlaces/Create
         public IActionResult Create()
         {
-            ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code");
-            ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name");
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name");
             return View();
         }
 
-        // POST: Devices/Create
+        // POST: DevicePlaces/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DeviceId,WagonId,Serial,GuaranteeDate,DevicePlaceId")] Device device)
+        public async Task<IActionResult> Create([Bind("DevicePlaceId,Code,Description,DeviceTypeId")] DevicePlace devicePlace)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(device);
+                _context.Add(devicePlace);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", device.DevicePlaceId);
-            ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", device.WagonId);
-            return View(device);
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", devicePlace.DeviceTypeId);
+            return View(devicePlace);
         }
 
-        // GET: Devices/Edit/5
+        // GET: DevicePlaces/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,24 +80,23 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            var device = await _context.Devices.FindAsync(id);
-            if (device == null)
+            var devicePlace = await _context.DevicePlaces.FindAsync(id);
+            if (devicePlace == null)
             {
                 return NotFound();
             }
-            ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", device.DevicePlaceId);
-            ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", device.WagonId);
-            return View(device);
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", devicePlace.DeviceTypeId);
+            return View(devicePlace);
         }
 
-        // POST: Devices/Edit/5
+        // POST: DevicePlaces/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DeviceId,WagonId,Serial,GuaranteeDate,DevicePlaceId")] Device device)
+        public async Task<IActionResult> Edit(int id, [Bind("DevicePlaceId,Code,Description,DeviceTypeId")] DevicePlace devicePlace)
         {
-            if (id != device.DeviceId)
+            if (id != devicePlace.DevicePlaceId)
             {
                 return NotFound();
             }
@@ -109,12 +105,12 @@ namespace VinarishMvc.Controllers
             {
                 try
                 {
-                    _context.Update(device);
+                    _context.Update(devicePlace);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DeviceExists(device.DeviceId))
+                    if (!DevicePlaceExists(devicePlace.DevicePlaceId))
                     {
                         return NotFound();
                     }
@@ -125,12 +121,11 @@ namespace VinarishMvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", device.DevicePlaceId);
-            ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", device.WagonId);
-            return View(device);
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", devicePlace.DeviceTypeId);
+            return View(devicePlace);
         }
 
-        // GET: Devices/Delete/5
+        // GET: DevicePlaces/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,41 +133,39 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            var device = await _context.Devices
-                .Include(d => d.DevicePlace)
-                .Include(d => d.Wagon)
-                .FirstOrDefaultAsync(m => m.DeviceId == id);
-            if (device == null)
+            var devicePlace = await _context.DevicePlaces
+                .Include(d => d.DeviceType)
+                .FirstOrDefaultAsync(m => m.DevicePlaceId == id);
+            if (devicePlace == null)
             {
                 return NotFound();
             }
 
-            return View(device);
+            return View(devicePlace);
         }
 
-        // POST: Devices/Delete/5
+        // POST: DevicePlaces/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var device = await _context.Devices.FindAsync(id);
-            _context.Devices.Remove(device);
+            var devicePlace = await _context.DevicePlaces.FindAsync(id);
+            _context.DevicePlaces.Remove(devicePlace);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DeviceExists(int id)
+        private bool DevicePlaceExists(int id)
         {
-            return _context.Devices.Any(e => e.DeviceId == id);
+            return _context.DevicePlaces.Any(e => e.DevicePlaceId == id);
         }
-
-        // GET: Devices
+        // GET: DevicePlaces
         public ActionResult IndexSync()
         {
-            ViewBag.dataSource = _context.Devices.ToList();
+            ViewBag.dataSource = _context.DevicePlaces.ToList();
             return View();
         }
-        // POST: Devices/Upload
+        // POST: DevicePlaces/Upload
         [HttpPost, ActionName("Upload")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upload(IFormFile File)
@@ -180,9 +173,9 @@ namespace VinarishMvc.Controllers
             IFormFile file = File;
             if (file == null || file.Length == 0)
             {
-                return RedirectToAction(nameof(IndexSync));
+                return RedirectToAction(nameof(Index));
             }
-            List<Device> Devices = new List<Device>();
+            List<DevicePlace> DevicePlaces = new List<DevicePlace>();
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream).ConfigureAwait(false);
@@ -192,24 +185,21 @@ namespace VinarishMvc.Controllers
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Tip: To access the first worksheet, try index 1, not 0
                     int totalRows = worksheet.Dimension.Rows;
 
-                    List<Wagon> Wagons = _context.Wagons.ToList();
-                    foreach (Wagon w in Wagons)
+                    for (int i = 1; i < totalRows; i++)
                     {
-                        for (int i = 1; i < totalRows; i++)
+                        DevicePlaces.Add(new DevicePlace
                         {
-                            Devices.Add(new Device
-                            {
-                                DevicePlaceId = _context.DevicePlaces.Where(x => x.DeviceType.Name.Contains(((object[,])(worksheet.Cells.Value))[i, 2].ToString())).FirstOrDefault().DevicePlaceId,
-                                WagonId = w.WagonId
-                            });
-                        }
+                            DeviceTypeId = _context.DeviceTypes.Where(x => x.Name.Contains(((object[,])(worksheet.Cells.Value))[i, 2].ToString())).FirstOrDefault().DeviceTypeId,
+                            Code = ((object[,])(worksheet.Cells.Value))[i, 0].ToString(),
+                            Description = ((object[,])(worksheet.Cells.Value))[i, 1].ToString()
+                        });
                     }
                 }
             }
 
-            _context.Devices.AddRange(Devices);
+            _context.DevicePlaces.AddRange(DevicePlaces);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(IndexSync));
+            return RedirectToAction(nameof(Index));
         }
     }
 }

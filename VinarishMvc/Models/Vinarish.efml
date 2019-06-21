@@ -47,15 +47,6 @@
     <id name="DeviceId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="10e72c12-02c1-4158-8671-92f7fd14a991">
       <column name="" />
     </id>
-    <property name="Code" type="String" p1:ValidateRequired="true" p1:Guid="7e4ce3a2-4e71-44bf-95ef-cab4a222b02f">
-      <column name="" unique="True" />
-    </property>
-    <property name="Description" type="String" p1:ValidateRequired="true" p1:Guid="119a917e-9615-4c5a-8ded-a5e84aa14981">
-      <column name="" />
-    </property>
-    <property name="DeviceTypeId" type="Int32" p1:ValidateRequired="true" p1:Guid="51137868-e8b8-421a-bc80-a3a5abb6af4c">
-      <column name="" not-null="False" />
-    </property>
     <property name="WagonId" type="Int32" p1:ValidateRequired="true" p1:Guid="6f5ff2f5-fabc-46ee-af02-6a5641ca6132">
       <column name="" not-null="False" />
     </property>
@@ -64,6 +55,9 @@
     </property>
     <property name="GuaranteeDate" type="DateTime" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="f4cabab2-fc57-4d26-992d-82181b1c9e48">
       <column name="" />
+    </property>
+    <property name="DevicePlaceId" type="Int32" p1:ValidateRequired="true" p1:Guid="8cf96ccf-6bd2-40b4-a4be-c4df43eb31ef">
+      <column name="" not-null="False" />
     </property>
   </class>
   <class name="Report" entity-set="Reports" p1:Guid="92c49109-04b4-4c28-8b44-cef2b3182867">
@@ -150,15 +144,21 @@
       <column name="" not-null="False" />
     </property>
   </class>
+  <class name="DevicePlace" entity-set="DevicePlaces" p1:Guid="4d55201b-4fc4-4d1b-a9db-88f12632a368">
+    <id name="DevicePlaceId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="64ed3f78-4d9a-48bf-bcf8-12db4abdaf07">
+      <column name="" />
+    </id>
+    <property name="Code" type="String" p1:ValidateRequired="true" p1:Guid="37616378-44ea-4240-833d-e8568311d18c">
+      <column name="" unique="True" />
+    </property>
+    <property name="Description" type="String" p1:ValidateRequired="true" p1:Guid="368199af-e3b0-4e6d-a1a8-f1eb2cbf1a37">
+      <column name="" />
+    </property>
+    <property name="DeviceTypeId" type="Int32" p1:ValidateRequired="true" p1:Guid="74b5360c-a1a5-4095-b37d-e084d3546b7a">
+      <column name="" not-null="False" />
+    </property>
+  </class>
   <associations>
-    <association name="DeviceType_Device" cardinality="OneToMany" on-delete="Restrict" p1:Guid="52a2d469-bc89-4b26-b86c-493a01376b82">
-      <end1 multiplicity="One" name="DeviceType" class="Device" relation-class="DeviceType" constrained="True" lazy="False" p1:Guid="3bbdc193-7f81-4c25-a1bf-0fb2d61267ac">
-        <property name="DeviceTypeId" />
-      </end1>
-      <end2 multiplicity="Many" name="Devices" class="DeviceType" relation-class="Device" lazy="False" p1:Guid="f2e9658b-8c72-42b4-9f7f-d2b5e8d4acd2">
-        <property name="DeviceTypeId" />
-      </end2>
-    </association>
     <association name="Wagon_Device" cardinality="OneToMany" on-delete="Restrict" p1:Guid="b2897fd3-db95-4604-9d3a-92fb4b779c26">
       <end1 multiplicity="One" name="Wagon" class="Device" relation-class="Wagon" constrained="True" lazy="False" p1:Guid="2b20a929-7736-419a-9b71-bb190086d31d">
         <property name="WagonId" />
@@ -245,6 +245,22 @@
       </end1>
       <end2 multiplicity="Many" name="AppendixReports" class="Report" relation-class="Report" lazy="False" p1:Guid="1418c2fe-c84b-4b9b-88c3-c30608a02c03">
         <property name="AppendixReportId" />
+      </end2>
+    </association>
+    <association name="DeviceType_DevicePlace" cardinality="OneToMany" on-delete="Restrict" p1:Guid="49f19749-e4eb-4fbe-9204-a5304ca9fb80">
+      <end1 multiplicity="One" name="DeviceType" class="DevicePlace" relation-class="DeviceType" constrained="True" lazy="False" p1:Guid="17184fc3-303a-4f86-bd7f-28521c0ce047">
+        <property name="DeviceTypeId" />
+      </end1>
+      <end2 multiplicity="Many" name="DevicePlaces" class="DeviceType" relation-class="DevicePlace" lazy="False" p1:Guid="7400e362-d8b2-4278-9c5d-997700287329">
+        <property name="DeviceTypeId" />
+      </end2>
+    </association>
+    <association name="DevicePlace_Device" cardinality="OneToMany" on-delete="Restrict" p1:Guid="288238c2-aab3-4821-bec6-f3aa5bfcd232">
+      <end1 multiplicity="One" name="DevicePlace" class="Device" relation-class="DevicePlace" constrained="True" lazy="False" p1:Guid="5e086230-0452-4dc9-b9a9-792e0a19d34d">
+        <property name="DevicePlaceId" />
+      </end1>
+      <end2 multiplicity="Many" name="Devices" class="DevicePlace" relation-class="Device" lazy="False" p1:Guid="238a2aae-558f-44bc-a2d5-5369e7d63989">
+        <property name="DevicePlaceId" />
       </end2>
     </association>
   </associations>
