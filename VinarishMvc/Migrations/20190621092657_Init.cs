@@ -51,7 +51,8 @@ namespace VinarishMvc.Migrations
                 name: "Departments",
                 columns: table => new
                 {
-                    DepartmentId = table.Column<int>(nullable: false),
+                    DepartmentId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -60,18 +61,18 @@ namespace VinarishMvc.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Status",
+                name: "DeviceStatus",
                 columns: table => new
                 {
                     StatusId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Code = table.Column<string>(nullable: false),
                     Text = table.Column<string>(nullable: false),
-                    StatusType = table.Column<int>(nullable: true)
+                    DeviceStatusType = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Status", x => x.StatusId);
+                    table.PrimaryKey("PK_DeviceStatus", x => x.StatusId);
                 });
 
             migrationBuilder.CreateTable(
@@ -301,7 +302,8 @@ namespace VinarishMvc.Migrations
                 name: "TrainTrips",
                 columns: table => new
                 {
-                    TrainTripId = table.Column<int>(nullable: false),
+                    TrainTripId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DateTime = table.Column<DateTime>(nullable: false),
                     TrainId = table.Column<int>(nullable: false),
                     ReporterId = table.Column<int>(nullable: false)
@@ -334,11 +336,18 @@ namespace VinarishMvc.Migrations
                     DeviceId = table.Column<int>(nullable: false),
                     ReporterId = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    StatusCodeId = table.Column<int>(nullable: false)
+                    DeviceStatusId = table.Column<int>(nullable: false),
+                    AppendixReportId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reports", x => x.ReportId);
+                    table.ForeignKey(
+                        name: "FK_Reports_Reports_AppendixReportId",
+                        column: x => x.AppendixReportId,
+                        principalTable: "Reports",
+                        principalColumn: "ReportId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reports_Devices_DeviceId",
                         column: x => x.DeviceId,
@@ -346,16 +355,16 @@ namespace VinarishMvc.Migrations
                         principalColumn: "DeviceId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Reports_DeviceStatus_DeviceStatusId",
+                        column: x => x.DeviceStatusId,
+                        principalTable: "DeviceStatus",
+                        principalColumn: "StatusId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Reports_Reporters_ReporterId",
                         column: x => x.ReporterId,
                         principalTable: "Reporters",
                         principalColumn: "ReporterId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Reports_Status_StatusCodeId",
-                        column: x => x.StatusCodeId,
-                        principalTable: "Status",
-                        principalColumn: "StatusId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -363,7 +372,8 @@ namespace VinarishMvc.Migrations
                 name: "WagonTrips",
                 columns: table => new
                 {
-                    WagonTripId = table.Column<int>(nullable: false),
+                    WagonTripId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     WagonId = table.Column<int>(nullable: false),
                     TrainTripId = table.Column<int>(nullable: false)
                 },
@@ -453,6 +463,18 @@ namespace VinarishMvc.Migrations
                 column: "WagonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DeviceStatus_Code",
+                table: "DeviceStatus",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeviceStatus_Text",
+                table: "DeviceStatus",
+                column: "Text",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DeviceTypes_DepartmentId",
                 table: "DeviceTypes",
                 column: "DepartmentId");
@@ -475,31 +497,24 @@ namespace VinarishMvc.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reports_AppendixReportId",
+                table: "Reports",
+                column: "AppendixReportId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reports_DeviceId",
                 table: "Reports",
                 column: "DeviceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reports_DeviceStatusId",
+                table: "Reports",
+                column: "DeviceStatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reports_ReporterId",
                 table: "Reports",
                 column: "ReporterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reports_StatusCodeId",
-                table: "Reports",
-                column: "StatusCodeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Status_Code",
-                table: "Status",
-                column: "Code",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Status_Text",
-                table: "Status",
-                column: "Text",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trains_Name",
@@ -576,7 +591,7 @@ namespace VinarishMvc.Migrations
                 name: "Devices");
 
             migrationBuilder.DropTable(
-                name: "Status");
+                name: "DeviceStatus");
 
             migrationBuilder.DropTable(
                 name: "TrainTrips");

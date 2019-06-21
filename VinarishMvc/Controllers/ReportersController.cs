@@ -18,12 +18,16 @@ namespace VinarishMvc.Controllers
         {
             _context = context;
         }
-
         // GET: Reporters
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Reporters.Include(r => r.Department);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext =_context.Reporters.Include(r => r.Department);
+            foreach(Reporter r in applicationDbContext)
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == r.VinarishUserId);
+                r.UserName = user.UserName;
+            }
+            return View(applicationDbContext);
         }
 
         // GET: Reporters/Details/5
@@ -45,13 +49,26 @@ namespace VinarishMvc.Controllers
             return View(reporter);
         }
 
-        // GET: Reporters/Create
-        public IActionResult Create()
+        //// GET: Reporters/Create
+        //public IActionResult Create()
+        //{
+        //    ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+        //    return View();
+        //}
+        // GET: Reporters/Create/[vinarishUserId]
+        public IActionResult Create(string id)
         {
+            var reporter = _context.Reporters.Where(x => x.VinarishUserId == id).FirstOrDefault();
+            if (reporter != null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            var user = _context.Users.FirstOrDefault(x => x.Id == id);
+            ViewBag.Name = user.UserName;
+            ViewBag.VinarishUserId = id;
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
             return View();
         }
-
         // POST: Reporters/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.

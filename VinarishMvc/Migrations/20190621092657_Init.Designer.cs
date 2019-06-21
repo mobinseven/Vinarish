@@ -10,7 +10,7 @@ using VinarishMvc.Data;
 namespace VinarishMvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190621072156_Init")]
+    [Migration("20190621092657_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -212,7 +212,9 @@ namespace VinarishMvc.Migrations
             modelBuilder.Entity("VinarishMvc.Models.Department", b =>
                 {
                     b.Property<int>("DepartmentId")
-                        .HasColumnName("DepartmentId");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("DepartmentId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -269,6 +271,35 @@ namespace VinarishMvc.Migrations
                     b.ToTable("Devices");
                 });
 
+            modelBuilder.Entity("VinarishMvc.Models.DeviceStatus", b =>
+                {
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StatusId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnName("Code");
+
+                    b.Property<int?>("DeviceStatusType")
+                        .HasColumnName("DeviceStatusType");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnName("Text");
+
+                    b.HasKey("StatusId");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("Text")
+                        .IsUnique();
+
+                    b.ToTable("DeviceStatus");
+                });
+
             modelBuilder.Entity("VinarishMvc.Models.DeviceType", b =>
                 {
                     b.Property<int>("DeviceTypeId")
@@ -300,6 +331,9 @@ namespace VinarishMvc.Migrations
                         .HasColumnName("ReportId")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("AppendixReportId")
+                        .HasColumnName("AppendixReportId");
+
                     b.Property<DateTime>("DateTimeCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("DateTimeCreated")
@@ -313,22 +347,24 @@ namespace VinarishMvc.Migrations
                     b.Property<int>("DeviceId")
                         .HasColumnName("DeviceId");
 
+                    b.Property<int>("DeviceStatusId")
+                        .HasColumnName("DeviceStatusId");
+
                     b.Property<int>("ReporterId")
                         .HasColumnName("ReporterId");
 
                     b.Property<int>("Status")
                         .HasColumnName("Status");
 
-                    b.Property<int>("StatusCodeId")
-                        .HasColumnName("StatusCodeId");
-
                     b.HasKey("ReportId");
+
+                    b.HasIndex("AppendixReportId");
 
                     b.HasIndex("DeviceId");
 
-                    b.HasIndex("ReporterId");
+                    b.HasIndex("DeviceStatusId");
 
-                    b.HasIndex("StatusCodeId");
+                    b.HasIndex("ReporterId");
 
                     b.ToTable("Reports");
                 });
@@ -357,35 +393,6 @@ namespace VinarishMvc.Migrations
                     b.ToTable("Reporters");
                 });
 
-            modelBuilder.Entity("VinarishMvc.Models.Status", b =>
-                {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("StatusId")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnName("Code");
-
-                    b.Property<int?>("StatusType")
-                        .HasColumnName("StatusType");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnName("Text");
-
-                    b.HasKey("StatusId");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("Text")
-                        .IsUnique();
-
-                    b.ToTable("Status");
-                });
-
             modelBuilder.Entity("VinarishMvc.Models.Train", b =>
                 {
                     b.Property<int>("TrainId")
@@ -408,7 +415,9 @@ namespace VinarishMvc.Migrations
             modelBuilder.Entity("VinarishMvc.Models.TrainTrip", b =>
                 {
                     b.Property<int>("TrainTripId")
-                        .HasColumnName("TrainTripId");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("TrainTripId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnName("DateTime");
@@ -456,7 +465,9 @@ namespace VinarishMvc.Migrations
             modelBuilder.Entity("VinarishMvc.Models.WagonTrip", b =>
                 {
                     b.Property<int>("WagonTripId")
-                        .HasColumnName("WagonTripId");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("WagonTripId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("TrainTripId")
                         .HasColumnName("TrainTripId");
@@ -541,19 +552,24 @@ namespace VinarishMvc.Migrations
 
             modelBuilder.Entity("VinarishMvc.Models.Report", b =>
                 {
+                    b.HasOne("VinarishMvc.Models.Report", "Report1")
+                        .WithMany("AppendixReports")
+                        .HasForeignKey("AppendixReportId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("VinarishMvc.Models.Device", "Device")
                         .WithMany("MalfunctionReports")
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("VinarishMvc.Models.DeviceStatus", "DeviceStatus")
+                        .WithMany("Reports")
+                        .HasForeignKey("DeviceStatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("VinarishMvc.Models.Reporter", "Reporter")
                         .WithMany("MalfunctionReports")
                         .HasForeignKey("ReporterId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("VinarishMvc.Models.Status", "StatusCode")
-                        .WithMany("MalfunctionReports")
-                        .HasForeignKey("StatusCodeId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

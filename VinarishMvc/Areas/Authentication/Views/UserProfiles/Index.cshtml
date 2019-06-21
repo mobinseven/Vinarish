@@ -43,6 +43,7 @@
                     </button>
                     <div class="dropdown-menu">
                         <a asp-action="ChangeRole" asp-route-id="@item.UserProfileId" class="dropdown-item">Accesses</a>
+                        <a asp-action="Create" asp-controller="Reporters" asp-route-id="@item.VinarishUserId" class="dropdown-item">Department</a>
                         <a asp-action="ChangePassword" asp-route-id="@item.UserProfileId" class="dropdown-item">Change Password</a>
                         <a asp-action="Edit" asp-route-id="@item.UserProfileId" class="dropdown-item">Edit</a>
                         <a asp-action="Details" asp-route-id="@item.UserProfileId" class="dropdown-item">Details</a>
