@@ -1,0 +1,8 @@
+﻿@using VinarishMvc.Models
+@foreach (DevicePlace dp in ViewBag.DevicePlaces)
+{
+    <div style="margin:0 auto; width:300px;">
+        <ejs-inplaceeditor id="dp-@dp.DevicePlaceId" mode="Inline" value="dp.Description" name="DevicePlace" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
+        </ejs-inplaceeditor>
+    </div>
+}
