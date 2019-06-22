@@ -8,15 +8,15 @@
         <File Name="Vinarish.Train.cs" />
         <File Name="Vinarish.Wagon.cs" />
         <File Name="Vinarish.DeviceType.cs" />
-        <File Name="Vinarish.Device.cs" />
         <File Name="Vinarish.Report.cs" />
         <File Name="Vinarish.Reporter.cs" />
-        <File Name="Vinarish.Status.cs" />
+        <File Name="Vinarish.DeviceStatus.cs" />
         <File Name="Vinarish.WagonTrip.cs" />
         <File Name="Vinarish.Department.cs" />
         <File Name="Vinarish.TrainTrip.cs" />
+        <File Name="Vinarish.DevicePlace.cs" />
         <File Name="Vinarish.ReportStatus.cs" />
-        <File Name="Vinarish.StatusType.cs" />
+        <File Name="Vinarish.DeviceStatusType.cs" />
       </GeneratedFiles>
     </Generation>
     <DatabaseFirstNamingRules>

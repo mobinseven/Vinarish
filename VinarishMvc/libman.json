@@ -11,6 +11,10 @@
         "dist/js/persian-datepicker.min.js",
         "dist/css/persian-datepicker.min.css"
       ]
+    },
+    {
+      "library": "open-iconic@1.1.1",
+      "destination": "wwwroot/lib/open-iconic/"
     }
   ]
 }

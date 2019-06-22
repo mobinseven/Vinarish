@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
@@ -27,7 +30,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: DeviceTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -61,6 +64,7 @@ namespace VinarishMvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                deviceType.DeviceTypeId = Guid.NewGuid();
                 _context.Add(deviceType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -70,7 +74,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: DeviceTypes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -91,7 +95,7 @@ namespace VinarishMvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DeviceTypeId,Name,DepartmentId")] DeviceType deviceType)
+        public async Task<IActionResult> Edit(Guid id, [Bind("DeviceTypeId,Name,DepartmentId")] DeviceType deviceType)
         {
             if (id != deviceType.DeviceTypeId)
             {
@@ -123,7 +127,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: DeviceTypes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -144,7 +148,7 @@ namespace VinarishMvc.Controllers
         // POST: DeviceTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var deviceType = await _context.DeviceTypes.FindAsync(id);
             _context.DeviceTypes.Remove(deviceType);
@@ -152,9 +156,45 @@ namespace VinarishMvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DeviceTypeExists(int id)
+        private bool DeviceTypeExists(Guid id)
         {
             return _context.DeviceTypes.Any(e => e.DeviceTypeId == id);
+        }
+        // POST: DeviceTypes/Upload
+        [HttpPost, ActionName("Upload")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upload(IFormFile File)
+        {
+            IFormFile file = File;
+            if (file == null || file.Length == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            List<DeviceType> DeviceTypes = new List<DeviceType>();
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream).ConfigureAwait(false);
+
+                using (var package = new ExcelPackage(memoryStream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Tip: To access the first worksheet, try index 1, not 0
+                    int totalRows = worksheet.Dimension.Rows;
+
+
+                    for (int i = 0; i < totalRows; i++)
+                    {
+                        DeviceTypes.Add(new DeviceType
+                        {
+                            Name = ((object[,])(worksheet.Cells.Value))[i, 0].ToString(),
+                            DepartmentId = _context.Departments.Where(d => d.Name.Contains("Iptv")).FirstOrDefault().DepartmentId
+                        });
+                    }
+                }
+            }
+
+            _context.DeviceTypes.AddRange(DeviceTypes);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

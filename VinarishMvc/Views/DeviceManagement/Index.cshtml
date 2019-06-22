@@ -1,8 +1,27 @@
 ﻿@using VinarishMvc.Models
-@foreach (DevicePlace dp in ViewBag.DevicePlaces)
+@foreach (Department d in ViewBag.Data)
 {
-    <div style="margin:0 auto; width:300px;">
-        <ejs-inplaceeditor id="dp-@dp.DevicePlaceId" mode="Inline" value="dp.Description" name="DevicePlace" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
-        </ejs-inplaceeditor>
+    <div class="list-group">
+
+        <span data-target="#menu-@d.DepartmentId" class="list-group-item list-group-item-dark font-weight-bolder" data-toggle="collapse">
+            <i class="iconic iconic-chevron-right"></i>@d.Name
+        </span>
+        <div class="list-group collapse" id="menu-@d.DepartmentId">
+
+            @foreach (DeviceType dt in d.DeviceTypes)
+            {
+                <span data-target="#menu-@dt.DeviceTypeId" class="list-group-item list-group-item-secondary font-weight-bold" data-toggle="collapse">
+                    <i class="glyphicon glyphicon-chevron-right"></i>@dt.Name
+                </span>
+                <div class="list-group collapse" id="menu-@dt.DeviceTypeId">
+                    @foreach (DevicePlace dp in dt.DevicePlaces)
+                    {
+                            <ejs-inplaceeditor cssClass="list-group-item" id="dp-@dp.DevicePlaceId" mode="Inline" value="dp.Description" name="DevicePlace" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
+                            </ejs-inplaceeditor>
+                    }
+                </div>
+            }
+        </div>
+
     </div>
 }

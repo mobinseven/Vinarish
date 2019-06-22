@@ -22,7 +22,7 @@
     </property>
   </class>
   <class name="Wagon" entity-set="Wagons" p1:Guid="afc1af8a-546a-4617-a8dc-fac399bb2084">
-    <id name="WagonId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="2f43918f-d830-49ac-a0b4-d4647ff6185a">
+    <id name="WagonId" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="2f43918f-d830-49ac-a0b4-d4647ff6185a">
       <column name="" />
     </id>
     <property name="Number" type="Int32" p1:ValidateRequired="true" p1:Guid="1a8bbead-a57d-4e87-a057-b4c91debde35">
@@ -33,30 +33,13 @@
     </property>
   </class>
   <class name="DeviceType" entity-set="DeviceTypes" p1:Guid="a7e9c880-9522-483e-ae38-aa86224bd61a">
-    <id name="DeviceTypeId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="e67af33f-8829-48a0-93d2-df93f509edb3">
+    <id name="DeviceTypeId" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="e67af33f-8829-48a0-93d2-df93f509edb3">
       <column name="" />
     </id>
     <property name="Name" type="String" p1:ValidateRequired="true" p1:Guid="57c4b0a5-3603-4b99-ad44-43498c5a87c1">
       <column name="" unique="True" />
     </property>
-    <property name="DepartmentId" type="Int32" p1:ValidateRequired="true" p1:Guid="cf759993-122a-4414-ae40-80169384b6cf">
-      <column name="" not-null="False" />
-    </property>
-  </class>
-  <class name="Device" entity-set="Devices" p1:Guid="58ff37e0-d147-4eaf-8cd6-7b663f22c750">
-    <id name="DeviceId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="10e72c12-02c1-4158-8671-92f7fd14a991">
-      <column name="" />
-    </id>
-    <property name="WagonId" type="Int32" p1:ValidateRequired="true" p1:Guid="6f5ff2f5-fabc-46ee-af02-6a5641ca6132">
-      <column name="" not-null="False" />
-    </property>
-    <property name="Serial" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="aaa1b271-9f6b-43ba-911d-96b15ce3d681">
-      <column name="" unique="True" />
-    </property>
-    <property name="GuaranteeDate" type="DateTime" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="f4cabab2-fc57-4d26-992d-82181b1c9e48">
-      <column name="" />
-    </property>
-    <property name="DevicePlaceId" type="Int32" p1:ValidateRequired="true" p1:Guid="8cf96ccf-6bd2-40b4-a4be-c4df43eb31ef">
+    <property name="DepartmentId" type="Guid" p1:ValidateRequired="true" p1:Guid="cf759993-122a-4414-ae40-80169384b6cf">
       <column name="" not-null="False" />
     </property>
   </class>
@@ -70,19 +53,22 @@
     <property name="DateTimeModified" type="DateTime" value-generated="OnAddOrUpdate" p1:ValidateRequired="true" p1:Guid="0bd864b7-f39e-410e-83fe-d655b1eb6137">
       <column name="" default="CURRENT_TIMESTAMP" />
     </property>
-    <property name="DeviceId" type="Int32" p1:ValidateRequired="true" p1:Guid="c1f51020-ae05-45b6-9732-a7b24be5baea">
-      <column name="" not-null="False" />
-    </property>
     <property name="ReporterId" type="Int32" p1:ValidateRequired="true" p1:Guid="d1983d1f-4125-4d89-a562-eb257b081db5">
       <column name="" not-null="False" />
     </property>
     <property name="Status" type="VinarishMvc.Models.ReportStatus" p1:ValidateRequired="true" p1:Guid="9e42ab01-3fd0-43f7-bcbc-418c6b97ab03">
       <column name="" />
     </property>
-    <property name="DeviceStatusId" type="Int32" p1:ValidateRequired="true" p1:Guid="3db62de3-d13d-4959-9d75-d5d501eed5f7">
+    <property name="DeviceStatusId" type="Guid" p1:ValidateRequired="true" p1:Guid="3db62de3-d13d-4959-9d75-d5d501eed5f7">
       <column name="" not-null="False" />
     </property>
     <property name="AppendixReportId" type="Int32" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="2507e78c-d919-4bff-826c-2a408ab5a600">
+      <column name="" not-null="False" />
+    </property>
+    <property name="DevicePlaceId" type="Guid" p1:ValidateRequired="true" p1:Guid="efb0eed3-7c24-4672-b8b2-5f110cd37c6d">
+      <column name="" not-null="False" />
+    </property>
+    <property name="WagonId" type="Guid" p1:ValidateRequired="true" p1:Guid="d177784e-ba67-45f9-b489-e6acec053857">
       <column name="" not-null="False" />
     </property>
   </class>
@@ -93,12 +79,12 @@
     <property name="VinarishUserId" type="String" p1:ValidateRequired="true" p1:Guid="3569a889-2d22-454a-bddc-fa7893f83262">
       <column name="" unique="True" />
     </property>
-    <property name="DepartmentId" type="Int32" p1:ValidateRequired="true" p1:Guid="5092e09f-5edc-4b46-a5d7-109ed6433922">
+    <property name="DepartmentId" type="Guid" p1:ValidateRequired="true" p1:Guid="5092e09f-5edc-4b46-a5d7-109ed6433922">
       <column name="" not-null="False" />
     </property>
   </class>
   <class name="DeviceStatus" entity-set="DeviceStatus" p1:Guid="b81dc021-06f6-4062-97b3-3f2d19f275b1">
-    <id name="StatusId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="a97c336c-09aa-4b3c-ba0b-4f12caf0a4ff">
+    <id name="StatusId" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="a97c336c-09aa-4b3c-ba0b-4f12caf0a4ff">
       <column name="" />
     </id>
     <property name="Code" type="String" p1:ValidateRequired="true" p1:Guid="e4740e9c-d24b-44bc-9db7-ffe9a9fd9fd2">
@@ -110,20 +96,23 @@
     <property name="DeviceStatusType" type="VinarishMvc.Models.DeviceStatusType" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="bb7e03a0-2c37-4883-b2d3-4b2f2da7ffc8">
       <column name="" />
     </property>
-  </class>
-  <class name="WagonTrip" entity-set="WagonTrips" p1:Guid="5aaddd02-b71a-42c1-82af-684537875089">
-    <id name="WagonTripId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="941272b4-627e-4913-b8f0-6bbecf217d96">
-      <column name="" />
-    </id>
-    <property name="WagonId" type="Int32" p1:ValidateRequired="true" p1:Guid="4a8e5d64-b62e-41c4-8498-46c1d745ee0e">
+    <property name="DeviceTypeId" type="Guid" p1:ValidateRequired="true" p1:Guid="2f222550-18c2-4c0c-b217-c7666b5a1f36">
       <column name="" not-null="False" />
     </property>
-    <property name="TrainTripId" type="Int32" p1:ValidateRequired="true" p1:Guid="5bf2debc-829e-4fba-b61f-f7529670b593">
+  </class>
+  <class name="WagonTrip" entity-set="WagonTrips" p1:Guid="5aaddd02-b71a-42c1-82af-684537875089">
+    <id name="WagonTripId" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="941272b4-627e-4913-b8f0-6bbecf217d96">
+      <column name="" />
+    </id>
+    <property name="WagonId" type="Guid" p1:ValidateRequired="true" p1:Guid="4a8e5d64-b62e-41c4-8498-46c1d745ee0e">
+      <column name="" not-null="False" />
+    </property>
+    <property name="TrainTripId" type="Guid" p1:ValidateRequired="true" p1:Guid="5bf2debc-829e-4fba-b61f-f7529670b593">
       <column name="" not-null="False" />
     </property>
   </class>
   <class name="Department" entity-set="Departments" p1:Guid="75efdf49-fad0-48ac-9abf-3144f52affb4">
-    <id name="DepartmentId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="6da3ea62-3435-4c97-89f7-749c61a97ce8">
+    <id name="DepartmentId" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="6da3ea62-3435-4c97-89f7-749c61a97ce8">
       <column name="" />
     </id>
     <property name="Name" type="String" p1:ValidateRequired="true" p1:Guid="0b084086-d8c4-402a-ab55-773a24351d85">
@@ -131,7 +120,7 @@
     </property>
   </class>
   <class name="TrainTrip" entity-set="TrainTrips" p1:Guid="c5eac420-2400-4e78-bcb2-ca68b184efaa">
-    <id name="TrainTripId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="2d6d7805-1903-49bc-895a-9010d45d73fc">
+    <id name="TrainTripId" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="2d6d7805-1903-49bc-895a-9010d45d73fc">
       <column name="" />
     </id>
     <property name="DateTime" type="DateTime" p1:ValidateRequired="true" p1:Guid="c1dec141-b649-4e43-9590-bebe098b45b5">
@@ -145,36 +134,20 @@
     </property>
   </class>
   <class name="DevicePlace" entity-set="DevicePlaces" p1:Guid="4d55201b-4fc4-4d1b-a9db-88f12632a368">
-    <id name="DevicePlaceId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="64ed3f78-4d9a-48bf-bcf8-12db4abdaf07">
+    <id name="DevicePlaceId" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="64ed3f78-4d9a-48bf-bcf8-12db4abdaf07">
       <column name="" />
     </id>
+    <concurrency name="DeviceTypeId" type="Guid" p1:ValidateRequired="true" p1:Guid="74b5360c-a1a5-4095-b37d-e084d3546b7a">
+      <column name="" not-null="False" />
+    </concurrency>
     <property name="Code" type="String" p1:ValidateRequired="true" p1:Guid="37616378-44ea-4240-833d-e8568311d18c">
       <column name="" unique="True" />
     </property>
     <property name="Description" type="String" p1:ValidateRequired="true" p1:Guid="368199af-e3b0-4e6d-a1a8-f1eb2cbf1a37">
       <column name="" />
     </property>
-    <property name="DeviceTypeId" type="Int32" p1:ValidateRequired="true" p1:Guid="74b5360c-a1a5-4095-b37d-e084d3546b7a">
-      <column name="" not-null="False" />
-    </property>
   </class>
   <associations>
-    <association name="Wagon_Device" cardinality="OneToMany" on-delete="Restrict" p1:Guid="b2897fd3-db95-4604-9d3a-92fb4b779c26">
-      <end1 multiplicity="One" name="Wagon" class="Device" relation-class="Wagon" constrained="True" lazy="False" p1:Guid="2b20a929-7736-419a-9b71-bb190086d31d">
-        <property name="WagonId" />
-      </end1>
-      <end2 multiplicity="Many" name="Devices" class="Wagon" relation-class="Device" lazy="False" p1:Guid="e6b23374-beb6-4dda-809e-347f26c798b5">
-        <property name="WagonId" />
-      </end2>
-    </association>
-    <association name="Device_MalfunctionReport" cardinality="OneToMany" on-delete="Restrict" p1:Guid="7aae3c89-d24e-4f51-9836-49aa01ced010">
-      <end1 multiplicity="One" name="Device" class="Report" relation-class="Device" constrained="True" lazy="False" p1:Guid="2e13bd2e-c7c3-4540-aac5-cb1f7940ef3c">
-        <property name="DeviceId" />
-      </end1>
-      <end2 multiplicity="Many" name="MalfunctionReports" class="Device" relation-class="Report" lazy="False" p1:Guid="fee9694b-b53a-4ad8-bcf3-34c6274ec0bc">
-        <property name="DeviceId" />
-      </end2>
-    </association>
     <association name="Reporter_MalfunctionReport" cardinality="OneToMany" on-delete="Restrict" p1:Guid="098362e0-a875-4bda-aa4c-0bfd80eb5b8d">
       <end1 multiplicity="One" name="Reporter" class="Report" relation-class="Reporter" constrained="True" lazy="False" p1:Guid="9eeae8ae-e1e9-47ee-bfab-c44759b63bc0">
         <property name="ReporterId" />
@@ -240,7 +213,7 @@
       </end2>
     </association>
     <association name="Report_Report" cardinality="OneToMany" on-delete="Restrict" p1:Guid="944c9241-995e-4867-b28f-4b5f7b81152c">
-      <end1 multiplicity="ZeroOrOne" name="Report1" class="Report" relation-class="Report" constrained="True" lazy="False" p1:Guid="5dd78782-aaf6-4633-88ff-8f7cd6745734">
+      <end1 multiplicity="ZeroOrOne" name="ParentReport" class="Report" relation-class="Report" constrained="True" lazy="False" p1:Guid="5dd78782-aaf6-4633-88ff-8f7cd6745734">
         <property name="ReportId" />
       </end1>
       <end2 multiplicity="Many" name="AppendixReports" class="Report" relation-class="Report" lazy="False" p1:Guid="1418c2fe-c84b-4b9b-88c3-c30608a02c03">
@@ -255,12 +228,28 @@
         <property name="DeviceTypeId" />
       </end2>
     </association>
-    <association name="DevicePlace_Device" cardinality="OneToMany" on-delete="Restrict" p1:Guid="288238c2-aab3-4821-bec6-f3aa5bfcd232">
-      <end1 multiplicity="One" name="DevicePlace" class="Device" relation-class="DevicePlace" constrained="True" lazy="False" p1:Guid="5e086230-0452-4dc9-b9a9-792e0a19d34d">
+    <association name="DeviceType_DeviceStatus" cardinality="OneToMany" p1:Guid="9635f267-c121-441f-9fd5-44c91b55f483">
+      <end1 multiplicity="One" name="DeviceType" class="DeviceStatus" relation-class="DeviceType" constrained="True" lazy="False" p1:Guid="6aced2d4-2946-4857-b367-889bbb085e41">
+        <property name="DeviceTypeId" />
+      </end1>
+      <end2 multiplicity="Many" name="DeviceStatus" class="DeviceType" relation-class="DeviceStatus" lazy="False" p1:Guid="c3b47294-244a-44d1-8a1c-7bd91b05b19a">
+        <property name="DeviceTypeId" />
+      </end2>
+    </association>
+    <association name="DevicePlace_Report" cardinality="OneToMany" on-delete="Restrict" p1:Guid="11dea58c-aa3a-4677-ad11-1bded9902158">
+      <end1 multiplicity="One" name="DevicePlace" class="Report" relation-class="DevicePlace" constrained="True" lazy="False" p1:Guid="95441710-4b39-4dbf-a179-36b0a8178f8d">
         <property name="DevicePlaceId" />
       </end1>
-      <end2 multiplicity="Many" name="Devices" class="DevicePlace" relation-class="Device" lazy="False" p1:Guid="238a2aae-558f-44bc-a2d5-5369e7d63989">
+      <end2 multiplicity="Many" name="Reports" class="DevicePlace" relation-class="Report" lazy="False" p1:Guid="0aa91ac7-09e7-48d8-ba6a-ae62f96d6ac6">
         <property name="DevicePlaceId" />
+      </end2>
+    </association>
+    <association name="Wagon_Report" cardinality="OneToMany" p1:Guid="5290fc66-590c-48e6-8416-b69d29bcdbea">
+      <end1 multiplicity="One" name="Wagon" class="Report" relation-class="Wagon" constrained="True" lazy="False" p1:Guid="9d43be31-3f58-4860-9393-15674ff6385d">
+        <property name="WagonId" />
+      </end1>
+      <end2 multiplicity="Many" name="Reports" class="Wagon" relation-class="Report" lazy="False" p1:Guid="a2c2b8ed-b9a0-46d0-ba5d-b5de8e7bd48d">
+        <property name="WagonId" />
       </end2>
     </association>
   </associations>
