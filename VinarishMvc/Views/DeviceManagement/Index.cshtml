@@ -16,8 +16,16 @@
                 <div class="list-group collapse" id="menu-@dt.DeviceTypeId">
                     @foreach (DevicePlace dp in dt.DevicePlaces)
                     {
-                            <ejs-inplaceeditor cssClass="list-group-item" id="dp-@dp.DevicePlaceId" mode="Inline" value="dp.Description" name="DevicePlace" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
-                            </ejs-inplaceeditor>
+                        <div class="d-flex flex-row flex-wrap ">
+                            <div class="card p-2 px-3 w-50 list-group-item-action">
+                                <ejs-inplaceeditor data-underline="false" id="dp-desc-@dp.DevicePlaceId" mode="Inline" value="dp.Description" name="Description" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
+                                </ejs-inplaceeditor>
+                            </div>
+                            <div class="card p-2 px-3 w-50 list-group-item-action">
+                                <ejs-inplaceeditor data-underline="false" id="dp-code-@dp.DevicePlaceId" mode="Inline" value="dp.Code" name="Code" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
+                                </ejs-inplaceeditor>
+                            </div>
+                        </div>
                     }
                 </div>
             }

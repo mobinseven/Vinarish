@@ -23,18 +23,23 @@ namespace VinarishMvc.Controllers
         public class SubmitModel
         {
             public string Name { get; set; }
-            public int PrimaryKey { get; set; }
+            public string PrimaryKey { get; set; }
             public string Value { get; set; }
         }
         public SubmitModel UpdateData([FromBody]SubmitModel payload)
         {
-            if (payload.Name == "DevicePlace")
+            var devicePlace = _context.DevicePlaces.Find(Guid.Parse(payload.PrimaryKey));
+            if (payload.Name == "Description")
             {
-                var devicePlace = _context.DevicePlaces.Find(payload.PrimaryKey);
                 devicePlace.Description = payload.Value;
-                _context.Update(devicePlace);
-                _context.SaveChanges();
             }
+            if (payload.Name == "Code")
+            {
+                devicePlace.Code = payload.Value;
+
+            }
+            _context.Update(devicePlace);
+            _context.SaveChanges();
             return payload;
         }
 
@@ -45,29 +50,12 @@ namespace VinarishMvc.Controllers
                 _context.Departments
                 .Include(d => d.DeviceTypes)
                 .ThenInclude(dt => dt.DevicePlaces)
+                .Include(d => d.DeviceTypes)
+                .ThenInclude(dt => dt.DeviceStatus)
                 .ToList();
-
-            ViewBag.modalData = new { placeholder = "Enter employee name" };
 
             return View();
 
-        }
-        public class Continents
-        {
-            public string code;
-            public string name;
-            public bool expanded;
-            public bool selected;
-            public List<Countries> child;
-
-        }
-        public class Countries
-        {
-            public string code;
-            public string name;
-            public bool expanded;
-            public bool selected;
-            public DevicePlace DevicePlace;
         }
     }
 }
