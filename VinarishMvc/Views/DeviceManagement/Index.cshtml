@@ -1,35 +1,70 @@
-﻿@using VinarishMvc.Models
-@foreach (Department d in ViewBag.Data)
-{
-    <div class="list-group">
+﻿
+<div class="container-fluid">
+    <div class="row d-flex">
 
-        <span data-target="#menu-@d.DepartmentId" class="list-group-item list-group-item-dark font-weight-bolder" data-toggle="collapse">
-            <i class="iconic iconic-chevron-right"></i>@d.Name
-        </span>
-        <div class="list-group collapse" id="menu-@d.DepartmentId">
+        <nav class="col-xs-6 collapse show width bar" id="sidebar">
+            <div class="btn-group-vertical" role="group">
+                @foreach (Department d in ViewBag.Data)
+                {
 
-            @foreach (DeviceType dt in d.DeviceTypes)
-            {
-                <span data-target="#menu-@dt.DeviceTypeId" class="list-group-item list-group-item-secondary font-weight-bold" data-toggle="collapse">
-                    <i class="glyphicon glyphicon-chevron-right"></i>@dt.Name
-                </span>
-                <div class="list-group collapse" id="menu-@dt.DeviceTypeId">
-                    @foreach (DevicePlace dp in dt.DevicePlaces)
-                    {
-                        <div class="d-flex flex-row flex-wrap ">
-                            <div class="card p-2 px-3 w-50 list-group-item-action">
-                                <ejs-inplaceeditor data-underline="false" id="dp-desc-@dp.DevicePlaceId" mode="Inline" value="dp.Description" name="Description" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
-                                </ejs-inplaceeditor>
-                            </div>
-                            <div class="card p-2 px-3 w-50 list-group-item-action">
-                                <ejs-inplaceeditor data-underline="false" id="dp-code-@dp.DevicePlaceId" mode="Inline" value="dp.Code" name="Code" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
-                                </ejs-inplaceeditor>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-        </div>
+                    <span data-target="#menu-@d.DepartmentId" class="btn btn-dark btn-lg" data-toggle="collapse">
+                        @d.Name
+                    </span>
+                    <div class="collapse btn-group-vertical" role="group" id="menu-@d.DepartmentId">
 
+                        @foreach (DeviceType dt in d.DeviceTypes)
+                        {
+                            <button onclick="NodeClicked('@dt.DeviceTypeId')" class="btn btn-light btn-lg" data-toggle="collapse" data-target=".bar">
+                                @dt.Name
+                            </button>
+                        }
+                    </div>
+
+                }
+            </div>
+        </nav>
+        <main class="col-xl bar" id="mainbar">
+            <div id="main">
+
+            </div>
+        </main>
     </div>
-}
+</div>
+<style>
+    .fa {
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .collapse.show {
+        visibility: visible;
+    }
+
+    .collapsing {
+        visibility: visible;
+        height: 0;
+        -webkit-transition-property: height, visibility;
+        transition-property: height, visibility;
+        -webkit-transition-timing-function: ease-out;
+        transition-timing-function: ease-out;
+        -webkit-transition: width .1s; /* Safari */
+        transition: width .1s;
+    }
+
+        .collapsing.width {
+            -webkit-transition-property: width, visibility;
+            transition-property: width, visibility;
+            width: 0;
+            height: 100%;
+            -webkit-transition-timing-function: ease-out;
+            transition-timing-function: ease-out;
+            -webkit-transition: width .1s; /* Safari */
+            transition: width .1s;
+        }
+</style>
+
+<script>
+    function NodeClicked(e) {
+        $("#main").load("DeviceManagement/about/" + e);
+    }
+</script>

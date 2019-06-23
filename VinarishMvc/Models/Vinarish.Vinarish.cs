@@ -8,23 +8,10 @@
 // the code is regenerated.
 //------------------------------------------------------------------------------
 
-using System;
-using System.Data;
-using System.Linq;
-using System.Linq.Expressions;
-using System.ComponentModel;
-using System.Reflection;
-using System.Data.Common;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
-using VinarishMvc.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using VinarishMvc.Areas.Authentication.Models;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Linq;
 using VinarishMvc.Areas.Identity.Models;
 using VinarishMvc.Models;
 
@@ -103,35 +90,35 @@ namespace VinarishMvc.Data
 
         protected void VinarishOnModelCreating(ModelBuilder modelBuilder)
         {
-            this.TrainMapping(modelBuilder);
-            this.CustomizeTrainMapping(modelBuilder);
+            TrainMapping(modelBuilder);
+            CustomizeTrainMapping(modelBuilder);
 
-            this.WagonMapping(modelBuilder);
-            this.CustomizeWagonMapping(modelBuilder);
+            WagonMapping(modelBuilder);
+            CustomizeWagonMapping(modelBuilder);
 
-            this.DeviceTypeMapping(modelBuilder);
-            this.CustomizeDeviceTypeMapping(modelBuilder);
+            DeviceTypeMapping(modelBuilder);
+            CustomizeDeviceTypeMapping(modelBuilder);
 
-            this.ReportMapping(modelBuilder);
-            this.CustomizeReportMapping(modelBuilder);
+            ReportMapping(modelBuilder);
+            CustomizeReportMapping(modelBuilder);
 
-            this.ReporterMapping(modelBuilder);
-            this.CustomizeReporterMapping(modelBuilder);
+            ReporterMapping(modelBuilder);
+            CustomizeReporterMapping(modelBuilder);
 
-            this.DeviceStatusMapping(modelBuilder);
-            this.CustomizeDeviceStatusMapping(modelBuilder);
+            DeviceStatusMapping(modelBuilder);
+            CustomizeDeviceStatusMapping(modelBuilder);
 
-            this.WagonTripMapping(modelBuilder);
-            this.CustomizeWagonTripMapping(modelBuilder);
+            WagonTripMapping(modelBuilder);
+            CustomizeWagonTripMapping(modelBuilder);
 
-            this.DepartmentMapping(modelBuilder);
-            this.CustomizeDepartmentMapping(modelBuilder);
+            DepartmentMapping(modelBuilder);
+            CustomizeDepartmentMapping(modelBuilder);
 
-            this.TrainTripMapping(modelBuilder);
-            this.CustomizeTrainTripMapping(modelBuilder);
+            TrainTripMapping(modelBuilder);
+            CustomizeTrainTripMapping(modelBuilder);
 
-            this.DevicePlaceMapping(modelBuilder);
-            this.CustomizeDevicePlaceMapping(modelBuilder);
+            DevicePlaceMapping(modelBuilder);
+            CustomizeDevicePlaceMapping(modelBuilder);
 
             RelationshipsMapping(modelBuilder);
             CustomizeMapping(ref modelBuilder);
@@ -307,28 +294,28 @@ namespace VinarishMvc.Data
         private void RelationshipsMapping(ModelBuilder modelBuilder)
         {
 
-        #region Train Navigation properties
+            #region Train Navigation properties
 
             modelBuilder.Entity<Train>().HasMany(x => x.TrainTrips).WithOne(op => op.Train).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"TrainId");
 
-        #endregion
+            #endregion
 
-        #region Wagon Navigation properties
+            #region Wagon Navigation properties
 
             modelBuilder.Entity<Wagon>().HasMany(x => x.Trips).WithOne(op => op.Wagon).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"WagonId");
             modelBuilder.Entity<Wagon>().HasMany(x => x.Reports).WithOne(op => op.Wagon).IsRequired(true).HasForeignKey(@"WagonId");
 
-        #endregion
+            #endregion
 
-        #region DeviceType Navigation properties
+            #region DeviceType Navigation properties
 
             modelBuilder.Entity<DeviceType>().HasOne(x => x.Department).WithMany(op => op.DeviceTypes).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DepartmentId");
             modelBuilder.Entity<DeviceType>().HasMany(x => x.DevicePlaces).WithOne(op => op.DeviceType).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DeviceTypeId");
             modelBuilder.Entity<DeviceType>().HasMany(x => x.DeviceStatus).WithOne(op => op.DeviceType).IsRequired(true).HasForeignKey(@"DeviceTypeId");
 
-        #endregion
+            #endregion
 
-        #region Report Navigation properties
+            #region Report Navigation properties
 
             modelBuilder.Entity<Report>().HasOne(x => x.Reporter).WithMany(op => op.MalfunctionReports).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"ReporterId");
             modelBuilder.Entity<Report>().HasOne(x => x.DeviceStatus).WithMany(op => op.Reports).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DeviceStatusId");
@@ -337,51 +324,51 @@ namespace VinarishMvc.Data
             modelBuilder.Entity<Report>().HasOne(x => x.DevicePlace).WithMany(op => op.Reports).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DevicePlaceId");
             modelBuilder.Entity<Report>().HasOne(x => x.Wagon).WithMany(op => op.Reports).IsRequired(true).HasForeignKey(@"WagonId");
 
-        #endregion
+            #endregion
 
-        #region Reporter Navigation properties
+            #region Reporter Navigation properties
 
             modelBuilder.Entity<Reporter>().HasMany(x => x.MalfunctionReports).WithOne(op => op.Reporter).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"ReporterId");
             modelBuilder.Entity<Reporter>().HasOne(x => x.Department).WithMany(op => op.Reporters).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DepartmentId");
             modelBuilder.Entity<Reporter>().HasMany(x => x.TrainTrips).WithOne(op => op.Reporter).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"ReporterId");
 
-        #endregion
+            #endregion
 
-        #region DeviceStatus Navigation properties
+            #region DeviceStatus Navigation properties
 
             modelBuilder.Entity<DeviceStatus>().HasMany(x => x.Reports).WithOne(op => op.DeviceStatus).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DeviceStatusId");
             modelBuilder.Entity<DeviceStatus>().HasOne(x => x.DeviceType).WithMany(op => op.DeviceStatus).IsRequired(true).HasForeignKey(@"DeviceTypeId");
 
-        #endregion
+            #endregion
 
-        #region WagonTrip Navigation properties
+            #region WagonTrip Navigation properties
 
             modelBuilder.Entity<WagonTrip>().HasOne(x => x.Wagon).WithMany(op => op.Trips).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"WagonId");
             modelBuilder.Entity<WagonTrip>().HasOne(x => x.TrainTrip).WithMany(op => op.WagonsOfTrip).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"TrainTripId");
 
-        #endregion
+            #endregion
 
-        #region Department Navigation properties
+            #region Department Navigation properties
 
             modelBuilder.Entity<Department>().HasMany(x => x.DeviceTypes).WithOne(op => op.Department).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DepartmentId");
             modelBuilder.Entity<Department>().HasMany(x => x.Reporters).WithOne(op => op.Department).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DepartmentId");
 
-        #endregion
+            #endregion
 
-        #region TrainTrip Navigation properties
+            #region TrainTrip Navigation properties
 
             modelBuilder.Entity<TrainTrip>().HasOne(x => x.Train).WithMany(op => op.TrainTrips).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"TrainId");
             modelBuilder.Entity<TrainTrip>().HasMany(x => x.WagonsOfTrip).WithOne(op => op.TrainTrip).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"TrainTripId");
             modelBuilder.Entity<TrainTrip>().HasOne(x => x.Reporter).WithMany(op => op.TrainTrips).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"ReporterId");
 
-        #endregion
+            #endregion
 
-        #region DevicePlace Navigation properties
+            #region DevicePlace Navigation properties
 
             modelBuilder.Entity<DevicePlace>().HasOne(x => x.DeviceType).WithMany(op => op.DevicePlaces).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DeviceTypeId");
             modelBuilder.Entity<DevicePlace>().HasMany(x => x.Reports).WithOne(op => op.DevicePlace).OnDelete(DeleteBehavior.Restrict).IsRequired(true).HasForeignKey(@"DevicePlaceId");
 
-        #endregion
+            #endregion
         }
 
         partial void CustomizeMapping(ref ModelBuilder modelBuilder);

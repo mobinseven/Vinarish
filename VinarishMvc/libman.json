@@ -13,8 +13,8 @@
       ]
     },
     {
-      "library": "open-iconic@1.1.1",
-      "destination": "wwwroot/lib/open-iconic/"
+      "library": "font-awesome@5.8.2",
+      "destination": "wwwroot/lib/font-awesome/"
     }
   ]
 }

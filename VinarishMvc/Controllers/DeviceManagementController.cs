@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using Syncfusion.EJ2;
 using Syncfusion.EJ2.Navigations;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
+using VinarishMvc.Models.Syncfusion;
 
 namespace VinarishMvc.Controllers
 {
@@ -42,7 +46,6 @@ namespace VinarishMvc.Controllers
             _context.SaveChanges();
             return payload;
         }
-
         // GET: DeviceManagement
         public IActionResult Index()
         {
@@ -56,6 +59,12 @@ namespace VinarishMvc.Controllers
 
             return View();
 
+        }
+        public IActionResult About(Guid id)
+        {
+            var deviceType = _context.DeviceTypes.Where(dt => dt.DeviceTypeId == id)
+                .FirstOrDefault();
+            return PartialView(deviceType);
         }
     }
 }
