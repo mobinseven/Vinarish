@@ -46,7 +46,7 @@ namespace VinarishMvc
             });
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
+                    Configuration.GetConnectionString("DefaultConnection")));//.UseLazyLoadingProxies()
             // Get Identity Default Options
             IConfigurationSection identityDefaultOptionsConfigurationSection = Configuration.GetSection("IdentityDefaultOptions");
 
@@ -93,7 +93,9 @@ namespace VinarishMvc
             .AddJsonOptions(options =>
             {
                 options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
-            }); ;
+            })
+            .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddAuthorization();
         }
 

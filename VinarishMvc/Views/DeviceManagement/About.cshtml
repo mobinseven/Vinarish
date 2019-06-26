@@ -4,37 +4,51 @@
 <span data-toggle="collapse" data-target=".bar">
     <i class="fa fa-arrow-circle-right"></i>
 </span>
-<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">دستگاه‌ها</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">کدهای خرابی</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">کدهای بازسازی</a>
-    </li>
-</ul>
-<div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-        <div>
-            @foreach (DevicePlace dp in Model.DevicePlaces)
-            {
-                <div class="d-flex flex-row flex-wrap ">
-                    <div class="card p-2 px-3 w-50 list-group-item-action">
-                        <ejs-inplaceeditor data-underline="false" id="dp-desc-@dp.DevicePlaceId" mode="Inline" value="dp.Description" name="Description" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
-                        </ejs-inplaceeditor>
-                    </div>
-                    <div class="card p-2 px-3 w-50 list-group-item-action">
-                        <ejs-inplaceeditor data-underline="false" id="dp-code-@dp.DevicePlaceId" mode="Inline" value="dp.Code" name="Code" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
-                        </ejs-inplaceeditor>
-                    </div>
-                </div>
-            }
-        </div>
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">دستگاه‌ها</a>
+        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">کدهای خرابی</a>
+        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">کدهای بازسازی</a>
     </div>
-    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
-    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <i class="fa fa-plus-circle"></i>
+
+        @foreach (DevicePlace dp in Model.DevicePlaces)
+        {
+            <div class="d-flex flex-row flex-wrap ">
+                <div class="card p-2 px-3 w-50 list-group-item-action">
+                    <ejs-inplaceeditor data-underline="false" id="dp-desc-@dp.DevicePlaceId" mode="Inline" value="dp.Description" name="Description" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
+                    </ejs-inplaceeditor>
+                </div>
+                <div class="card p-2 px-3 w-50 list-group-item-action">
+                    <ejs-inplaceeditor data-underline="false" id="dp-code-@dp.DevicePlaceId" mode="Inline" value="dp.Code" name="Code" primaryKey="@dp.DevicePlaceId" adaptor="UrlAdaptor" url="DeviceManagement/UpdateData" model="ViewBag.model">
+                    </ejs-inplaceeditor>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <ejs-grid id="Grid" dataSource="ViewBag.dataSource">
+            <e-grid-columns>
+                <e-grid-column field="DepartmentId" headerText="Id" ></e-grid-column>
+                <e-grid-column field="Name" headerText="Name" textAlign="Right"></e-grid-column>
+            </e-grid-columns>
+        </ejs-grid>
+    </div>
+    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 </div>
+<style>
+    .e-editable-value {
+        font-family: 'B Nazanin' !important;
+    }
+</style>
+
+<script>
+    function NodeClicked(e) {
+        $("#main").load("DeviceManagement/about/" + e);
+    }
+</script>
 
 <ejs-scripts></ejs-scripts>

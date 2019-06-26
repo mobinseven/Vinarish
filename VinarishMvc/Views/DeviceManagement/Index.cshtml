@@ -1,20 +1,19 @@
-﻿
-<div class="container-fluid">
-    <div class="row d-flex">
-
-        <nav class="col-xs-6 collapse show width bar" id="sidebar">
+﻿<div class="container">
+    <div class="row">
+        <div class="col-4">
             <div class="btn-group-vertical" role="group">
                 @foreach (Department d in ViewBag.Data)
                 {
 
                     <span data-target="#menu-@d.DepartmentId" class="btn btn-dark btn-lg" data-toggle="collapse">
+                        @**@
                         @d.Name
                     </span>
                     <div class="collapse btn-group-vertical" role="group" id="menu-@d.DepartmentId">
 
                         @foreach (DeviceType dt in d.DeviceTypes)
                         {
-                            <button onclick="NodeClicked('@dt.DeviceTypeId')" class="btn btn-light btn-lg" data-toggle="collapse" data-target=".bar">
+                            <button onclick="Grid('@dt.DeviceTypeId')" class="btn btn-light btn-lg">
                                 @dt.Name
                             </button>
                         }
@@ -22,11 +21,19 @@
 
                 }
             </div>
-        </nav>
-        <main class="col-xl bar" id="mainbar">
+        </div>
+        <div class="col-8">
             <div id="main">
-
+                test
             </div>
+        </div>
+    </div>
+    <div class="row d-flex">
+        <a href="#" onclick="Grid()">Grid</a>
+        <nav class="col collapse show width bar" id="sidebar">
+
+        </nav>
+        <main class="col-xl" id="mainbar">
         </main>
     </div>
 </div>
@@ -65,6 +72,66 @@
 
 <script>
     function NodeClicked(e) {
-        $("#main").load("DeviceManagement/about/" + e);
+        var ajax = new ej.base.Ajax("DeviceManagement/about/" + e, 'GET', true);
+
+        ajax.send().then(function (result) {
+
+            // append partial view controls into created element
+
+            document.getElementById('main').innerHTML = result;
+            // Need to evaluate scripts manually
+            eval(document.getElementById('main').querySelector('script').innerHTML);
+
+        });
+    };
+</script>
+<script>
+    function Grid(e) {
+        var ajax = new ej.base.Ajax("DeviceManagement/Grid/" + e, 'GET', true);
+
+        ajax.send().then(function (result) {
+
+            document.getElementById('main').innerHTML = result;
+            console.log(result);
+            // Need to evaluate scripts manually
+            //eval(document.getElementById('main').querySelector('script').innerHTML);
+            insertAndExecute("main", result);
+        });
     }
+</script>
+<script type="text/javascript">
+    function insertAndExecute(id, text) {
+        domelement = document.getElementById(id);
+        domelement.innerHTML = text;
+        var scripts = [];
+
+        ret = domelement.childNodes;
+        for (var i = 0; ret[i]; i++) {
+            if (scripts && nodeName(ret[i], "script") && (!ret[i].type || ret[i].type.toLowerCase() === "text/javascript")) {
+                scripts.push(ret[i].parentNode ? ret[i].parentNode.removeChild(ret[i]) : ret[i]);
+            }
+        }
+
+        for (script in scripts) {
+            evalScript(scripts[script]);
+        }
+    }
+    function nodeName(elem, name) {
+        return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
+    }
+    function evalScript(elem) {
+        data = (elem.text || elem.textContent || elem.innerHTML || "");
+
+        var head = document.getElementsByTagName("head")[0] || document.documentElement,
+            script = document.createElement("script");
+        script.type = "text/javascript";
+        script.appendChild(document.createTextNode(data));
+        head.insertBefore(script, head.firstChild);
+        head.removeChild(script);
+
+        if (elem.parentNode) {
+            elem.parentNode.removeChild(elem);
+        }
+    }
+
 </script>
