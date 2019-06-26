@@ -23,9 +23,14 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                @*<label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />*@
+                <div class="input-group mb-3" dir="ltr">
+                    <input asp-for="Email" type="text" class="form-control" placeholder="Username">
+                    <div class="input-group-append">
+                        <span class="input-group-text">@@vinarish.com</span>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
@@ -37,21 +42,21 @@
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OldPassword" class="control-label"></label>
-                <input asp-for="OldPassword" class="form-control" />
-                <span asp-validation-for="OldPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProfilePicture" class="control-label"></label>
-                <input asp-for="ProfilePicture" class="form-control" />
-                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="VinarishUserId" class="control-label"></label>
-                <input asp-for="VinarishUserId" class="form-control" />
-                <span asp-validation-for="VinarishUserId" class="text-danger"></span>
-            </div>
+            @*<div class="form-group">
+                    <label asp-for="OldPassword" class="control-label"></label>
+                    <input asp-for="OldPassword" class="form-control" />
+                    <span asp-validation-for="OldPassword" class="text-danger"></span>
+                </div>*@
+            @*<div class="form-group">
+                    <label asp-for="ProfilePicture" class="control-label"></label>
+                    <input asp-for="ProfilePicture" class="form-control" />
+                    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                </div>*@
+            @*<div class="form-group">
+                    <label asp-for="VinarishUserId" class="control-label"></label>
+                    <input asp-for="VinarishUserId" class="form-control" />
+                    <span asp-validation-for="VinarishUserId" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

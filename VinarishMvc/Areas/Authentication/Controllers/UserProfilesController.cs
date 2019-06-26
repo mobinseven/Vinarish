@@ -78,7 +78,9 @@ namespace VinarishMvc.Areas.Authentication.Controllers
                 UserProfile register = userProfile;
                 if (register.Password.Equals(register.ConfirmPassword))
                 {
-                    VinarishUser user = new VinarishUser() { Email = register.Email, UserName = register.Email, EmailConfirmed = true };
+                    var username = register.Email;
+                    register.Email = register.Email + "@vinarish.com";
+                    VinarishUser user = new VinarishUser() { Email = register.Email, UserName = username, EmailConfirmed = true };
                     var result = await _userManager.CreateAsync(user, register.Password);
                     if (result.Succeeded)
                     {
