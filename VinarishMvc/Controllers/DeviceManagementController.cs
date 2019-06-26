@@ -24,62 +24,15 @@ namespace VinarishMvc.Controllers
         {
             _context = context;
         }
-        public class SubmitModel
+        // GET: DevicePlaces
+        public ActionResult DevicePlacesIndex()
         {
-            public string Name { get; set; }
-            public string PrimaryKey { get; set; }
-            public string Value { get; set; }
-        }
-        public SubmitModel UpdateData([FromBody]SubmitModel payload)
-        {
-            var devicePlace = _context.DevicePlaces.Find(Guid.Parse(payload.PrimaryKey));
-            if (payload.Name == "Description")
-            {
-                devicePlace.Description = payload.Value;
-            }
-            if (payload.Name == "Code")
-            {
-                devicePlace.Code = payload.Value;
-
-            }
-            _context.Update(devicePlace);
-            _context.SaveChanges();
-            return payload;
-        }
-        // GET: DeviceManagement
-        public IActionResult Index()
-        {
-            ViewBag.Data =
-                _context.Departments
-                .Include(d => d.DeviceTypes)
-                .ThenInclude(dt => dt.DevicePlaces)
-                .Include(d => d.DeviceTypes)
-                .ThenInclude(dt => dt.DeviceStatus)
-                .ToList();
-
+            ViewBag.dataSource = _context.DevicePlaces.ToList();
             return View();
-
-        }
-        [HttpGet]
-        public IActionResult Grid(Guid id)
-        {
-            var deviceType = _context.DeviceTypes
-                .Where(dt => dt.DeviceTypeId == id)
-                .Include(dt => dt.DevicePlaces)
-                .FirstOrDefault();
-            List<DevicePlace> data = deviceType.DevicePlaces.ToList();
-
-            ViewBag.dataSource = data;
-            return PartialView(deviceType);
         }
 
-        //[HttpGet]
-        //public IActionResult Grid()
-        //{
-        //    List<Department> data = _context.Departments.ToList();
-        //    ViewBag.dataSource = data;
-        //    return PartialView();
-        //}
+
+        // POST: DevicePlaces/Create
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody]CrudViewModel<DevicePlace> payload)
         {
@@ -88,64 +41,65 @@ namespace VinarishMvc.Controllers
             ViewBag.dataSource = await _context.DevicePlaces.ToListAsync();
             return Json(payload.value);
         }
+
+        // POST: DevicePlaces/Edit
         [HttpPost]
-        public async Task<IActionResult> Update([Bind("value")][FromBody]CrudViewModel<Wagon> payload)
+        public async Task<IActionResult> Update([Bind("value")][FromBody]CrudViewModel<DevicePlace> payload)
         {
             if (ModelState.IsValid)
             {
                 _context.Update(payload.value);
                 await _context.SaveChangesAsync();
+                // TODO: DbUpdateConcurrencyException
+                return RedirectToAction(nameof(DevicePlacesIndex));
             }
             return View(payload.value);
         }
+        // POST: DevicePlaces/Remove
         [HttpPost, ActionName("Remove")]
-        public async Task<IActionResult> Remove([Bind("key")][FromBody]CrudViewModel<Wagon> payload)
+        public async Task<IActionResult> Remove([Bind("key")][FromBody]CrudViewModel<DevicePlace> payload)
         {
-            var Wagon = await _context.Wagons.FindAsync(Convert.ToInt32(payload.key));
-            _context.Wagons.Remove(Wagon);
+            var DevicePlace = await _context.DevicePlaces.FindAsync(payload.key);
+            _context.DevicePlaces.Remove(DevicePlace);
             await _context.SaveChangesAsync();
-            var data = _context.Wagons.ToList();
+            var data = _context.DevicePlaces.ToList();
             return Json(data);
         }
-        public class TreeGridData
+        // POST: DevicePlaces/Upload
+        [HttpPost, ActionName("Upload")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upload(IFormFile File)
         {
-            public string Id { get; set; }
-            public string Text { get; set; }
-            public string Code { get; set; }
-            public string ParentItem { get; set; }
-            public bool isParent { get; set; }
-        }
-        public IActionResult TreeGrid()
-        {
-            List<DeviceType> dts = _context.DeviceTypes.ToList();
-            List<DevicePlace> dps = _context.DevicePlaces.ToList();
-            List<TreeGridData> result = new List<TreeGridData>();
-            foreach (DeviceType dt in dts)
+            IFormFile file = File;
+            if (file == null || file.Length == 0)
             {
-                result.Add(new TreeGridData()
-                {
-                    Id = dt.DeviceTypeId.ToString(),
-                    Text = dt.Name,
-                    Code = "L",
-                    isParent = true,
-                    ParentItem = null
-                });
+                return RedirectToAction(nameof(DevicePlacesIndex));
             }
-            foreach (DevicePlace dp in dps)
+            List<DevicePlace> DevicePlaces = new List<DevicePlace>();
+            using (var memoryStream = new MemoryStream())
             {
-                result.Add(new TreeGridData()
+                await file.CopyToAsync(memoryStream).ConfigureAwait(false);
+
+                using (var package = new ExcelPackage(memoryStream))
                 {
-                    Id = dp.DevicePlaceId.ToString(),
-                    Text = dp.Description,
-                    Code = dp.Code,
-                    ParentItem = dp.DeviceTypeId.ToString(),
-                    isParent = false
-                });
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Tip: To access the first worksheet, try index 1, not 0
+                    int totalRows = worksheet.Dimension.Rows;
+
+
+                    for (int i = 1; i < totalRows; i++)
+                    {
+                        DevicePlaces.Add(new DevicePlace
+                        {
+                            Code = ((object[,])(worksheet.Cells.Value))[i, 0].ToString()
+                            
+                           });
+                    }
+                }
             }
 
-            ViewBag.dataSource = result;
-            return View();
-
+            _context.DevicePlaces.AddRange(DevicePlaces);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(DevicePlacesIndex));
         }
     }
 }

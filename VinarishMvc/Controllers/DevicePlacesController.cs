@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
+using VinarishMvc.Models.Syncfusion;
 
 namespace VinarishMvc.Controllers
 {
@@ -22,17 +23,51 @@ namespace VinarishMvc.Controllers
             _context = context;
         }
 
+        //// GET: DevicePlaces
+        //public async Task<IActionResult> Index()
+        //{
+        //    var applicationDbContext = _context.DevicePlaces.Include(d => d.DeviceType);
+        //    return View(await applicationDbContext.ToListAsync());
+        //}
         // GET: DevicePlaces
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexSync()
         {
-            var applicationDbContext = _context.DevicePlaces.Include(d => d.DeviceType);
+            var applicationDbContext = _context.DevicePlaces;//.Include(d => d.DeviceType);
+            ViewData["dataSource"] = _context.DeviceTypes.FirstOrDefault();
             return View(await applicationDbContext.ToListAsync());
         }
-        // GET: DevicePlaces
-        public ActionResult IndexSync()
+        // POST: DevicePlaces/Create
+        [HttpPost]
+        public async Task<IActionResult> Insert([FromBody]CrudViewModel<DevicePlace> payload)
         {
-            ViewBag.dataSource = _context.DevicePlaces.ToList();
-            return View();
+            _context.Add(payload.value);
+            await _context.SaveChangesAsync();
+            ViewBag.dataSource = await _context.DevicePlaces.ToListAsync();
+            return Json(payload.value);
+        }
+
+        // POST: DevicePlaces/Edit
+        [HttpPost]
+        public async Task<IActionResult> Update([Bind("value")][FromBody]CrudViewModel<DevicePlace> payload)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(payload.value);
+                await _context.SaveChangesAsync();
+                // TODO: DbUpdateConcurrencyException
+                return RedirectToAction(nameof(IndexSync));
+            }
+            return View(payload.value);
+        }
+        // POST: DevicePlaces/Remove
+        [HttpPost, ActionName("Remove")]
+        public async Task<IActionResult> Remove([Bind("key")][FromBody]CrudViewModel<DevicePlace> payload)
+        {
+            var DevicePlace = await _context.DevicePlaces.FindAsync(payload.key);
+            _context.DevicePlaces.Remove(DevicePlace);
+            await _context.SaveChangesAsync();
+            var data = _context.DevicePlaces.ToList();
+            return Json(data);
         }
         // POST: DevicePlaces/Upload
         [HttpPost, ActionName("Upload")]
@@ -42,7 +77,7 @@ namespace VinarishMvc.Controllers
             IFormFile file = File;
             if (file == null || file.Length == 0)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexSync));
             }
             List<DevicePlace> DevicePlaces = new List<DevicePlace>();
             using (var memoryStream = new MemoryStream())
@@ -68,7 +103,7 @@ namespace VinarishMvc.Controllers
 
             _context.DevicePlaces.AddRange(DevicePlaces);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexSync));
         }
     }
 }

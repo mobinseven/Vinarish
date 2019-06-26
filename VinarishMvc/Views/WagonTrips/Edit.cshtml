@@ -1,0 +1,36 @@
+﻿@model VinarishMvc.Models.WagonTrip
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>WagonTrip</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="WagonTripId" />
+            <div class="form-group">
+                <label asp-for="WagonId" class="control-label"></label>
+                <select asp-for="WagonId" class="form-control" asp-items="ViewBag.WagonId"></select>
+                <span asp-validation-for="WagonId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TrainTripId" class="control-label"></label>
+                <select asp-for="TrainTripId" class="form-control" asp-items="ViewBag.TrainTripId"></select>
+                <span asp-validation-for="TrainTripId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

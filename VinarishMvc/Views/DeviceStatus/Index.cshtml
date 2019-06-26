@@ -1,0 +1,68 @@
+﻿@model IEnumerable<VinarishMvc.Models.DeviceStatus>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-action="UploadError" method="post"
+      enctype="multipart/form-data">
+    <input type="file" name="file" class="btn btn-light" />
+    <div class="form-group">
+        <input type="submit" value="افزودن کد خرابی از اکسل" class="btn btn-light" />
+    </div>
+</form>
+<form asp-action="UploadRepair" method="post"
+      enctype="multipart/form-data">
+    <input type="file" name="file" class="btn btn-light" />
+    <div class="form-group">
+        <input type="submit" value="افزودن کد بازسازی از اکسل" class="btn btn-light" />
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeviceStatusType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeviceType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeviceStatusType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeviceType.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StatusId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.StatusId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.StatusId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
