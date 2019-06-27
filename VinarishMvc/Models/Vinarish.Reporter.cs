@@ -39,6 +39,12 @@ namespace VinarishMvc.Models
             set;
         }
 
+        public virtual string UserName
+        {
+            get;
+            set;
+        }
+
         public virtual System.Guid DepartmentId
         {
             get;

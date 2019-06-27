@@ -21,12 +21,12 @@ namespace VinarishMvc.Controllers
         // GET: Reporters
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext =_context.Reporters.Include(r => r.Department);
-            foreach(Reporter r in applicationDbContext)
-            {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == r.VinarishUserId);
-                r.UserName = user.UserName;
-            }
+            var applicationDbContext = await _context.Reporters.Include(r => r.Department).ToListAsync();
+            //foreach(Reporter r in applicationDbContext)
+            //{
+            //    var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == r.VinarishUserId);
+            //    r.UserName = user.UserName;
+            //}
             return View(applicationDbContext);
         }
 
@@ -70,11 +70,9 @@ namespace VinarishMvc.Controllers
             return View();
         }
         // POST: Reporters/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReporterId,VinarishUserId,DepartmentId")] Reporter reporter)
+        public async Task<IActionResult> Create(Reporter reporter)
         {
             if (ModelState.IsValid)
             {
@@ -108,7 +106,7 @@ namespace VinarishMvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReporterId,VinarishUserId,DepartmentId")] Reporter reporter)
+        public async Task<IActionResult> Edit(int id, Reporter reporter)
         {
             if (id != reporter.ReporterId)
             {

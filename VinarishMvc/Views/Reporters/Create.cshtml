@@ -7,7 +7,8 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="VinarishUserId" value="@ViewBag.VinarishUserId" type="hidden"/>
+                <input asp-for="VinarishUserId" value="@ViewBag.VinarishUserId" type="hidden" />
+                <input asp-for="UserName" value="@ViewBag.Name" type="hidden" />
             </div>
             <div class="form-group">
                 <label asp-for="DepartmentId" class="control-label"></label>

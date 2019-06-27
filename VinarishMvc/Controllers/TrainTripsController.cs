@@ -22,7 +22,11 @@ namespace VinarishMvc.Controllers
         // GET: TrainTrips
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TrainTrips.Include(t => t.Reporter).Include(t => t.Train);
+            var applicationDbContext = _context.TrainTrips
+                .Include(t => t.Reporter)
+                .Include(t => t.Train)
+                .Include(t => t.WagonsOfTrip)
+                .ThenInclude(w => w.Wagon);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -45,13 +49,23 @@ namespace VinarishMvc.Controllers
 
             return View(trainTrip);
         }
-
+        public class CreateViewModel
+        {
+            public TrainTrip TrainTrip { get; set; }
+            public Dictionary<string, bool> Wagons { get; set; } = new Dictionary<string, bool>();
+        }
         // GET: TrainTrips/Create
         public IActionResult Create()
         {
-            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "VinarishUserId");
+            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName");
             ViewData["TrainId"] = new SelectList(_context.Trains, "TrainId", "Name");
-            return View();
+            CreateViewModel model = new CreateViewModel();
+            List<Wagon> wagons = _context.Wagons.OrderBy(w => w.Name).ToList();
+            foreach (Wagon w in wagons)
+            {
+                model.Wagons.Add(w.Name, false);
+            }
+            return View(model);
         }
 
         // POST: TrainTrips/Create
@@ -59,18 +73,25 @@ namespace VinarishMvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TrainTripId,DateTime,TrainId,ReporterId")] TrainTrip trainTrip)
+        public async Task<IActionResult> Create(CreateViewModel model)
         {
-            if (ModelState.IsValid)
+            model.TrainTrip.TrainTripId = Guid.NewGuid();
+            _context.Add(model.TrainTrip);
+            List<WagonTrip> WagonTrips = new List<WagonTrip>();
+            foreach (var item in model.Wagons)
             {
-                trainTrip.TrainTripId = Guid.NewGuid();
-                _context.Add(trainTrip);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (item.Value)
+                {
+                    WagonTrips.Add(new WagonTrip
+                    {
+                        TrainTripId = model.TrainTrip.TrainTripId,
+                        WagonId = _context.Wagons.Where(w => w.Name == item.Key).FirstOrDefault().WagonId
+                    });
+                }
             }
-            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "VinarishUserId", trainTrip.ReporterId);
-            ViewData["TrainId"] = new SelectList(_context.Trains, "TrainId", "Name", trainTrip.TrainId);
-            return View(trainTrip);
+            _context.WagonTrips.AddRange(WagonTrips);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TrainTrips/Edit/5
@@ -80,15 +101,26 @@ namespace VinarishMvc.Controllers
             {
                 return NotFound();
             }
-
-            var trainTrip = await _context.TrainTrips.FindAsync(id);
-            if (trainTrip == null)
+            CreateViewModel model = new CreateViewModel();
+            model.TrainTrip = await _context.TrainTrips.FindAsync(id);
+            if (model.TrainTrip == null)
             {
                 return NotFound();
             }
-            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "VinarishUserId", trainTrip.ReporterId);
-            ViewData["TrainId"] = new SelectList(_context.Trains, "TrainId", "Name", trainTrip.TrainId);
-            return View(trainTrip);
+
+            List<Wagon> wagons = _context.Wagons.OrderBy(w=>w.Name).ToList();
+            foreach (Wagon w in wagons)
+            {
+                model.Wagons.Add(w.Name, false);
+            }
+            List<WagonTrip> IncludedWagons = _context.WagonTrips.Where(w => w.TrainTripId == id).Include(wt => wt.Wagon).ToList();
+            foreach (WagonTrip w in IncludedWagons)
+            {
+                model.Wagons[w.Wagon.Name] = true;
+            }
+            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName");
+            ViewData["TrainId"] = new SelectList(_context.Trains, "TrainId", "Name");
+            return View(model);
         }
 
         // POST: TrainTrips/Edit/5
@@ -96,36 +128,30 @@ namespace VinarishMvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("TrainTripId,DateTime,TrainId,ReporterId")] TrainTrip trainTrip)
+        public async Task<IActionResult> Edit(Guid id, CreateViewModel model)
         {
-            if (id != trainTrip.TrainTripId)
+            if (id == null)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            _context.Update(model.TrainTrip);
+            _context.WagonTrips.RemoveRange(_context.WagonTrips.Where(w => w.TrainTripId == id).Include(wt => wt.Wagon).ToList());
+            List<WagonTrip> WagonTrips = new List<WagonTrip>();
+            foreach (var item in model.Wagons)
             {
-                try
+                if (item.Value)
                 {
-                    _context.Update(trainTrip);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TrainTripExists(trainTrip.TrainTripId))
+                    WagonTrips.Add(new WagonTrip
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                        TrainTripId = model.TrainTrip.TrainTripId,
+                        WagonId = _context.Wagons.Where(w => w.Name == item.Key).FirstOrDefault().WagonId
+                    });
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "VinarishUserId", trainTrip.ReporterId);
-            ViewData["TrainId"] = new SelectList(_context.Trains, "TrainId", "Name", trainTrip.TrainId);
-            return View(trainTrip);
+            _context.WagonTrips.AddRange(WagonTrips);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TrainTrips/Delete/5
