@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h1>مدیریت دستگاه‌ها</h1>
+
+<div>
+    <div class="row">
+        <div class="col-md-3">
+            <partial name="~/Views/DeviceManagement/_ManageNav.cshtml" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
