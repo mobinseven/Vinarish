@@ -1,0 +1,17 @@
+﻿@model VinarishMvc.Controllers.DeviceStatusController.UploadViewModel
+
+<form asp-action="Upload" method="post"
+      enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="DepartmentId" class="control-label"></label>
+        <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DeviceStatusType" class="control-label"></label>
+        <select asp-for="DeviceStatusType" class="form-control" asp-items="ViewBag.DeviceStatusType"></select>
+    </div>
+    <input type="file" name="file" class="btn btn-light" />
+    <div class="form-group">
+        <input type="submit" value="افزودن از اکسل" class="btn btn-light" />
+    </div>
+</form>

@@ -161,12 +161,30 @@ namespace VinarishMvc.Controllers
             return _context.DeviceStatus.Any(e => e.StatusId == id);
         }
 
-        // POST: DevicePlaces/UploadError
-        [HttpPost, ActionName("UploadError")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UploadError(IFormFile File)
+        // GET: DeviceStatus/Upload
+        public IActionResult Upload()
         {
-            IFormFile file = File;
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            ViewData["DeviceStatusType"] = new SelectList(Enum.GetValues(typeof(DeviceStatusType)).Cast<DeviceStatusType>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList(), "Value", "Text");
+            return View();
+        }
+
+        public class UploadViewModel
+        {
+            public Guid DepartmentId { get; set; }
+            public DeviceStatusType DeviceStatusType { get; set; }
+            public IFormFile File { get; set; }
+        }
+        // POST: DevicePlaces/Upload
+        [HttpPost, ActionName("Upload")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upload(UploadViewModel model)
+        {
+            IFormFile file = model.File;
             if (file == null || file.Length == 0)
             {
                 return RedirectToAction(nameof(Index));
@@ -183,12 +201,20 @@ namespace VinarishMvc.Controllers
 
                     for (int i = 1; i < totalRows; i++)
                     {
+                        var code = (string)((object[,])(worksheet.Cells.Value))[i, 0];
+                        if (_context.DeviceStatus.Any(ds => ds.Code == code)) continue;
+                        var text = (string)((object[,])(worksheet.Cells.Value))[i, 1];
+                        if (_context.DeviceStatus.Any(ds => ds.Text == text)) continue;
+                        var dtidCell = (string)((object[,])(worksheet.Cells.Value))[i, 2];
+                        if (dtidCell == null) continue;
+                        var dt = _context.DeviceTypes.Where(x => x.Name == dtidCell).FirstOrDefault();
+                        if (dt == null) continue;
                         DeviceStatus.Add(new DeviceStatus
                         {
-                            DeviceTypeId = _context.DeviceTypes.Where(x => x.Name.Contains(((object[,])(worksheet.Cells.Value))[i, 2].ToString())).FirstOrDefault().DeviceTypeId,
-                            Code = ((object[,])(worksheet.Cells.Value))[i, 0].ToString(),
-                            Text = ((object[,])(worksheet.Cells.Value))[i, 1].ToString(),
-                            DeviceStatusType = DeviceStatusType.Malfunction
+                            DeviceTypeId = dt.DeviceTypeId,
+                            Code = code,
+                            Text = text,
+                            DeviceStatusType = model.DeviceStatusType
                         });
                     }
                 }

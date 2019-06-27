@@ -1,68 +1,166 @@
 ﻿@model IEnumerable<VinarishMvc.Models.DeviceStatus>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "کدهای وضعیت";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"><i class="fa fa-plus-square fa-2x"></i></a>
+    <a asp-action="Upload"><i class="fa fa-upload fa-2x"></i></a>
 </p>
-<form asp-action="UploadError" method="post"
-      enctype="multipart/form-data">
-    <input type="file" name="file" class="btn btn-light" />
-    <div class="form-group">
-        <input type="submit" value="افزودن کد خرابی از اکسل" class="btn btn-light" />
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-mal-tab" data-toggle="tab" href="#nav-mal" role="tab">کدهای خرابی</a>
+        <a class="nav-item nav-link" id="nav-rep-tab" data-toggle="tab" href="#nav-rep" role="tab">کدهای بازسازی</a>
+        <a class="nav-item nav-link" id="nav-notrep-tab" data-toggle="tab" href="#nav-notrep" role="tab">کدهای دلیل عدم بازسازی</a>
     </div>
-</form>
-<form asp-action="UploadRepair" method="post"
-      enctype="multipart/form-data">
-    <input type="file" name="file" class="btn btn-light" />
-    <div class="form-group">
-        <input type="submit" value="افزودن کد بازسازی از اکسل" class="btn btn-light" />
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-mal" role="tabpanel">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Text)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DeviceStatusType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DeviceType)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    @if (item.DeviceStatusType == DeviceStatusType.Malfunction)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Text)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeviceStatusType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeviceType.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit"></i></a> |
+                                <a asp-action="Details" asp-route-id="@item.StatusId"><i class="fa fa-info"></i></a> |
+                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
     </div>
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Text)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeviceStatusType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeviceType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Text)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeviceStatusType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeviceType.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.StatusId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.StatusId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.StatusId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="tab-pane fade" id="nav-rep" role="tabpanel">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Text)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DeviceStatusType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DeviceType)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    @if (item.DeviceStatusType == DeviceStatusType.Repair)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Text)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeviceStatusType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeviceType.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit"></i></a> |
+                                <a asp-action="Details" asp-route-id="@item.StatusId"><i class="fa fa-info"></i></a> |
+                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="nav-notrep" role="tabpanel">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Text)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DeviceStatusType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DeviceType)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    @if (item.DeviceStatusType == DeviceStatusType.Unrepairable)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Text)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeviceStatusType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeviceType.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit"></i></a> |
+                                <a asp-action="Details" asp-route-id="@item.StatusId"><i class="fa fa-info"></i></a> |
+                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,137 +1,18 @@
-﻿<div class="container">
-    <div class="row">
-        <div class="col-4">
-            <div class="btn-group-vertical" role="group">
-                @foreach (Department d in ViewBag.Data)
-                {
-
-                    <span data-target="#menu-@d.DepartmentId" class="btn btn-dark btn-lg" data-toggle="collapse">
-                        @**@
-                        @d.Name
-                    </span>
-                    <div class="collapse btn-group-vertical" role="group" id="menu-@d.DepartmentId">
-
-                        @foreach (DeviceType dt in d.DeviceTypes)
-                        {
-                            <button onclick="Grid('@dt.DeviceTypeId')" class="btn btn-light btn-lg">
-                                @dt.Name
-                            </button>
-                        }
-                    </div>
-
-                }
-            </div>
-        </div>
-        <div class="col-8">
-            <div id="main">
-                test
-            </div>
-        </div>
+﻿<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">گروه دستگاه</a>
+        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">دستگاه</a>
+        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">کدهای وضعیت</a>
     </div>
-    <div class="row d-flex">
-        <a href="#" onclick="Grid()">Grid</a>
-        <nav class="col collapse show width bar" id="sidebar">
-
-        </nav>
-        <main class="col-xl" id="mainbar">
-        </main>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        ...
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        ...
+    </div>
+    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+        ...
     </div>
 </div>
-<style>
-    .fa {
-        font-size: 2rem;
-        cursor: pointer;
-    }
-
-    .collapse.show {
-        visibility: visible;
-    }
-
-    .collapsing {
-        visibility: visible;
-        height: 0;
-        -webkit-transition-property: height, visibility;
-        transition-property: height, visibility;
-        -webkit-transition-timing-function: ease-out;
-        transition-timing-function: ease-out;
-        -webkit-transition: width .1s; /* Safari */
-        transition: width .1s;
-    }
-
-        .collapsing.width {
-            -webkit-transition-property: width, visibility;
-            transition-property: width, visibility;
-            width: 0;
-            height: 100%;
-            -webkit-transition-timing-function: ease-out;
-            transition-timing-function: ease-out;
-            -webkit-transition: width .1s; /* Safari */
-            transition: width .1s;
-        }
-</style>
-
-<script>
-    function NodeClicked(e) {
-        var ajax = new ej.base.Ajax("DeviceManagement/about/" + e, 'GET', true);
-
-        ajax.send().then(function (result) {
-
-            // append partial view controls into created element
-
-            document.getElementById('main').innerHTML = result;
-            // Need to evaluate scripts manually
-            eval(document.getElementById('main').querySelector('script').innerHTML);
-
-        });
-    };
-</script>
-<script>
-    function Grid(e) {
-        var ajax = new ej.base.Ajax("DeviceManagement/Grid/" + e, 'GET', true);
-
-        ajax.send().then(function (result) {
-
-            document.getElementById('main').innerHTML = result;
-            console.log(result);
-            // Need to evaluate scripts manually
-            //eval(document.getElementById('main').querySelector('script').innerHTML);
-            insertAndExecute("main", result);
-        });
-    }
-</script>
-<script type="text/javascript">
-    function insertAndExecute(id, text) {
-        domelement = document.getElementById(id);
-        domelement.innerHTML = text;
-        var scripts = [];
-
-        ret = domelement.childNodes;
-        for (var i = 0; ret[i]; i++) {
-            if (scripts && nodeName(ret[i], "script") && (!ret[i].type || ret[i].type.toLowerCase() === "text/javascript")) {
-                scripts.push(ret[i].parentNode ? ret[i].parentNode.removeChild(ret[i]) : ret[i]);
-            }
-        }
-
-        for (script in scripts) {
-            evalScript(scripts[script]);
-        }
-    }
-    function nodeName(elem, name) {
-        return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
-    }
-    function evalScript(elem) {
-        data = (elem.text || elem.textContent || elem.innerHTML || "");
-
-        var head = document.getElementsByTagName("head")[0] || document.documentElement,
-            script = document.createElement("script");
-        script.type = "text/javascript";
-        script.appendChild(document.createTextNode(data));
-        head.insertBefore(script, head.firstChild);
-        head.removeChild(script);
-
-        if (elem.parentNode) {
-            elem.parentNode.removeChild(elem);
-        }
-    }
-
-</script>

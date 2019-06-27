@@ -160,12 +160,26 @@ namespace VinarishMvc.Controllers
         {
             return _context.DeviceTypes.Any(e => e.DeviceTypeId == id);
         }
+
+        // GET: DeviceTypes/Upload
+        public IActionResult Upload()
+        {
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            return View();
+        }
+
+        public class UploadViewModel
+        {
+            public Guid DepartmentId { get; set; }
+            public IFormFile File { get; set; }
+        }
+
         // POST: DeviceTypes/Upload
         [HttpPost, ActionName("Upload")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upload(IFormFile File)
+        public async Task<IActionResult> Upload(UploadViewModel model)
         {
-            IFormFile file = File;
+            IFormFile file = model.File;
             if (file == null || file.Length == 0)
             {
                 return RedirectToAction(nameof(Index));
@@ -186,7 +200,7 @@ namespace VinarishMvc.Controllers
                         DeviceTypes.Add(new DeviceType
                         {
                             Name = ((object[,])(worksheet.Cells.Value))[i, 0].ToString(),
-                            DepartmentId = _context.Departments.Where(d => d.Name.Contains("Iptv")).FirstOrDefault().DepartmentId
+                            DepartmentId = model.DepartmentId
                         });
                     }
                 }

@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
-using VinarishMvc.Models.Syncfusion;
 
 namespace VinarishMvc.Controllers
 {
@@ -23,61 +22,168 @@ namespace VinarishMvc.Controllers
             _context = context;
         }
 
-        //// GET: DevicePlaces
-        //public async Task<IActionResult> Index()
-        //{
-        //    var applicationDbContext = _context.DevicePlaces.Include(d => d.DeviceType);
-        //    return View(await applicationDbContext.ToListAsync());
-        //}
         // GET: DevicePlaces
-        public async Task<IActionResult> IndexSync()
+        public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.DevicePlaces;//.Include(d => d.DeviceType);
-            ViewData["dataSource"] = _context.DeviceTypes.FirstOrDefault();
+            var applicationDbContext = _context.DevicePlaces.Include(d => d.DeviceType);
             return View(await applicationDbContext.ToListAsync());
         }
-        // POST: DevicePlaces/Create
-        [HttpPost]
-        public async Task<IActionResult> Insert([FromBody]CrudViewModel<DevicePlace> payload)
+
+        // GET: DevicePlaces/Details/5
+        public async Task<IActionResult> Details(Guid? id)
         {
-            _context.Add(payload.value);
-            await _context.SaveChangesAsync();
-            ViewBag.dataSource = await _context.DevicePlaces.ToListAsync();
-            return Json(payload.value);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var devicePlace = await _context.DevicePlaces
+                .Include(d => d.DeviceType)
+                .FirstOrDefaultAsync(m => m.DevicePlaceId == id);
+            if (devicePlace == null)
+            {
+                return NotFound();
+            }
+
+            return View(devicePlace);
         }
 
-        // POST: DevicePlaces/Edit
+        // GET: DevicePlaces/Create
+        public IActionResult Create()
+        {
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name");
+            return View();
+        }
+
+        // POST: DevicePlaces/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Update([Bind("value")][FromBody]CrudViewModel<DevicePlace> payload)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("DevicePlaceId,Code,Description,DeviceTypeId")] DevicePlace devicePlace)
         {
             if (ModelState.IsValid)
             {
-                _context.Update(payload.value);
+                devicePlace.DevicePlaceId = Guid.NewGuid();
+                _context.Add(devicePlace);
                 await _context.SaveChangesAsync();
-                // TODO: DbUpdateConcurrencyException
-                return RedirectToAction(nameof(IndexSync));
+                return RedirectToAction(nameof(Index));
             }
-            return View(payload.value);
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", devicePlace.DeviceTypeId);
+            return View(devicePlace);
         }
-        // POST: DevicePlaces/Remove
-        [HttpPost, ActionName("Remove")]
-        public async Task<IActionResult> Remove([Bind("key")][FromBody]CrudViewModel<DevicePlace> payload)
+
+        // GET: DevicePlaces/Edit/5
+        public async Task<IActionResult> Edit(Guid? id)
         {
-            var DevicePlace = await _context.DevicePlaces.FindAsync(payload.key);
-            _context.DevicePlaces.Remove(DevicePlace);
-            await _context.SaveChangesAsync();
-            var data = _context.DevicePlaces.ToList();
-            return Json(data);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var devicePlace = await _context.DevicePlaces.FindAsync(id);
+            if (devicePlace == null)
+            {
+                return NotFound();
+            }
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", devicePlace.DeviceTypeId);
+            return View(devicePlace);
         }
+
+        // POST: DevicePlaces/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, [Bind("DevicePlaceId,Code,Description,DeviceTypeId")] DevicePlace devicePlace)
+        {
+            if (id != devicePlace.DevicePlaceId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(devicePlace);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DevicePlaceExists(devicePlace.DevicePlaceId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", devicePlace.DeviceTypeId);
+            return View(devicePlace);
+        }
+
+        // GET: DevicePlaces/Delete/5
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var devicePlace = await _context.DevicePlaces
+                .Include(d => d.DeviceType)
+                .FirstOrDefaultAsync(m => m.DevicePlaceId == id);
+            if (devicePlace == null)
+            {
+                return NotFound();
+            }
+
+            return View(devicePlace);
+        }
+
+        // POST: DevicePlaces/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var devicePlace = await _context.DevicePlaces.FindAsync(id);
+            _context.DevicePlaces.Remove(devicePlace);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool DevicePlaceExists(Guid id)
+        {
+            return _context.DevicePlaces.Any(e => e.DevicePlaceId == id);
+        }
+
+        // GET: DevicePlaces/Upload
+        public IActionResult Upload()
+        {
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            return View();
+        }
+
+        public class UploadViewModel
+        {
+            public Guid DepartmentId { get; set; }
+            public IFormFile File { get; set; }
+        }
+
+
         // POST: DevicePlaces/Upload
         [HttpPost, ActionName("Upload")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upload(IFormFile File)
+        public async Task<IActionResult> Upload(UploadViewModel model)
         {
-            IFormFile file = File;
+            IFormFile file = model.File;
             if (file == null || file.Length == 0)
             {
-                return RedirectToAction(nameof(IndexSync));
+                return RedirectToAction(nameof(Index));
             }
             List<DevicePlace> DevicePlaces = new List<DevicePlace>();
             using (var memoryStream = new MemoryStream())
@@ -91,11 +197,19 @@ namespace VinarishMvc.Controllers
 
                     for (int i = 1; i < totalRows; i++)
                     {
+                        var code = (string)((object[,])(worksheet.Cells.Value))[i, 0];
+                        if (_context.DeviceStatus.Any(ds => ds.Code == code)) continue;
+                        var text = (string)((object[,])(worksheet.Cells.Value))[i, 1];
+                        if (_context.DeviceStatus.Any(ds => ds.Text == text)) continue;
+                        var dtidCell = (string)((object[,])(worksheet.Cells.Value))[i, 2];
+                        if (dtidCell == null) continue;
+                        var dt = _context.DeviceTypes.Where(x => x.Name == dtidCell).FirstOrDefault();
+                        if (dt == null) continue;
                         DevicePlaces.Add(new DevicePlace
                         {
-                            DeviceTypeId = _context.DeviceTypes.Where(x => x.Name.Contains(((object[,])(worksheet.Cells.Value))[i, 2].ToString())).FirstOrDefault().DeviceTypeId,
-                            Code = ((object[,])(worksheet.Cells.Value))[i, 0].ToString(),
-                            Description = ((object[,])(worksheet.Cells.Value))[i, 1].ToString()
+                            DeviceTypeId = dt.DeviceTypeId,
+                            Code = code,
+                            Description = text
                         });
                     }
                 }
@@ -103,7 +217,7 @@ namespace VinarishMvc.Controllers
 
             _context.DevicePlaces.AddRange(DevicePlaces);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(IndexSync));
+            return RedirectToAction(nameof(Index));
         }
     }
 }
