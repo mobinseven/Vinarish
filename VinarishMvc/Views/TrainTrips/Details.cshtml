@@ -1,34 +1,63 @@
 ﻿@model VinarishMvc.Models.TrainTrip
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "سفر";
 }
 
-<h1>Details</h1>
+<div class="table-responsive">
+    <h4>سفر</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Train)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Reporter)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>
+                        @{ var dt = Model.DateTime.ToString("yy/MM/dd");}
+                        @Html.DisplayFor(modelItem => dt)
 
-<div>
-    <h4>TrainTrip</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Train)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Train.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Reporter)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Reporter.VinarishUserId)
-        </dd>
-    </dl>
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@Model.TrainTripId">
+                            @Html.DisplayFor(modelItem => Model.Train.Name)
+                        </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Reporter.UserName)
+                    </td>
+                </tr>
+            <tr>
+                <td colspan="3">
+                    @Html.DisplayNameFor(model => model.WagonsOfTrip)
+                    @await Html.PartialAsync("~/Views/Reports/_ProgressWagon.cshtml", Model.WagonsOfTrip)
+
+                    @*<div class="list-group">
+            @foreach (var w in Model.WagonsOfTrip)
+            {
+            <a role="button" class="list-group-item list-group-item-action" asp-action="Details" asp-controller="Wagons" asp-route-id="@w.WagonTripId">
+                @w.Wagon.Number
+                @if (w.Wagon.Reports.Count > 0)
+                {
+                    <span class="badge badge-warning">@w.Wagon.Reports.Count</span>
+                }
+
+            </a>
+            }
+        </div>*@
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.TrainTripId">Edit</a> |

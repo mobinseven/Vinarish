@@ -71,6 +71,9 @@
     <property name="WagonId" type="Guid" p1:ValidateRequired="true" p1:Guid="d177784e-ba67-45f9-b489-e6acec053857">
       <column name="" not-null="False" />
     </property>
+    <property name="TrainTripId" type="Guid" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="1e3a8c6b-7fe0-4536-8645-82259818d5f8">
+      <column name="" not-null="False" />
+    </property>
   </class>
   <class name="Reporter" entity-set="Reporters" p1:Guid="c1df4638-8d40-4ad7-8940-84f28737d1b7">
     <id name="ReporterId" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="40c77371-793a-4bff-a86d-e52a9c78f403">
@@ -81,6 +84,9 @@
     </property>
     <property name="DepartmentId" type="Guid" p1:ValidateRequired="true" p1:Guid="5092e09f-5edc-4b46-a5d7-109ed6433922">
       <column name="" not-null="False" />
+    </property>
+    <property name="UserName" type="String" p1:ValidateRequired="true" p1:Guid="2d0eba87-2252-4929-88b9-5996aedfcdf1">
+      <column name="" />
     </property>
   </class>
   <class name="DeviceStatus" entity-set="DeviceStatus" p1:Guid="b81dc021-06f6-4062-97b3-3f2d19f275b1">
@@ -250,6 +256,14 @@
       </end1>
       <end2 multiplicity="Many" name="Reports" class="Wagon" relation-class="Report" lazy="False" p1:Guid="a2c2b8ed-b9a0-46d0-ba5d-b5de8e7bd48d">
         <property name="WagonId" />
+      </end2>
+    </association>
+    <association name="TrainTrip_Report" cardinality="OneToMany" on-delete="Restrict" p1:Guid="7823efbc-953b-4447-9802-ba116daffb48">
+      <end1 multiplicity="ZeroOrOne" name="TrainTrip" class="Report" relation-class="TrainTrip" constrained="True" lazy="False" p1:Guid="e52ad5b2-9137-495e-ad11-c36f26b7ab4b">
+        <property name="TrainTripId" />
+      </end1>
+      <end2 multiplicity="Many" name="Reports" class="TrainTrip" relation-class="Report" lazy="False" p1:Guid="07d08ad9-22f3-4058-9078-cc61510b785b">
+        <property name="TrainTripId" />
       </end2>
     </association>
   </associations>

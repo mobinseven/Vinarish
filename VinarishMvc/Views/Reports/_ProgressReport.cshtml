@@ -1,0 +1,33 @@
+﻿@model VinarishMvc.Models.Report
+
+@{
+    string color = "";
+    switch (Model.Status)
+    {
+        case ReportStatus.Waiting: color = "table-warning"; break;
+        case ReportStatus.InProgress: color = "table-info"; break;
+        case ReportStatus.Processed: color = "table-success"; break;
+        case ReportStatus.Postponed: color = "table-danger"; break;
+    }
+}
+
+        <tr class="@color">
+            <td>
+                @Model.DateTimeCreated.ToString("yy/MM/dd")
+            </td>
+            @if (Model.WagonTrip != null)
+            {
+                <td>
+                    @Model.WagonTrip.TrainTrip.Train.Name
+                </td>
+            }
+            <td>
+                @Model.Reporter.UserName
+            </td>
+            <td>
+                @Model.DevicePlace.Description
+            </td>
+            <td>
+                @Model.DeviceStatus.Text
+            </td>
+        </tr>

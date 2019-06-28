@@ -46,7 +46,7 @@ namespace VinarishMvc
             });
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));//.UseLazyLoadingProxies()
+                    Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
             // Get Identity Default Options
             IConfigurationSection identityDefaultOptionsConfigurationSection = Configuration.GetSection("IdentityDefaultOptions");
 

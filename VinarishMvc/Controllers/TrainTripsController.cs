@@ -41,6 +41,9 @@ namespace VinarishMvc.Controllers
             var trainTrip = await _context.TrainTrips
                 .Include(t => t.Reporter)
                 .Include(t => t.Train)
+                .Include(t => t.WagonsOfTrip)
+                .ThenInclude(w => w.Wagon)
+                .ThenInclude(w => w.Reports)
                 .FirstOrDefaultAsync(m => m.TrainTripId == id);
             if (trainTrip == null)
             {
@@ -108,7 +111,7 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            List<Wagon> wagons = _context.Wagons.OrderBy(w=>w.Name).ToList();
+            List<Wagon> wagons = _context.Wagons.OrderBy(w => w.Name).ToList();
             foreach (Wagon w in wagons)
             {
                 model.Wagons.Add(w.Name, false);

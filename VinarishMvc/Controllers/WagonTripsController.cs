@@ -36,7 +36,9 @@ namespace VinarishMvc.Controllers
 
             var wagonTrip = await _context.WagonTrips
                 .Include(w => w.TrainTrip)
+                .ThenInclude(tt=>tt.Train)
                 .Include(w => w.Wagon)
+                .Include(w=>w.Reports)
                 .FirstOrDefaultAsync(m => m.WagonTripId == id);
             if (wagonTrip == null)
             {

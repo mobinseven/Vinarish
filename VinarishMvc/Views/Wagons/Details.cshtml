@@ -1,17 +1,19 @@
-﻿@model VinarishMvc.Models.WagonTrip
-
+﻿@model VinarishMvc.Models.Wagon
+@using VinarishMvc.Models
 @{
-    ViewData["Title"] = "واگن " + Model.Wagon.Number + " در سفر " + Model.TrainTrip.Train + " " + Model.TrainTrip.DateTime.ToString("yy/MM/dd");
+    ViewData["Title"] = "واگن " + Model.Name;
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>
+    @ViewData["Title"]
+</h1>
 
 <div class="table-responsive">
-    <a asp-action="Create" asp-controller="Reports" asp-route-id="@Model.WagonTripId">
+    <a asp-action="Create" asp-controller="Reports" asp-route-id="@Model.WagonId">
         <i class="fa fa-plus-circle"></i>
     </a>
     <table class="table">
-        @foreach (Report r in Model.Reports)
+        @foreach (Report r in ViewBag.Reports)
         {
             <tr>
                 <td>
@@ -22,8 +24,9 @@
                     @r.Reporter.UserName
                 </td>
                 <td>
-                    @r.DevicePlace.Description
-
+                    <a asp-action="Details" asp-controller="Reports" asp-route-id="@r.ReportId" class="stretched-link">
+                        @r.DevicePlace.Description
+                    </a>
                 </td>
                 <td>
                     @r.DeviceStatus.Text
