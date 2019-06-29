@@ -54,9 +54,22 @@ namespace VinarishMvc.Controllers
             public string Username { get; set; }
             public Guid DeviceTypeId { get; set; }
             public Report Report { get; set; } = new Report();
+            public int ParentReportId { get; set; }
         }
 
-        // GET: Reports/Create/[WagonTripId]
+        // GET: Reports/CreateTripRepairingReport/[ReportId]
+        public IActionResult CreateTripRepairingReport(int id)
+        {
+            CreateViewModel model = new CreateViewModel();
+            model.Report = _context.Reports.Find(id);
+            model.ParentReportId = id;
+            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
+                     .Where(ds => (ds.DeviceTypeId == model.Report.DevicePlace.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Repair) ||
+                     ds.DeviceStatusType == DeviceStatusType.Unrepairable), "StatusId", "Text");
+            return View(model);
+        }
+
+        // GET: Reports/CreateTripReport/[WagonTripId]
         public IActionResult CreateTripReport(Guid id)
         {
             var wagonTrip = _context.WagonTrips.Find(id);
@@ -68,35 +81,59 @@ namespace VinarishMvc.Controllers
             model.Report.WagonTrip = wagonTrip;
 
             ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name");
-            return View("Create", model);
+            return View(model);
         }
 
-        // GET: Reports/Create/DeviceTypeSelected
+        // GET: Reports/CreateTripReport/DeviceTypeSelected
         public IActionResult DeviceTypeSelected(CreateViewModel model)
         {
             model.Report.Wagon = _context.Wagons.Find(model.Report.WagonId);
             ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", model.DeviceTypeId);
             ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces.Where(dp => dp.DeviceTypeId == model.DeviceTypeId), "DevicePlaceId", "Description");
-            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus.Where(ds => ds.DeviceTypeId == model.DeviceTypeId), "StatusId", "Text");
-            return View("Create", model);
+            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
+                .Where(ds => ds.DeviceTypeId == model.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Malfunction), "StatusId", "Text");
+            return View("CreateTripReport", model);
         }
 
-        // POST: Reports/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Reports/CreateTripReport
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateViewModel model)
+        public async Task<IActionResult> CreateTripReport(CreateViewModel model)
         {
             if (ModelState.IsValid)
             {
                 model.Report.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
                 model.Report.Status = ReportStatus.Waiting;
-                _context.Add(model.Report);
+                _context.Reports.Add(model.Report);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var wt = _context.WagonTrips.Find(model.Report.WagonTripId);
+                return RedirectToAction("Details", "TrainTrips", new { id = model.Report.WagonTrip.TrainTripId });
             }
             return RedirectToAction(nameof(CreateTripReport), model.Report.WagonId);
+        }
+        // POST: Reports/CreateTripRepairingReport
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTripRepairingReport(CreateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Report.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
+                model.Report.ParentReportId = model.ParentReportId;
+                model.Report.Status = ReportStatus.Processed;
+                var ds = _context.DeviceStatus.Find(model.Report.DeviceStatusId);
+                Report ParentReport = _context.Reports.Find(model.ParentReportId);
+                if (ds.DeviceStatusType == DeviceStatusType.Repair)
+                    ParentReport.Status = ReportStatus.Processed;
+                else if (ds.DeviceStatusType == DeviceStatusType.Unrepairable)
+                    ParentReport.Status = ReportStatus.Postponed;
+                _context.Update(ParentReport);
+                _context.Reports.Add(model.Report);
+                await _context.SaveChangesAsync();
+                var wt = _context.WagonTrips.Find(model.Report.WagonTripId);
+                return RedirectToAction("Details", "TrainTrips", new { id = wt.TrainTripId });
+            }
+            return RedirectToAction(nameof(CreateTripRepairingReport), model.ParentReportId);
         }
 
         // GET: Reports/Edit/5
@@ -114,7 +151,7 @@ namespace VinarishMvc.Controllers
             }
             ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", report.DevicePlaceId);
             ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus, "StatusId", "Code", report.DeviceStatusId);
-            ViewData["AppendixReportId"] = new SelectList(_context.Reports, "ReportId", "ReportId", report.AppendixReportId);
+            ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "ReportId", report.ParentReportId);
             ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName", report.ReporterId);
             ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", report.WagonId);
             return View(report);
@@ -125,7 +162,7 @@ namespace VinarishMvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReportId,DateTimeCreated,DateTimeModified,ReporterId,Status,DeviceStatusId,AppendixReportId,DevicePlaceId,WagonId")] Report report)
+        public async Task<IActionResult> Edit(int id, [Bind("ReportId,DateTimeCreated,DateTimeModified,ReporterId,Status,DeviceStatusId,ParentReportId,DevicePlaceId,WagonId")] Report report)
         {
             if (id != report.ReportId)
             {
@@ -154,7 +191,7 @@ namespace VinarishMvc.Controllers
             }
             ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", report.DevicePlaceId);
             ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus, "StatusId", "Code", report.DeviceStatusId);
-            ViewData["AppendixReportId"] = new SelectList(_context.Reports, "ReportId", "ReportId", report.AppendixReportId);
+            ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "ReportId", report.ParentReportId);
             ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName", report.ReporterId);
             ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", report.WagonId);
             return View(report);

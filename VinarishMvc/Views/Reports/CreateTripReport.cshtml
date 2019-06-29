@@ -1,21 +1,21 @@
 ﻿@model VinarishMvc.Controllers.ReportsController.CreateViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "گزارش خرابی واگن " + Model.Report.Wagon.Number;
 }
 @using VinarishMvc.Areas.Identity.Models
 
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<VinarishUser> SignInManager
 
-<h4>گزارش خرابی واگن @Model.Report.Wagon.Number</h4>
-<hr />
+<h4>@ViewData["Title"]</h4>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="DeviceTypeSelected">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="Username" value="@User.Identity.Name" hidden />
+                <input asp-for="ParentReportId" value="@Model.ParentReportId" class="form-control" hidden />
                 <input asp-for="Report.WagonId" value="@Model.Report.WagonId" class="form-control" hidden />
                 <input asp-for="Report.WagonTripId" value="@Model.Report.WagonTripId" class="form-control" hidden />
             </div>
@@ -26,10 +26,11 @@
                 </select>
             </div>
         </form>
-        <form asp-action="Create">
+        <form asp-action="CreateTripReport">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="Username" value="@User.Identity.Name" hidden />
+                <input asp-for="ParentReportId" value="@Model.ParentReportId" class="form-control" hidden />
                 <input asp-for="Report.WagonId" value="@Model.Report.WagonId" class="form-control" hidden />
                 <input asp-for="DeviceTypeId" value="@Model.DeviceTypeId" class="form-control" hidden />
                 <input asp-for="Report.WagonTripId" value="@Model.Report.WagonTripId" class="form-control" hidden />
@@ -44,17 +45,13 @@
             <div class="form-group">
                 <label asp-for="Report.DeviceStatusId" class="control-label"></label>
                 <select asp-for="Report.DeviceStatusId" class="form-control" asp-items="ViewBag.DeviceStatusId">
-                    <option>***گزینش نوع خرابی***</option>
+                    <option>***گزینش وضعیت***</option>
                 </select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="فرستادن گزارش" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

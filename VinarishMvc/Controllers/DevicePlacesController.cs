@@ -198,9 +198,9 @@ namespace VinarishMvc.Controllers
                     for (int i = 1; i < totalRows; i++)
                     {
                         var code = (string)((object[,])(worksheet.Cells.Value))[i, 0];
-                        if (_context.DeviceStatus.Any(ds => ds.Code == code)) continue;
+                        if (_context.DevicePlaces.Any(ds => ds.Code == code)) continue;
                         var text = (string)((object[,])(worksheet.Cells.Value))[i, 1];
-                        if (_context.DeviceStatus.Any(ds => ds.Text == text)) continue;
+                        if (_context.DevicePlaces.Any(ds => ds.Description == text)) continue;
                         var dtidCell = (string)((object[,])(worksheet.Cells.Value))[i, 2];
                         if (dtidCell == null) continue;
                         var dt = _context.DeviceTypes.Where(x => x.Name == dtidCell).FirstOrDefault();

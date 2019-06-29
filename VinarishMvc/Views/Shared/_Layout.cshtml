@@ -67,15 +67,13 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/popper.js/popper.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script>
-        $('td[data-href]').on("click", function () {
-            document.location = $(this).data('href');
-        });
-        $('tr[data-href]').on("click", function () {
-            document.location = $(this).data('href');
-        });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
     @RenderSection("Scripts", required: false)
     <ejs-scripts></ejs-scripts>

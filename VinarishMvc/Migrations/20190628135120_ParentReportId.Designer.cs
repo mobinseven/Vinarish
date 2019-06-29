@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VinarishMvc.Data;
 
 namespace VinarishMvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190628135120_ParentReportId")]
+    partial class ParentReportId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -266,7 +268,7 @@ namespace VinarishMvc.Migrations
                     b.Property<int?>("DeviceStatusType")
                         .HasColumnName("DeviceStatusType");
 
-                    b.Property<Guid?>("DeviceTypeId")
+                    b.Property<Guid>("DeviceTypeId")
                         .HasColumnName("DeviceTypeId");
 
                     b.Property<string>("Text")
@@ -279,6 +281,9 @@ namespace VinarishMvc.Migrations
                         .IsUnique();
 
                     b.HasIndex("DeviceTypeId");
+
+                    b.HasIndex("Text")
+                        .IsUnique();
 
                     b.ToTable("DeviceStatus");
                 });
@@ -534,7 +539,8 @@ namespace VinarishMvc.Migrations
                 {
                     b.HasOne("VinarishMvc.Models.DeviceType", "DeviceType")
                         .WithMany("DeviceStatus")
-                        .HasForeignKey("DeviceTypeId");
+                        .HasForeignKey("DeviceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("VinarishMvc.Models.DeviceType", b =>

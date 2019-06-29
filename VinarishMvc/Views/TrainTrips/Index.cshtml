@@ -32,32 +32,76 @@
                     @{ var dt = item.DateTime.ToString("yy/MM/dd");}
                     @Html.DisplayFor(modelItem => dt)
                 </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.TrainTripId">
-                        @Html.DisplayFor(modelItem => item.Train.Name)
-                    </a>
+                <td style="transform: rotate(0);">
+
+                    @Html.DisplayFor(modelItem => item.Train.Name)
+                    <a asp-action="Details" asp-route-id="@item.TrainTripId" class="stretched-link"></a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Reporter.UserName)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.TrainTripId"><i class="fa fa-edit"></i></a>
-                    <a asp-action="Details" asp-route-id="@item.TrainTripId"><i class="fa fa-info"></i></a>
-                    <a asp-action="Delete" asp-route-id="@item.TrainTripId"><i class="fa fa-trash"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <div id="accordion-@item.TrainTripId" class="collapse">
-                        واگن‌ها:
-                        @foreach (var w in item.WagonsOfTrip)
+                @{
+                    int warning = 0;
+                    int success = 0;
+                    int danger = 0;
+                    int info = 0;
+                    foreach (WagonTrip wt in item.WagonsOfTrip)
+                    {
+                        foreach (Report r in wt.Reports)
                         {
-                            <span>@w.Wagon.Number ,</span>
+                            if (r.DeviceStatus.DeviceStatusType == DeviceStatusType.Malfunction)
+                            {
+                                switch (r.Status)
+                                {
+                                    case ReportStatus.Waiting: warning++; break;
+                                    case ReportStatus.InProgress: info++; break;
+                                    case ReportStatus.Processed: success++; break;
+                                    case ReportStatus.Postponed: danger++; break;
+                                }
+                            }
                         }
-                        .
-                    </div>
+                    }
+                }
+                <td>
+                    @if (warning > 0)
+                    {
+                        <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top"  title="خرابی رفع نشده">@warning</span>
+
+                    }
+                    @if (success > 0)
+                    {
+                        <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top"  title="خرابی رفع شده">@success</span>
+
+                    }
+                    @if (danger > 0)
+                    {
+                        <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top"  title="خرابی رفع نشدنی">@danger</span>
+
+                    }
+                    @if (info > 0)
+                    {
+                        <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top"   title="در دست بررسی">@info</span>
+
+                    }
                 </td>
+                @*<td>
+                        <a asp-action="Edit" asp-route-id="@item.TrainTripId"><i class="fa fa-edit"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.TrainTripId"><i class="fa fa-info"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.TrainTripId"><i class="fa fa-trash"></i></a>
+                    </td>*@
             </tr>
+            @*<tr>
+                    <td colspan="3">
+                        <div id="accordion-@item.TrainTripId" class="collapse">
+                            واگن‌ها:
+                            @foreach (var w in item.WagonsOfTrip)
+                            {
+                                <span>@w.Wagon.Number ,</span>
+                            }
+                            .
+                        </div>
+                    </td>
+                </tr>*@
         }
     </tbody>
 </table>

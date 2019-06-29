@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<VinarishMvc.Models.Report>
-<div class="table-responsive">
-    <table class="table">
+
         @if (Model.Count() == 0)
         {
-            <tr>بدون گزارش</tr>
+            <div>بدون گزارش</div>
         }
         @foreach (Report r in Model)
         {
-            @await Html.PartialAsync("~/Views/Reports/_ProgressReport.cshtml", r)
+            if (r.ParentReportId == null)
+            {
+                @await Html.PartialAsync("~/Views/Reports/_ProgressReport.cshtml", r)
+            }
         }
-    </table>
-</div>

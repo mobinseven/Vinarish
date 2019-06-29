@@ -197,9 +197,11 @@ namespace VinarishMvc.Controllers
 
                     for (int i = 0; i < totalRows; i++)
                     {
+                        var name = ((object[,])(worksheet.Cells.Value))[i, 0].ToString();
+                        if (_context.DeviceTypes.Any(dt => dt.Name == name)) continue;
                         DeviceTypes.Add(new DeviceType
                         {
-                            Name = ((object[,])(worksheet.Cells.Value))[i, 0].ToString(),
+                            Name = name,
                             DepartmentId = model.DepartmentId
                         });
                     }

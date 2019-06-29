@@ -4,30 +4,65 @@
     string color = "";
     switch (Model.Status)
     {
-        case ReportStatus.Waiting: color = "table-warning"; break;
-        case ReportStatus.InProgress: color = "table-info"; break;
-        case ReportStatus.Processed: color = "table-success"; break;
-        case ReportStatus.Postponed: color = "table-danger"; break;
+        case ReportStatus.Waiting: color = "warning"; break;
+        case ReportStatus.Processed: color = "success"; break;
+        case ReportStatus.Postponed: color = "danger"; break;
+            //case ReportStatus.InProgress: color = "bg-info"; break; TODO: InProgress
     }
 }
-
-        <tr class="@color">
-            <td>
-                @Model.DateTimeCreated.ToString("yy/MM/dd")
-            </td>
-            @if (Model.WagonTrip != null)
-            {
-                <td>
-                    @Model.WagonTrip.TrainTrip.Train.Name
-                </td>
-            }
-            <td>
-                @Model.Reporter.UserName
-            </td>
-            <td>
-                @Model.DevicePlace.Description
-            </td>
-            <td>
-                @Model.DeviceStatus.Text
-            </td>
-        </tr>
+<div>
+    <div class="card text-right border-@color" data-toggle="collapse" data-target="#body-footer-@Model.ReportId">
+        <div class="card-header">@Model.DevicePlace.Description</div>
+        <div id="body-footer-@Model.ReportId" class="collapse hsparent">
+            <div class="card-group">
+                <div class="card">
+                    <div class="card-body">
+                        <p>
+                            @Model.DeviceStatus.Text
+                        </p>
+                        <p>
+                            @Model.Reporter.UserName
+                        </p>
+                        <p>
+                            @Model.DateTimeCreated.ToString("yy/MM/dd")
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Delete" asp-controller="Reports" asp-route-id="@Model.ReportId">
+                            <i class="fa fa-trash m-1"></i>
+                        </a>
+                        <a asp-controller="Reports" asp-action="CreateTripRepairingReport" asp-route-id="@Model.ReportId">
+                            <i class="fa fa-wrench m-1"></i>
+                        </a>
+                    </div>
+                </div>
+                @foreach (Report r in Model.AppendixReports)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <p>
+                                @r.DeviceStatus.Text
+                            </p>
+                            <p>
+                                @r.Reporter.UserName
+                            </p>
+                            <p>
+                                @r.DateTimeCreated.ToString("yy/MM/dd")
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Delete" asp-controller="Reports" asp-route-id="@r.ReportId">
+                                <i class="fa fa-trash m-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .card {
+        min-width: 150px;
+    }
+</style>

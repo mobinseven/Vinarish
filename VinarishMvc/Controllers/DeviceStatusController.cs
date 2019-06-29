@@ -62,15 +62,12 @@ namespace VinarishMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StatusId,Code,Text,DeviceStatusType,DeviceTypeId")] DeviceStatus deviceStatus)
         {
-            if (ModelState.IsValid)
-            {
-                deviceStatus.StatusId = Guid.NewGuid();
-                _context.Add(deviceStatus);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", deviceStatus.DeviceTypeId);
-            return View(deviceStatus);
+            deviceStatus.StatusId = Guid.NewGuid();
+            _context.Add(deviceStatus);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            //ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", deviceStatus.DeviceTypeId);
+            //return View(deviceStatus);
         }
 
         // GET: DeviceStatus/Edit/5
@@ -215,44 +212,6 @@ namespace VinarishMvc.Controllers
                             Code = code,
                             Text = text,
                             DeviceStatusType = model.DeviceStatusType
-                        });
-                    }
-                }
-            }
-
-            _context.DeviceStatus.AddRange(DeviceStatus);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        // POST: DevicePlaces/UploadRepair
-        [HttpPost, ActionName("UploadRepair")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UploadRepair(IFormFile File)
-        {
-            IFormFile file = File;
-            if (file == null || file.Length == 0)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            List<DeviceStatus> DeviceStatus = new List<DeviceStatus>();
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream).ConfigureAwait(false);
-
-                using (var package = new ExcelPackage(memoryStream))
-                {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Tip: To access the first worksheet, try index 1, not 0
-                    int totalRows = worksheet.Dimension.Rows;
-
-                    for (int i = 1; i < totalRows; i++)
-                    {
-                        DeviceStatus.Add(new DeviceStatus
-                        {
-                            DeviceTypeId = _context.DeviceTypes.Where(x => x.Name.Contains(((object[,])(worksheet.Cells.Value))[i, 2].ToString())).FirstOrDefault().DeviceTypeId,
-                            Code = ((object[,])(worksheet.Cells.Value))[i, 0].ToString(),
-                            Text = ((object[,])(worksheet.Cells.Value))[i, 1].ToString(),
-                            DeviceStatusType = DeviceStatusType.Repair
                         });
                     }
                 }
