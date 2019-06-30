@@ -29,26 +29,26 @@
                         <div class="justify-content-end">
                             @if (warning > 0)
                             {
-                                <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع نشده">@warning</span>
+                                <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.MalfunctionReportToolTip">@warning</span>
 
                             }
                             @if (success > 0)
                             {
-                                <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع شده">@success</span>
+                                <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.RepairReportToolTip">@success</span>
 
                             }
                             @if (danger > 0)
                             {
-                                <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع نشدنی">@danger</span>
+                                <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.NotRepairedReportToolTip">@danger</span>
 
                             }
                             @if (info > 0)
                             {
-                                <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="در دست بررسی">@info</span>
+                                <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.InProgressToolTip">@info</span>
 
                             }
                             <a asp-action="CreateTripReport" asp-controller="Reports" asp-route-id="@wt.WagonTripId" data-toggle="tooltip" data-placement="top" title="ثبت گزارش خرابی">
-                                <i class="fa fa-plus-circle fa-2x text-danger"></i>
+                                <i class="fa fa-plus-circle fa-lg m-2 text-danger"></i>
                             </a>
                         </div>
                     </div>

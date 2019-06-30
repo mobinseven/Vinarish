@@ -66,30 +66,30 @@
                 <td>
                     @if (warning > 0)
                     {
-                        <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top"  title="">@warning</span>
+                        <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.MalfunctionReportToolTip">@warning</span>
 
                     }
                     @if (success > 0)
                     {
-                        <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top"  title="خرابی رفع شده">@success</span>
+                        <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.RepairReportToolTip">@success</span>
 
                     }
                     @if (danger > 0)
                     {
-                        <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top"  title="خرابی رفع نشدنی">@danger</span>
+                        <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.NotRepairedReportToolTip">@danger</span>
 
                     }
                     @if (info > 0)
                     {
-                        <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top"   title="در دست بررسی">@info</span>
+                        <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.InProgressToolTip">@info</span>
 
                     }
                 </td>
                 <td>
-                        <a asp-action="Edit" asp-route-id="@item.TrainTripId"><i class="fa fa-edit"></i></a>
-                        <a asp-action="Details" asp-route-id="@item.TrainTripId"><i class="fa fa-info"></i></a>
-                        <a asp-action="Delete" asp-route-id="@item.TrainTripId"><i class="fa fa-trash"></i></a>
-                    </td>
+                    <a asp-action="Edit" asp-route-id="@item.TrainTripId"><i class="fa fa-edit fa-lg m-2"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.TrainTripId"><i class="fa fa-info fa-lg m-2"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.TrainTripId"><i class="fa fa-trash fa-lg m-2"></i></a>
+                </td>
             </tr>
             @*<tr>
                     <td colspan="3">

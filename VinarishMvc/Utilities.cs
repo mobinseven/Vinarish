@@ -8,6 +8,13 @@ using System.Text;
 
 namespace VinarishMvc
 {
+    static public class Expressions
+    {
+        static public readonly string MalfunctionReportToolTip = "گزارش";
+        static public readonly string RepairReportToolTip = "رفع شده";
+        static public readonly string NotRepairedReportToolTip = "رفع نشده";
+        static public readonly string InProgressToolTip = "در دست بررسی";
+    }
     static public class Utilities
     {
         //static public string GetPErsianDateTimeNow()

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<VinarishMvc.Models.Train>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "فهرست رام‌ها";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"><i class="fa fa-plus-square fa-2x"></i></a>
 </p>
 <table class="table">
     <thead>
@@ -25,9 +25,9 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.TrainId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TrainId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TrainId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.TrainId"><i class="fa fa-edit fa-lg m-2"></i></a>
+                <a asp-action="Details" asp-route-id="@item.TrainId"><i class="fa fa-info fa-lg m-2"></i></a>
+                <a asp-action="Delete" asp-route-id="@item.TrainId"><i class="fa fa-trash fa-lg m-2"></i></a>
             </td>
         </tr>
 }

@@ -164,7 +164,7 @@ namespace VinarishMvc.Controllers
             }
             ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", report.DevicePlaceId);
             ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus, "StatusId", "Code", report.DeviceStatusId);
-            ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "ReportId", report.ParentReportId);
+            ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "Code", report.ParentReportId);
             ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName", report.ReporterId);
             ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", report.WagonId);
             return View(report);
@@ -204,7 +204,7 @@ namespace VinarishMvc.Controllers
             }
             ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", report.DevicePlaceId);
             ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus, "StatusId", "Code", report.DeviceStatusId);
-            ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "ReportId", report.ParentReportId);
+            ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "Code", report.ParentReportId);
             ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName", report.ReporterId);
             ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", report.WagonId);
             return View(report);

@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=185.10.75.8;User ID=vinarish;Password=Hibernate70!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+    "DefaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=vinarish2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
   },
   "Logging": {
     "LogLevel": {
@@ -26,6 +26,9 @@
     "SignInRequireConfirmedEmail": false,
     "CookieHttpOnly": true,
     "CookieExpiration": 150,
+    //"LoginPath": "/Account/Login",
+    //"LogoutPath": "/Account/Logout",
+    //"AccessDeniedPath": "/Account/AccessDenied",
     "SlidingExpiration": true
   }
 }
