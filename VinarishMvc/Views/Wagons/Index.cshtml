@@ -1,41 +1,81 @@
 ﻿@model IEnumerable<VinarishMvc.Models.Wagon>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "فهرست واگن‌ها";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"><i class="fa fa-plus-square fa-2x"></i></a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Number)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Number)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.WagonId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WagonId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WagonId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            
+            <tr>
+                <td style="transform: rotate(0);">
+                    @Html.DisplayFor(modelItem => item.Name)
+                    <a asp-action="Details" asp-route-id="@item.WagonId" class="stretched-link"></a>
+
+                </td>
+                @{
+                    int warning = 0;
+                    int success = 0;
+                    int danger = 0;
+                    int info = 0;
+                    foreach (Report r in item.Reports)
+                    {
+                        if (r.DeviceStatus.DeviceStatusType == DeviceStatusType.Malfunction)
+                        {
+                            switch (r.Status)
+                            {
+                                case ReportStatus.Waiting: warning++; break;
+                                case ReportStatus.InProgress: info++; break;
+                                case ReportStatus.Processed: success++; break;
+                                case ReportStatus.Postponed: danger++; break;
+                            }
+                        }
+                    }
+                }
+                <td>
+                    @if (warning > 0)
+                    {
+                        <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع نشده">@warning</span>
+
+                    }
+                    @if (success > 0)
+                    {
+                        <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع شده">@success</span>
+
+                    }
+                    @if (danger > 0)
+                    {
+                        <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع نشدنی">@danger</span>
+
+                    }
+                    @if (info > 0)
+                    {
+                        <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="در دست بررسی">@info</span>
+
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.WagonId"><i class="fa fa-edit"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.WagonId"><i class="fa fa-info"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.WagonId"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

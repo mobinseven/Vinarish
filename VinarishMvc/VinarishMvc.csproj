@@ -8,13 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
-    <PackageReference Include="MD.PersianDateTime.Core" Version="2.3.5" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.4" />
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
-    
-<PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="17.1.0.38" />
 <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
   </ItemGroup>
 
@@ -26,6 +23,9 @@
 
 
   <ItemGroup>
+    <None Update="Controllers\Models\Vinarish.efml">
+      <Generator>DevartEFCoreGenerator</Generator>
+    </None>
     <None Update="Models\Vinarish.efml">
       <Generator>DevartEFCoreGenerator</Generator>
       <LastGenOutput>Vinarish.info</LastGenOutput>

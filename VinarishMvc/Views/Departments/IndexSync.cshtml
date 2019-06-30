@@ -1,6 +1,6 @@
 ﻿<h1>Departments</h1>
 
-<ejs-grid id="Grid" toolbar="@(new List<string>() { "Add","Delete","Update", "Cancel" })" dataBound="dataBound">
+@*<ejs-grid id="Grid" toolbar="@(new List<string>() { "Add","Delete","Update", "Cancel" })" dataBound="dataBound">
     <e-data-manager adaptor="RemoteSaveAdaptor" json="@ViewBag.dataSource.ToArray()" insertUrl="Insert" updateUrl="Update" removeUrl="Remove"></e-data-manager>
     <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true"></e-grid-editSettings>
     <e-grid-columns>
@@ -13,4 +13,4 @@
     function dataBound(args) {
         this.autoFitColumns(['Name']);
     }
-</script>
+</script>*@

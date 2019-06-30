@@ -8,11 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
-using Syncfusion.EJ2;
-using Syncfusion.EJ2.Navigations;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
-using VinarishMvc.Models.Syncfusion;
 
 namespace VinarishMvc.Controllers
 {

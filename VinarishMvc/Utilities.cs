@@ -1,5 +1,4 @@
-﻿using MD.PersianDateTime.Core;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,26 +10,26 @@ namespace VinarishMvc
 {
     static public class Utilities
     {
-        static public string GetPErsianDateTimeNow()
-        {
-            return ConvertToPersianDate(DateTime.Now);
-        }
-        static public string ConvertToPersianDate(DateTime dateTime)
-        {
-            StringBuilder time = new StringBuilder();
-            var persianDateTime = new PersianDateTime(dateTime)
-            {
-                EnglishNumber = false
-            };
-            time.AppendFormat("{0}, {1}/{2}/{3} {4}:{5}\n",
-                          persianDateTime.GetLongDayOfWeekName,
-                          persianDateTime.GetShortYear,
-                          persianDateTime.Month,
-                          persianDateTime.Day,
-                          persianDateTime.Hour,
-                          persianDateTime.Minute);
-            return time.ToString();
-        }
+        //static public string GetPErsianDateTimeNow()
+        //{
+        //    return ConvertToPersianDate(DateTime.Now);
+        //}
+        //static public string ConvertToPersianDate(DateTime dateTime)
+        //{
+        //    StringBuilder time = new StringBuilder();
+        //    var persianDateTime = new PersianDateTime(dateTime)
+        //    {
+        //        EnglishNumber = false
+        //    };
+        //    time.AppendFormat("{0}, {1}/{2}/{3} {4}:{5}\n",
+        //                  persianDateTime.GetLongDayOfWeekName,
+        //                  persianDateTime.GetShortYear,
+        //                  persianDateTime.Month,
+        //                  persianDateTime.Day,
+        //                  persianDateTime.Hour,
+        //                  persianDateTime.Minute);
+        //    return time.ToString();
+        //}
         private static readonly CultureInfo persian = new CultureInfo("fa-IR");
 
         public static string DigitsToPersian(string input)

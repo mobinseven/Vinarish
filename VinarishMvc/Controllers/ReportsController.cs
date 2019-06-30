@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -51,10 +52,20 @@ namespace VinarishMvc.Controllers
 
         public class CreateViewModel
         {
+            [DisplayName("مامور")]
             public string Username { get; set; }
+            [DisplayName("رده دستگاه")]
             public Guid DeviceTypeId { get; set; }
             public Report Report { get; set; } = new Report();
             public int ParentReportId { get; set; }
+        }
+
+        void GenerateReportCode(ref CreateViewModel model)
+        {
+            var dp = _context.DevicePlaces.Find(model.Report.DevicePlaceId);
+            var ds = _context.DeviceStatus.Find(model.Report.DeviceStatusId);
+            var rep= _context.Reporters.Find(model.Report.ReporterId);
+            model.Report.Code = dp.Code.ToUpper() + ds.Code.ToUpper() + rep.UserName.ToUpper() + DateTime.Now.ToString("yyMMdd");
         }
 
         // GET: Reports/CreateTripRepairingReport/[ReportId]
@@ -104,6 +115,7 @@ namespace VinarishMvc.Controllers
             {
                 model.Report.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
                 model.Report.Status = ReportStatus.Waiting;
+                GenerateReportCode(ref model);
                 _context.Reports.Add(model.Report);
                 await _context.SaveChangesAsync();
                 var wt = _context.WagonTrips.Find(model.Report.WagonTripId);
@@ -128,6 +140,7 @@ namespace VinarishMvc.Controllers
                 else if (ds.DeviceStatusType == DeviceStatusType.Unrepairable)
                     ParentReport.Status = ReportStatus.Postponed;
                 _context.Update(ParentReport);
+                GenerateReportCode(ref model);
                 _context.Reports.Add(model.Report);
                 await _context.SaveChangesAsync();
                 var wt = _context.WagonTrips.Find(model.Report.WagonTripId);

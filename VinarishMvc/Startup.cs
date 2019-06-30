@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Syncfusion.Licensing;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -24,7 +23,6 @@ namespace VinarishMvc
     {
         public Startup(IConfiguration configuration)
         {
-            SyncfusionLicenseProvider.RegisterLicense("MDAxQDMxMzcyZTMxMmUzMFNaZHJaa0JqRjBNa3RXNi9lMTZBUi92NEl4bEFYcGNuK2c4UDVMTjlxcnM9");
             Configuration = configuration;
         }
 
