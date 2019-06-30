@@ -1,5 +1,4 @@
 ﻿@model VinarishMvc.Models.Wagon
-@using VinarishMvc.Models
 @{
     ViewData["Title"] = "واگن " + Model.Name;
 }
@@ -8,30 +7,5 @@
     @ViewData["Title"]
 </h1>
 
-<div class="table-responsive">
-    <a asp-action="Create" asp-controller="Reports" asp-route-id="@Model.WagonId">
-        <i class="fa fa-plus-circle"></i>
-    </a>
-    <table class="table">
-        @foreach (Report r in ViewBag.Reports)
-        {
-            <tr>
-                <td>
-                    @{ var dt = r.DateTimeCreated.ToString("yy/MM/dd");}
-                    @Html.DisplayFor(modelItem => dt)
-                </td>
-                <td>
-                    @r.Reporter.UserName
-                </td>
-                <td>
-                    <a asp-action="Details" asp-controller="Reports" asp-route-id="@r.ReportId" class="stretched-link">
-                        @r.DevicePlace.Description
-                    </a>
-                </td>
-                <td>
-                    @r.DeviceStatus.Text
-                </td>
-            </tr>
-        }
-    </table>
-</div>
+
+@await Html.PartialAsync("~/Views/Reports/_ProgressList.cshtml", Model.Reports)

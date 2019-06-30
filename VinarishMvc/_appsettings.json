@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=185.10.75.8;User ID=vinarish;Password=Hibernate70!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+    "DefaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=vinarish2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
   },
   "Logging": {
     "LogLevel": {
@@ -8,7 +8,7 @@
     }
   },
   "SuperAdminDefaultOptions": {
-    "Email": "farzad.motallebizaade",
+    "Email": "farzad.motallebizaade@vinarish.com",
     "Password": "Hibernate70!"
   },
   "AllowedHosts": "*",

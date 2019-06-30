@@ -25,7 +25,7 @@ namespace VinarishMvc.Controllers
         // GET: Wagons1
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Wagons.ToListAsync());
+            return View(await _context.Wagons.OrderBy(w => w.Number).ToListAsync());
         }
 
         // GET: Wagons1/Details/5
@@ -43,7 +43,7 @@ namespace VinarishMvc.Controllers
                 .Include(r => r.DevicePlace)
                 .Include(r => r.DeviceStatus)
                 .Include(r => r.Reporter)
-                .OrderByDescending(r=>r.DateTimeCreated)
+                .OrderByDescending(r => r.DateTimeCreated)
                 .ToList();
             if (wagon == null)
             {

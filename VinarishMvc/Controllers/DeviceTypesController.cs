@@ -195,7 +195,7 @@ namespace VinarishMvc.Controllers
                     int totalRows = worksheet.Dimension.Rows;
 
 
-                    for (int i = 0; i < totalRows; i++)
+                    for (int i = 1; i < totalRows; i++)
                     {
                         var name = ((object[,])(worksheet.Cells.Value))[i, 0].ToString();
                         if (_context.DeviceTypes.Any(dt => dt.Name == name)) continue;
