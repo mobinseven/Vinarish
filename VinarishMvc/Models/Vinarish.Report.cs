@@ -18,7 +18,8 @@ using System.Collections.Generic;
 
 namespace VinarishMvc.Models
 {
-    public partial class Report {
+    public partial class Report
+    {
 
         public Report()
         {
@@ -148,6 +149,12 @@ namespace VinarishMvc.Models
             get;
             set;
         }
+
+        [DisplayName("سایت")]
+        public virtual int? SiteId { get; set; }
+
+        [DisplayName("سایت")]
+        public virtual Site Site { get; set; }
 
         #region Extensibility Method Definitions
 

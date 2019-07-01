@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
@@ -14,9 +17,13 @@ namespace VinarishMvc.Controllers
     public class ReportsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _env;
 
-        public ReportsController(ApplicationDbContext context)
+        public ReportsController(
+            IHostingEnvironment env,
+            ApplicationDbContext context)
         {
+            _env = env;
             _context = context;
         }
 
@@ -247,6 +254,46 @@ namespace VinarishMvc.Controllers
         private bool ReportExists(int id)
         {
             return _context.Reports.Any(e => e.ReportId == id);
+        }
+
+        public IActionResult ExportCustomer()
+        {
+            string rootFolder = _env.WebRootPath;
+            string fileName = @"/Excel/ExportCustomers.xlsx";
+
+            FileInfo file = new FileInfo(Path.Combine(rootFolder, fileName));
+
+            using (ExcelPackage package = new ExcelPackage(file))
+            {
+
+                IList<Report> reports = _context.Reports.ToList();
+
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Reports");
+                int totalRows = reports.Count();
+
+                worksheet.Cells[0, 0].Value = "Code";
+                worksheet.Cells[0, 1].Value = "Date";
+                worksheet.Cells[0, 1].Value = "Wagon";
+                worksheet.Cells[0, 2].Value = "Reporter";
+                worksheet.Cells[0, 3].Value = "Device Code";
+                worksheet.Cells[0, 4].Value = "Device";
+                worksheet.Cells[0, 5].Value = "Status Code";
+                worksheet.Cells[0, 6].Value = "Status";
+                int i = 0;
+                for (int row = 2; row <= totalRows + 1; row++)
+                {
+                    //worksheet.Cells[row, 1].Value = reports[i].CustomerId;
+                    //worksheet.Cells[row, 2].Value = reports[i].CustomerName;
+                    //worksheet.Cells[row, 3].Value = reports[i].CustomerEmail;
+                    //worksheet.Cells[row, 4].Value = reports[i].CustomerCountry;
+                    //i++;
+                }
+
+                package.Save();
+
+            }
+
+            return View();
         }
     }
 }

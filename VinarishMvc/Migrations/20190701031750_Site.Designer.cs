@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VinarishMvc.Data;
 
 namespace VinarishMvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190701031750_Site")]
+    partial class Site
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,8 +340,7 @@ namespace VinarishMvc.Migrations
                     b.Property<int>("ReporterId")
                         .HasColumnName("ReporterId");
 
-                    b.Property<int>("SiteId")
-                        .HasColumnName("SiteId");
+                    b.Property<int>("SiteId");
 
                     b.Property<int>("Status")
                         .HasColumnName("Status");
