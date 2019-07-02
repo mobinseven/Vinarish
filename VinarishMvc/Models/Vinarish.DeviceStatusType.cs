@@ -15,13 +15,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Data.Common;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace VinarishMvc.Models
 {
     public enum DeviceStatusType : int
     {
+        [Display(Name = Expressions.DeviceStatusMalfunction)]
         Malfunction,
+        [Display(Name = Expressions.DeviceStatusRepair)]
         Repair,
+        [Display(Name = Expressions.DeviceStatusNRepair)]
         Unrepairable
     }
 }

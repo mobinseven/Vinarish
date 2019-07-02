@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<VinarishMvc.Models.DevicePlace>
 
 @{
-    ViewData["Title"] = "دستگاه‌ها";
+    ViewData["Title"] = Expressions.DevicePlaces;
 }
 
     <h1>@ViewData["Title"]</h1>
@@ -39,9 +39,8 @@
                 @Html.DisplayFor(modelItem => item.DeviceType.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.DevicePlaceId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DevicePlaceId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DevicePlaceId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.DevicePlaceId"><i class="fa fa-edit fa-lg m-3"></i></a>
+                <a asp-action="Delete" asp-route-id="@item.DevicePlaceId"><i class="fa fa-trash fa-lg m-3"></i></a>
             </td>
         </tr>
 }

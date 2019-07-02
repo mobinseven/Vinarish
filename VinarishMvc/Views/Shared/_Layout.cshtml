@@ -69,5 +69,41 @@
         })
     </script>
     @RenderSection("Scripts", required: false)
+    <link rel="stylesheet" href="~/lib/DataTables/datatables.min.css" />
+    <link rel="stylesheet" href="~/lib/DataTables/FixedHeader-3.1.4/css/fixedHeader.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/lib/DataTables/Responsive-2.2.2/css/responsive.bootstrap4.min.css" />
+
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                "paging": false,
+                "fixedHeader": {
+                    header: true,
+                },
+                responsive: true,
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "بدون ردیف",
+                    "info": "_START_ تا _END_ از _TOTAL_ ردیف",
+                    "infoEmpty": " 0 تا 0 از 0 ردیف",
+                    "infoFiltered": "(پالایش شده از _MAX_ ردیف)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "نمایش _MENU_",
+                    "loadingRecords": "دریافت داده‌ها ...",
+                    "processing": "پردازش داده‌ها ...",
+                    "search": "جستجو:",
+                    "zeroRecords": "ردیفی یافت نشد",
+                    "paginate": {
+                        "first": "نخستین",
+                        "last": "واپسین",
+                        "next": "پسین",
+                        "previous": "پیشین"
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

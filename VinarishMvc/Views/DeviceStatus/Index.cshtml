@@ -7,9 +7,9 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create"><i class="fa fa-plus-square fa-lg"></i></a>
-    <a asp-action="Upload"><i class="fa fa-upload fa-lg"></i></a>
-    <a asp-action="Download"><i class="fa fa-download fa-lg"></i></a>
+    <a asp-action="Create"><i class="fa fa-plus-square fa-lg m-3"></i></a>
+    <a asp-action="Upload"><i class="fa fa-upload fa-lg m-3"></i></a>
+    <a asp-action="Download"><i class="fa fa-download fa-lg m-3"></i></a>
 </p>
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -18,9 +18,9 @@
         <a class="nav-item nav-link" id="nav-notrep-tab" data-toggle="tab" href="#nav-notrep" role="tab">@Expressions.DeviceStatusNRepair</a>
     </div>
 </nav>
-<div class="tab-content table-responsive" id="nav-tabContent">
+<div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-mal" role="tabpanel">
-        <table class="table">
+        <table class="table table-sm">
             <thead>
                 <tr>
                     <th>
@@ -30,12 +30,9 @@
                         @Html.DisplayNameFor(model => model.Text)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DeviceStatusType)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => model.DeviceType)
                     </th>
-                    <th></th>
+                    <th>گزینه‌ها</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,15 +48,11 @@
                                 @Html.DisplayFor(modelItem => item.Text)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.DeviceStatusType)
-                            </td>
-                            <td>
                                 @Html.DisplayFor(modelItem => item.DeviceType.Name)
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit"></i></a>
-                                <a asp-action="Details" asp-route-id="@item.StatusId"><i class="fa fa-info"></i></a>
-                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash"></i></a>
+                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit fa-lg m-3"></i></a>
+                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash fa-lg m-3"></i></a>
                             </td>
                         </tr>
                     }
@@ -69,7 +62,7 @@
 
     </div>
     <div class="tab-pane fade" id="nav-rep" role="tabpanel">
-        <table class="table">
+        <table class="table table-sm" style="width:100%">
             <thead>
                 <tr>
                     <th>
@@ -77,9 +70,6 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Text)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DeviceStatusType)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.DeviceType)
@@ -100,15 +90,11 @@
                                 @Html.DisplayFor(modelItem => item.Text)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.DeviceStatusType)
-                            </td>
-                            <td>
                                 @Html.DisplayFor(modelItem => item.DeviceType.Name)
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit"></i></a>
-                                <a asp-action="Details" asp-route-id="@item.StatusId"><i class="fa fa-info"></i></a>
-                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash"></i></a>
+                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit fa-lg m-3"></i></a>
+                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash fa-lg m-3"></i></a>
                             </td>
                         </tr>
                     }
@@ -117,7 +103,7 @@
         </table>
     </div>
     <div class="tab-pane fade" id="nav-notrep" role="tabpanel">
-        <table class="table">
+        <table class="table table-sm" style="width:100%">
             <thead>
                 <tr>
                     <th>
@@ -125,12 +111,6 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Text)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DeviceStatusType)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DeviceType)
                     </th>
                     <th></th>
                 </tr>
@@ -148,15 +128,8 @@
                                 @Html.DisplayFor(modelItem => item.Text)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.DeviceStatusType)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DeviceType.Name)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit"></i></a>
-                                <a asp-action="Details" asp-route-id="@item.StatusId"><i class="fa fa-info"></i></a>
-                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash"></i></a>
+                                <a asp-action="Edit" asp-route-id="@item.StatusId"><i class="fa fa-edit fa-lg m-3"></i></a>
+                                <a asp-action="Delete" asp-route-id="@item.StatusId"><i class="fa fa-trash fa-lg m-3"></i></a>
                             </td>
                         </tr>
                     }
