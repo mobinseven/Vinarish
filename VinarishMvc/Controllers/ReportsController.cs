@@ -256,10 +256,10 @@ namespace VinarishMvc.Controllers
             return _context.Reports.Any(e => e.ReportId == id);
         }
 
-        public IActionResult ExportCustomer()
+        public IActionResult Export()
         {
             string rootFolder = _env.WebRootPath;
-            string fileName = @"/Excel/ExportCustomers.xlsx";
+            string fileName = @"/Excel/ExportReports.xlsx";
 
             FileInfo file = new FileInfo(Path.Combine(rootFolder, fileName));
 

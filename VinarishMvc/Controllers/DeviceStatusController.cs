@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using OfficeOpenXml.Table;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
@@ -16,9 +19,12 @@ namespace VinarishMvc.Controllers
     public class DeviceStatusController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _env;
 
-        public DeviceStatusController(ApplicationDbContext context)
+        public DeviceStatusController(
+        IHostingEnvironment env, ApplicationDbContext context)
         {
+            _env = env;
             _context = context;
         }
 
@@ -220,6 +226,57 @@ namespace VinarishMvc.Controllers
             _context.DeviceStatus.AddRange(DeviceStatus);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private class DeviceStatusTableType
+        {
+            [DisplayName(Expressions.Code)]
+            public string Code { get; set; }
+            //[DisplayName(Expressions.DeviceStatusMalfunction)]
+            public string Text { get; set; }
+            [DisplayName(Expressions.DeviceTypes)]
+            public string DeviceType { get; set; }
+        }
+        public FileResult Download()
+        {
+            string fileName = _env.WebRootPath + @"\Excel\DeviceStatus.xlsx";
+
+            FileInfo file = new FileInfo(fileName);
+            if (file.Exists)
+                file.Delete();
+            using (ExcelPackage ExcelPackage = new ExcelPackage(file))
+            {
+                IList<DeviceStatusTableType> DeviceStatusMal = _context.DeviceStatus
+                    .Where(ds => ds.DeviceStatusType == DeviceStatusType.Malfunction)
+                    .Select(ds => new DeviceStatusTableType { Code = ds.Code, Text = ds.Text, DeviceType = ds.DeviceType.Name })
+                    .ToList();
+                ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.DeviceStatusMalfunction);
+                worksheet.Cells["A1"].LoadFromCollection(DeviceStatusMal, true, TableStyles.Medium25);
+                worksheet.Cells["B2"].Value = Expressions.DeviceStatusMalfunction;
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                IList<DeviceStatusTableType> DeviceStatusRep = _context.DeviceStatus
+                    .Where(ds => ds.DeviceStatusType == DeviceStatusType.Repair)
+                    .Select(ds => new DeviceStatusTableType { Code = ds.Code, Text = ds.Text, DeviceType = ds.DeviceType.Name })
+                    .ToList();
+                worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.DeviceStatusRepair);
+                worksheet.Cells["A1"].LoadFromCollection(DeviceStatusRep, true, TableStyles.Medium25);
+                worksheet.Cells["B2"].Value = Expressions.DeviceStatusRepair;
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+
+                IList<DeviceStatusTableType> DeviceStatusNep = _context.DeviceStatus
+                    .Where(ds => ds.DeviceStatusType == DeviceStatusType.Unrepairable)
+                    .Select(ds => new DeviceStatusTableType { Code = ds.Code, Text = ds.Text, DeviceType = ds.DeviceType.Name })
+                    .ToList();
+                worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.DeviceStatusNRepair);
+                worksheet.Cells["A1"].LoadFromCollection(DeviceStatusNep, true, TableStyles.Medium25);
+                worksheet.Cells["B2"].Value = Expressions.DeviceStatusNRepair;
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                ExcelPackage.Save();
+
+            }
+            return PhysicalFile(fileName, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.DeviceStatus + ".xlsx");
         }
     }
 }

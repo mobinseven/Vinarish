@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using OfficeOpenXml.Table;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
@@ -16,9 +19,12 @@ namespace VinarishMvc.Controllers
     public class DevicePlacesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _env;
 
-        public DevicePlacesController(ApplicationDbContext context)
+        public DevicePlacesController(
+            IHostingEnvironment env, ApplicationDbContext context)
         {
+            _env = env;
             _context = context;
         }
 
@@ -218,6 +224,34 @@ namespace VinarishMvc.Controllers
             _context.DevicePlaces.AddRange(DevicePlaces);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private class DevicePlaceTableType
+        {
+            [DisplayName(Expressions.Code)]
+            public string Code { get; set; }
+            [DisplayName(Expressions.DevicePlaces)]
+            public string Description { get; set; }
+            [DisplayName(Expressions.DeviceTypes)]
+            public string DeviceType { get; set; }
+        }
+        public FileResult Download()
+        {
+            string fileName = _env.WebRootPath + @"\Excel\DevicePlaces.xlsx";
+
+            FileInfo file = new FileInfo(fileName);
+            if (file.Exists)
+                file.Delete();
+            using (ExcelPackage ExcelPackage = new ExcelPackage(file))
+            {
+                IList<DevicePlaceTableType> DevicePlaces = _context.DevicePlaces.Select(dp => new DevicePlaceTableType { Code = dp.Code, Description = dp.Description, DeviceType = dp.DeviceType.Name }).ToList();
+                ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.DevicePlaces);
+                worksheet.Cells["A1"].LoadFromCollection(DevicePlaces, true, TableStyles.Medium25);
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                ExcelPackage.Save();
+
+            }
+            return PhysicalFile(fileName, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.DevicePlaces + ".xlsx");
         }
     }
 }

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
@@ -16,9 +21,12 @@ namespace VinarishMvc.Controllers
     public class DeviceTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _env;
 
-        public DeviceTypesController(ApplicationDbContext context)
+        public DeviceTypesController(
+            IHostingEnvironment env, ApplicationDbContext context)
         {
+            _env = env;
             _context = context;
         }
 
@@ -177,6 +185,7 @@ namespace VinarishMvc.Controllers
         // POST: DeviceTypes/Upload
         [HttpPost, ActionName("Upload")]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(5000000)]
         public async Task<IActionResult> Upload(UploadViewModel model)
         {
             IFormFile file = model.File;
@@ -212,5 +221,31 @@ namespace VinarishMvc.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+        private class DeviceTypeTableType
+        {
+            [DisplayName(Expressions.DeviceTypes)]
+            public string Name { get; set; }
+        }
+        public FileResult Download()
+        {
+            string fileName = _env.WebRootPath + @"\Excel\DeviceTypes.xlsx";
+
+            FileInfo file = new FileInfo(fileName);
+            if (file.Exists)
+                file.Delete();
+            using (ExcelPackage ExcelPackage = new ExcelPackage(file))
+            {
+                IList<DeviceTypeTableType> DeviceTypes = _context.DeviceTypes.Select(dt => new DeviceTypeTableType { Name = dt.Name}).ToList();
+                ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.DeviceTypes);
+                worksheet.Cells["A1"].LoadFromCollection(DeviceTypes, true, TableStyles.Medium25);
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                ExcelPackage.Save();
+
+            }
+            return PhysicalFile(fileName, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.DeviceTypes + ".xlsx");
+        }
+
     }
 }

@@ -10,10 +10,17 @@ namespace VinarishMvc
 {
     static public class Expressions
     {
-        static public readonly string MalfunctionReportToolTip = "گزارش";
-        static public readonly string RepairReportToolTip = "رفع شده";
-        static public readonly string NotRepairedReportToolTip = "رفع نشده";
-        static public readonly string InProgressToolTip = "در دست بررسی";
+        public const string MalfunctionReportToolTip = "گزارش";
+        public const string RepairReportToolTip = "رفع شده";
+        public const string NotRepairedReportToolTip = "رفع نشده";
+        public const string InProgressToolTip = "در دست بررسی";
+        public const string DeviceTypes = "نوع تجهیز";
+        public const string DevicePlaces = "موقعیت تجهیز";
+        public const string Code = "کد";
+        public const string DeviceStatusMalfunction = "کد خرابی";
+        public const string DeviceStatusRepair = "کد رفع خرابی";
+        public const string DeviceStatusNRepair = "کد عدم رفع خرابی";
+        public const string DeviceStatus = "کد راهنما";
     }
     static public class Utilities
     {
