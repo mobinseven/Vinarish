@@ -210,6 +210,28 @@ namespace VinarishMvc.Controllers
                         if (_context.DeviceStatus.Any(ds => ds.Text == text)) continue;
                         var dtidCell = (string)((object[,])(worksheet.Cells.Value))[i, 2];
                         if (dtidCell == null) continue;
+                        var dt = _context.DeviceTypes.Where(x => x.DepartmentId == model.DepartmentId && x.Name == dtidCell).FirstOrDefault();
+                        if (dt == null) continue;
+                        DeviceStatus.Add(new DeviceStatus
+                        {
+                            DeviceTypeId = dt.DeviceTypeId,
+                            Code = code,
+                            Text = text,
+                            DeviceStatusType = DeviceStatusType.Malfunction
+                        });
+                    }
+
+                    worksheet = package.Workbook.Worksheets[2]; // Tip: To access the first worksheet, try index 1, not 0
+                    totalRows = worksheet.Dimension.Rows;
+
+                    for (int i = 1; i < totalRows; i++)
+                    {
+                        var code = (string)((object[,])(worksheet.Cells.Value))[i, 0];
+                        if (_context.DeviceStatus.Any(ds => ds.Code == code)) continue;
+                        var text = (string)((object[,])(worksheet.Cells.Value))[i, 1];
+                        if (_context.DeviceStatus.Any(ds => ds.Text == text)) continue;
+                        var dtidCell = (string)((object[,])(worksheet.Cells.Value))[i, 2];
+                        if (dtidCell == null) continue;
                         var dt = _context.DeviceTypes.Where(x => x.Name == dtidCell).FirstOrDefault();
                         if (dt == null) continue;
                         DeviceStatus.Add(new DeviceStatus
@@ -217,7 +239,29 @@ namespace VinarishMvc.Controllers
                             DeviceTypeId = dt.DeviceTypeId,
                             Code = code,
                             Text = text,
-                            DeviceStatusType = model.DeviceStatusType
+                            DeviceStatusType = DeviceStatusType.Repair
+                        });
+                    }
+
+                    worksheet = package.Workbook.Worksheets[3]; // Tip: To access the first worksheet, try index 1, not 0
+                    totalRows = worksheet.Dimension.Rows;
+
+                    for (int i = 1; i < totalRows; i++)
+                    {
+                        var code = (string)((object[,])(worksheet.Cells.Value))[i, 0];
+                        if (_context.DeviceStatus.Any(ds => ds.Code == code)) continue;
+                        var text = (string)((object[,])(worksheet.Cells.Value))[i, 1];
+                        if (_context.DeviceStatus.Any(ds => ds.Text == text)) continue;
+                        var dtidCell = (string)((object[,])(worksheet.Cells.Value))[i, 2];
+                        if (dtidCell == null) continue;
+                        var dt = _context.DeviceTypes.Where(x => x.Name == dtidCell).FirstOrDefault();
+                        if (dt == null) continue;
+                        DeviceStatus.Add(new DeviceStatus
+                        {
+                            DeviceTypeId = dt.DeviceTypeId,
+                            Code = code,
+                            Text = text,
+                            DeviceStatusType = DeviceStatusType.Unrepairable
                         });
                     }
                 }

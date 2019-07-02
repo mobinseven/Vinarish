@@ -1,7 +1,7 @@
 ﻿@using VinarishMvc.DeviceManagement
 
     <ul class="nav nav-pills flex-column">
-        <li class="nav-item"><a class="nav-link @ManageNavPages.DeviceTypesNavClass(ViewContext)" asp-controller="DeviceTypes" asp-action="Index">گروه‌ها</a></li>
-        <li class="nav-item"><a class="nav-link @ManageNavPages.DevicePlacesNavClass(ViewContext)" asp-controller="DevicePlaces" asp-action="Index">دستگاه‌ها</a></li>
-        <li class="nav-item"><a class="nav-link @ManageNavPages.DeviceStatusNavClass(ViewContext)" asp-controller="DeviceStatus" asp-action="Index">کدهای وضعیت</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.DeviceTypesNavClass(ViewContext)" asp-controller="DeviceTypes" asp-action="Index">@Expressions.DeviceTypes</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.DevicePlacesNavClass(ViewContext)" asp-controller="DevicePlaces" asp-action="Index">@Expressions.DevicePlaces</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.DeviceStatusNavClass(ViewContext)" asp-controller="DeviceStatus" asp-action="Index">@Expressions.DeviceStatus</a></li>
     </ul>
