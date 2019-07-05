@@ -33,21 +33,21 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName("بخش")]
+        [System.ComponentModel.DisplayName(Expressions.Departments)]
         public virtual string Name
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("رده دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.DeviceTypes)]
         public virtual IList<DeviceType> DeviceTypes
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("ماموران")]
+        [System.ComponentModel.DisplayName(Expressions.Reporters)]
         public virtual IList<Reporter> Reporters
         {
             get;

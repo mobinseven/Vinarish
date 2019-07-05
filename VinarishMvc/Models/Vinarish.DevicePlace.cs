@@ -32,35 +32,35 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName("رده دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.DeviceTypes)]
         public virtual System.Guid DeviceTypeId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("کد دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.Code+Expressions.DevicePlaces)]
         public virtual string Code
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.DevicePlaces)]
         public virtual string Description
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("رده دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.DeviceTypes)]
         public virtual DeviceType DeviceType
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارشها")]
+        [System.ComponentModel.DisplayName(Expressions.Reports)]
         public virtual IList<Report> Reports
         {
             get;

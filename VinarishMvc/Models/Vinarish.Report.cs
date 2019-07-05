@@ -33,56 +33,56 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName("زمان")]
+        [System.ComponentModel.DisplayName(Expressions.DateTime)]
         public virtual System.DateTime DateTimeCreated
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("واپسین ویرایش")]
+        [System.ComponentModel.DisplayName(Expressions.DateTimeModified)]
         public virtual System.DateTime DateTimeModified
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارشگر")]
+        [System.ComponentModel.DisplayName(Expressions.Reporter)]
         public virtual int ReporterId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("وضعیت گزارش")]
+        [System.ComponentModel.DisplayName(Expressions.Status)]
         public virtual ReportStatus Status
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("وضعیت")]
+        [System.ComponentModel.DisplayName(Expressions.DeviceStatus)]
         public virtual System.Guid DeviceStatusId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارش پدر")]
+        [System.ComponentModel.DisplayName(Expressions.ParentReport)]
         public virtual int? ParentReportId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.DevicePlaces)]
         public virtual System.Guid DevicePlaceId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("واگن")]
+        [System.ComponentModel.DisplayName(Expressions.Wagon)]
         public virtual System.Guid WagonId
         {
             get;
@@ -95,49 +95,49 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName("کد گزارش")]
+        [System.ComponentModel.DisplayName(Expressions.Code+Expressions.Report)]
         public virtual string Code
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارشگر")]
+        [System.ComponentModel.DisplayName(Expressions.Reporter)]
         public virtual Reporter Reporter
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("وضعیت")]
+        [System.ComponentModel.DisplayName(Expressions.DeviceStatus)]
         public virtual DeviceStatus DeviceStatus
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارشهای فرزند")]
+        [System.ComponentModel.DisplayName(Expressions.ChildReports)]
         public virtual IList<Report> AppendixReports
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارش پدر")]
+        [System.ComponentModel.DisplayName(Expressions.ParentReport)]
         public virtual Report ParentReport
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.DevicePlaces)]
         public virtual DevicePlace DevicePlace
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("واگن")]
+        [System.ComponentModel.DisplayName(Expressions.Wagon)]
         public virtual Wagon Wagon
         {
             get;
@@ -150,10 +150,10 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [DisplayName("سایت")]
+        [DisplayName(Expressions.Site)]
         public virtual int? SiteId { get; set; }
 
-        [DisplayName("سایت")]
+        [DisplayName(Expressions.Site)]
         public virtual Site Site { get; set; }
 
         #region Extensibility Method Definitions

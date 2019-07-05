@@ -39,35 +39,35 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName("بخش")]
+        [System.ComponentModel.DisplayName(Expressions.Departments)]
         public virtual System.Guid DepartmentId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("نام کاربری")]
+        [System.ComponentModel.DisplayName(Expressions.UserName)]
         public virtual string UserName
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارشها")]
+        [System.ComponentModel.DisplayName(Expressions.Reports)]
         public virtual IList<Report> MalfunctionReports
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("بخش")]
+        [System.ComponentModel.DisplayName(Expressions.Departments)]
         public virtual Department Department
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("سفرها")]
+        [System.ComponentModel.DisplayName(Expressions.TrainTrips)]
         public virtual IList<TrainTrip> TrainTrips
         {
             get;

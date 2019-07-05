@@ -1,10 +1,10 @@
 ﻿@model VinarishMvc.Models.DevicePlace
 
 @{
-    ViewData["Title"] = "پاک کردن " + @Expressions.DevicePlaces;
+    ViewData["Title"] = Expressions.DeleteItemTitle(Expressions.DevicePlaces);
 }
 
-<h3>آیا می‌خواهید این @Expressions.DevicePlaces پاک شود؟</h3>
+<h3>@Expressions.DeleteItemAsk(Expressions.DevicePlaces)</h3>
 <div>
     <dl class="row">
         <dt class = "col-sm-2">
@@ -29,7 +29,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="DevicePlaceId" />
-        <input type="submit" value="پاک شود" class="btn btn-danger" /> |
-        <a asp-action="Index">بازشگت به فهرست</a>
+        <input type="submit" value="@Expressions.Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">@Expressions.BackToIndex</a>
     </form>
 </div>

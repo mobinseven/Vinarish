@@ -18,7 +18,8 @@ using System.Collections.Generic;
 
 namespace VinarishMvc.Models
 {
-    public partial class DeviceStatus {
+    public partial class DeviceStatus
+    {
 
         public DeviceStatus()
         {
@@ -32,42 +33,42 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName("کد وضعیت")]
+        [System.ComponentModel.DisplayName(Expressions.DeviceStatus)]
         public virtual string Code
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("وضعیت")]
+        [System.ComponentModel.DisplayName(Expressions.Status)]
         public virtual string Text
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("نوع وضعیت")]
+        [System.ComponentModel.DisplayName(Expressions.Type + Expressions.DeviceStatus)]
         public virtual DeviceStatusType? DeviceStatusType
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("رده دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.DeviceTypes)]
         public virtual System.Guid? DeviceTypeId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارشها")]
+        [System.ComponentModel.DisplayName(Expressions.Reports)]
         public virtual IList<Report> Reports
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("رده دستگاه")]
+        [System.ComponentModel.DisplayName(Expressions.DeviceTypes)]
         public virtual DeviceType DeviceType
         {
             get;

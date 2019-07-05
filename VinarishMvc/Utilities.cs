@@ -10,17 +10,45 @@ namespace VinarishMvc
 {
     static public class Expressions
     {
-        public const string MalfunctionReportToolTip = "گزارش";
-        public const string RepairReportToolTip = "رفع شده";
-        public const string NotRepairedReportToolTip = "رفع نشده";
-        public const string InProgressToolTip = "در دست بررسی";
-        public const string DeviceTypes = "نوع تجهیز";
-        public const string DevicePlaces = "موقعیت تجهیز";
-        public const string Code = "کد";
-        public const string DeviceStatusMalfunction = "کد خرابی";
-        public const string DeviceStatusRepair = "کد رفع خرابی";
-        public const string DeviceStatusNRepair = "کد عدم رفع خرابی";
-        public const string DeviceStatus = "کد راهنما";
+        public const string MalfunctionReportToolTip = "گزارش ";
+        public const string RepairReportToolTip = "رفع شده ";
+        public const string NotRepairedReportToolTip = "رفع نشده ";
+        public const string InProgressToolTip = "در دست بررسی ";
+        public const string DeviceTypes = "نوع تجهیز ";
+        public const string DevicePlaces = "موقعیت تجهیز ";
+        public const string Code = "کد ";
+        public const string DeviceStatusMalfunction = "کد خرابی ";
+        public const string DeviceStatusRepair = "کد رفع خرابی ";
+        public const string DeviceStatusNRepair = "کد عدم رفع خرابی ";
+        public const string DeviceStatus = "کد راهنما ";
+        public const string Departments = "بخش ";
+        public const string Reporters = "ماموران ";
+        public const string Reporter = "گزارشگر ";
+        public const string Reports = "گزارش‌ها ";
+        public const string Report = "گزارش ";
+        public const string Status = "وضعیت ";
+        public const string Type = "نوع ";
+        public const string DateTime = "زمان ";
+        public const string DateTimeModified = "واپسین ویرایش";
+        public const string ParentReport = "گزارش پدر";
+        public const string Wagon = "واگن";
+        public const string ChildReports = "گزارشهای فرزند";
+        public const string Site = "سایت";
+        public const string UserName = "نام کاربری";
+        public const string TrainTrips = "سفرها";
+        public const string Options = "گزینه‌ها";
+        public const string Delete = "پاک شود";
+        public const string BackToIndex = "بازگشت به فهرست";
+        public static string DeleteItemTitle(string item)
+        {
+            return "پاک کردن " + item;
+        }
+        public static string DeleteItemAsk(string item)
+        {
+            return "آیا میخواهید این " + item + " پاک شود؟";
+        }
+
+
     }
     static public class Utilities
     {
