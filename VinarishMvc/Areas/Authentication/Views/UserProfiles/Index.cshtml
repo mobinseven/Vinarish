@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "فهرست کاربران";
+
+    List<Reporter>
+        reporters = ViewBag.Reporters;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -18,40 +21,49 @@
             <th>
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.ProfilePicture)
-            </th>*@
+            <th>
+                @Expressions.Departments
+            </th>
+            @*
+                <th>
+                    @Html.DisplayNameFor(model => model.ProfilePicture)
+                </th>*@
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            @*<td>
-                <img src="@item.ProfilePicture" width="50" />
-            </td>*@
-            <td>
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
-                        گزینه‌ها
-                    </button>
-                    <div class="dropdown-menu">
-                        <a asp-action="ChangeRole" asp-route-id="@item.UserProfileId" class="dropdown-item">دسترسی‌ها</a>
-                        <a asp-action="Create" asp-controller="Reporters" asp-route-id="@item.VinarishUserId" class="dropdown-item">بخش</a>
-                        <a asp-action="ChangePassword" asp-route-id="@item.UserProfileId" class="dropdown-item">تغییر رمز</a>
-                        <a asp-action="Edit" asp-route-id="@item.UserProfileId" class="dropdown-item">ویرایش</a>
-                        <a asp-action="Details" asp-route-id="@item.UserProfileId" class="dropdown-item">جزئیات</a>
-                        <a asp-action="Delete" asp-route-id="@item.UserProfileId" class="dropdown-item">پاک کردن</a>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => reporters.Where(r => r.VinarishUserId == item.VinarishUserId).FirstOrDefault().Department.Name)
+                </td>
+                @*
+                    <td>
+                        <img src="@item.ProfilePicture" width="50" />
+                    </td>*@
+                <td>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+                            گزینه‌ها
+                        </button>
+                        <div class="dropdown-menu">
+                            <a asp-action="ChangeRole" asp-route-id="@item.UserProfileId" class="dropdown-item">دسترسی‌ها</a>
+                            <a asp-action="Create" asp-controller="Reporters" asp-route-id="@item.VinarishUserId" class="dropdown-item">بخش</a>
+                            <a asp-action="ChangePassword" asp-route-id="@item.UserProfileId" class="dropdown-item">تغییر رمز</a>
+                            <a asp-action="Edit" asp-route-id="@item.UserProfileId" class="dropdown-item">ویرایش</a>
+                            <a asp-action="Details" asp-route-id="@item.UserProfileId" class="dropdown-item">جزئیات</a>
+                            <a asp-action="Delete" asp-route-id="@item.UserProfileId" class="dropdown-item">پاک کردن</a>
+                        </div>
                     </div>
-                </div>
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

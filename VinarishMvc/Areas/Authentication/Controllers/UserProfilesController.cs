@@ -16,7 +16,6 @@ using VinarishMvc.Data;
 namespace VinarishMvc.Areas.Authentication.Controllers
 {
     [Area("Authentication")]
-
     public class UserProfilesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -34,10 +33,12 @@ namespace VinarishMvc.Areas.Authentication.Controllers
             _roleManager = roleManager;
             _roles = roles;
         }
+
         [Authorize(Roles = RolesList.UserRoleManagement.RoleName)]
         // GET: Authentication/UserProfiles
         public async Task<IActionResult> Index()
         {
+            ViewBag.Reporters = _context.Reporters.ToList();
             return View(await _context.UserProfile.ToListAsync());
         }
 
@@ -66,7 +67,7 @@ namespace VinarishMvc.Areas.Authentication.Controllers
         }
 
         // POST: Authentication/UserProfiles/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -90,7 +91,6 @@ namespace VinarishMvc.Areas.Authentication.Controllers
                         _context.UserProfile.Add(register);
                         await _context.SaveChangesAsync();
                     }
-
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -114,7 +114,7 @@ namespace VinarishMvc.Areas.Authentication.Controllers
         }
 
         // POST: Authentication/UserProfiles/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -189,12 +189,14 @@ namespace VinarishMvc.Areas.Authentication.Controllers
         {
             return _context.UserProfile.Any(e => e.UserProfileId == id);
         }
+
         public class UserRoleViewModel
         {
             public string VinarishUserId { get; set; }
-            public Dictionary<string,bool> RoleList { get; set; } = new Dictionary<string, bool>();
+            public Dictionary<string, bool> RoleList { get; set; } = new Dictionary<string, bool>();
             public UserProfile Profile { get; set; }
         }
+
         // GET: Authentication/UserProfiles/ChangeRole/5
         public async Task<IActionResult> ChangeRole(int? id)
         {
@@ -215,8 +217,9 @@ namespace VinarishMvc.Areas.Authentication.Controllers
             }
             return View(Item);
         }
+
         // POST: Authentication/UserProfiles/ChangeRole/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -239,10 +242,10 @@ namespace VinarishMvc.Areas.Authentication.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-
             }
             return View(userProfile);
         }
+
         // GET: Authentication/UserProfiles/ChangePassword/5
         public async Task<IActionResult> ChangePassword(int? id)
         {
@@ -261,8 +264,9 @@ namespace VinarishMvc.Areas.Authentication.Controllers
             userProfile.ConfirmPassword = null;
             return View(userProfile);
         }
+
         // POST: Authentication/UserProfiles/ChangePassword/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -299,6 +303,5 @@ namespace VinarishMvc.Areas.Authentication.Controllers
             }
             return View(userProfile);
         }
-
     }
 }

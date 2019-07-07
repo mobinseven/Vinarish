@@ -18,12 +18,13 @@ using System.Collections.Generic;
 
 namespace VinarishMvc.Models
 {
-    public partial class Reporter {
-
+    public partial class Reporter
+    {
         public Reporter()
         {
-            this.MalfunctionReports = new List<Report>();
-            this.TrainTrips = new List<TrainTrip>();
+            this.Reports = new List<Report>();
+            this.Trips = new List<TrainTrip>();
+            this.AsAssistant = new List<Assistant>();
             OnCreated();
         }
 
@@ -39,36 +40,43 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Departments)]
-        public virtual System.Guid DepartmentId
+        [DisplayName(Expressions.Departments)]
+        public virtual Guid DepartmentId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.UserName)]
+        [DisplayName(Expressions.UserName)]
         public virtual string UserName
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Reports)]
-        public virtual IList<Report> MalfunctionReports
+        [DisplayName(Expressions.Reports)]
+        public virtual IList<Report> Reports
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Departments)]
+        [DisplayName(Expressions.Departments)]
         public virtual Department Department
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.TrainTrips)]
-        public virtual IList<TrainTrip> TrainTrips
+        [DisplayName(Expressions.Trips)]
+        public virtual IList<TrainTrip> Trips
+        {
+            get;
+            set;
+        }
+
+        [DisplayName(Expressions.AsAssistant)]
+        public virtual IList<Assistant> AsAssistant
         {
             get;
             set;
@@ -78,7 +86,6 @@ namespace VinarishMvc.Models
 
         partial void OnCreated();
 
-        #endregion
+        #endregion Extensibility Method Definitions
     }
-
 }

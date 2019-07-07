@@ -18,8 +18,8 @@ using System.Collections.Generic;
 
 namespace VinarishMvc.Models
 {
-    public partial class WagonTrip {
-
+    public partial class WagonTrip
+    {
         public WagonTrip()
         {
             this.Reports = new List<Report>();
@@ -44,21 +44,21 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName("واگن")]
+        [System.ComponentModel.DisplayName(Expressions.Wagon)]
         public virtual Wagon Wagon
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("سفر")]
+        [System.ComponentModel.DisplayName(Expressions.Trips)]
         public virtual TrainTrip TrainTrip
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("گزارشها")]
+        [System.ComponentModel.DisplayName(Expressions.Reports)]
         public virtual IList<Report> Reports
         {
             get;
@@ -69,7 +69,6 @@ namespace VinarishMvc.Models
 
         partial void OnCreated();
 
-        #endregion
+        #endregion Extensibility Method Definitions
     }
-
 }

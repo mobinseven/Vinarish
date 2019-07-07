@@ -1,10 +1,9 @@
-﻿@model VinarishMvc.Models.Wagon
+﻿@model VinarishMvc.Models.Site
 
 @{
-    ViewData["Title"] = Expressions.DeleteItemTitle(Expressions.Wagon);
+    ViewData["Title"] = Expressions.Delete + Expressions.Site;
 }
-
-<h3>@Expressions.DeleteItemAsk(Expressions.Wagon)</h3>
+<h3>@Expressions.DeleteItemAsk(Expressions.Site)</h3>
 <div>
     <dl class="row">
         <dt class="col-sm-2">
@@ -16,7 +15,7 @@
     </dl>
 
     <form asp-action="Delete">
-        <input type="hidden" asp-for="WagonId" />
+        <input type="hidden" asp-for="SiteId" />
         <input type="submit" value="@Expressions.Delete" class="btn btn-danger" /> |
         <a asp-action="Index">@Expressions.BackToIndex</a>
     </form>

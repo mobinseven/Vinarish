@@ -1,7 +1,7 @@
 ﻿@model VinarishMvc.Models.WagonTrip
 
 @{
-    ViewData["Title"] = "واگن " + Model.Wagon.Number + " در سفر " + Model.TrainTrip.Train + " " + Model.TrainTrip.DateTime.ToString("yy/MM/dd");
+    ViewData["Title"] = "واگن " + Model.Wagon.Name + " در سفر " + Model.TrainTrip.Train + " " + Model.TrainTrip.DateTime.ToString("yy/MM/dd");
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -23,7 +23,6 @@
                 </td>
                 <td>
                     @r.DevicePlace.Description
-
                 </td>
                 <td>
                     @r.DeviceStatus.Text

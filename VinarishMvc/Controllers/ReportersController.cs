@@ -18,6 +18,7 @@ namespace VinarishMvc.Controllers
         {
             _context = context;
         }
+
         // GET: Reporters
         public async Task<IActionResult> Index()
         {
@@ -69,6 +70,7 @@ namespace VinarishMvc.Controllers
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
             return View();
         }
+
         // POST: Reporters/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -78,7 +80,7 @@ namespace VinarishMvc.Controllers
             {
                 _context.Add(reporter);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "UserProfiles", new { area = "Authentication" });
             }
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", reporter.DepartmentId);
             return View(reporter);
@@ -102,7 +104,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: Reporters/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]

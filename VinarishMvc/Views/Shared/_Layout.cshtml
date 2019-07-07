@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
-
 </head>
 <body>
     <header>
@@ -60,7 +59,7 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/lib/popper.js/popper.min.js"></script>
+    <script src="https://unpkg.com/popper.js@1.15.0/dist/umd/popper.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script>
@@ -103,6 +102,18 @@
                     }
                 }
             });
+        });
+    </script>
+    <script>
+        $(function () {
+            var pathName = document.location.pathname;
+            window.onbeforeunload = function () {
+                var scrollPosition = $(document).scrollTop();
+                localStorage.setItem("scrollPosition_" + pathName, scrollPosition.toString());
+            }
+            if (localStorage["scrollPosition_" + pathName]) {
+                $(document).scrollTop(localStorage.getItem("scrollPosition_" + pathName));
+            }
         });
     </script>
 </body>

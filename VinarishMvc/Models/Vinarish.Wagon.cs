@@ -9,63 +9,66 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Data;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Data.Common;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VinarishMvc.Models
 {
-    public partial class Wagon {
+    public partial class Wagon
+    {
+        #region Constructors
 
         public Wagon()
         {
-            this.Trips = new List<WagonTrip>();
-            this.Reports = new List<Report>();
+            Trips = new List<WagonTrip>();
+            Reports = new List<Report>();
             OnCreated();
         }
 
-        public virtual System.Guid WagonId
-        {
-            get;
-            set;
-        }
+        #endregion Constructors
 
-        [System.ComponentModel.DisplayName("شماره واگن")]
+        #region Properties
+
+        [DisplayName(Expressions.WagonNumber)]
+        public virtual string Name { get; set; }
+
+        [NotMapped]
+        [DisplayName(Expressions.WagonNumber)]
         public virtual int Number
         {
-            get;
-            set;
+            get
+            {
+                return Convert.ToInt32(Name.Substring(Name.Length - 3));
+            }
         }
 
-        [System.ComponentModel.DisplayName("شماره واگن")]
-        public virtual string Name
-        {
-            get;
-            set;
-        }
-
-        [System.ComponentModel.DisplayName("سفرها")]
-        public virtual IList<WagonTrip> Trips
-        {
-            get;
-            set;
-        }
-
-        [System.ComponentModel.DisplayName("گزارشها")]
+        [DisplayName(Expressions.Reports)]
         public virtual IList<Report> Reports
         {
             get;
             set;
         }
 
-        #region Extensibility Method Definitions
+        [DisplayName(Expressions.Trips)]
+        public virtual IList<WagonTrip> Trips
+        {
+            get;
+            set;
+        }
+
+        public virtual Guid WagonId
+        {
+            get;
+            set;
+        }
+
+        #endregion Properties
+
+        #region Methods
 
         partial void OnCreated();
 
-        #endregion
+        #endregion Methods
     }
-
 }

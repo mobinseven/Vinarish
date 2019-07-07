@@ -21,10 +21,11 @@ namespace VinarishMvc.Controllers
         {
             _context = context;
         }
+
         // GET: Wagons1
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Wagons.OrderBy(w => w.Number).ToListAsync());
+            return View(await _context.Wagons.OrderBy(w => w.Name).ToListAsync());
         }
 
         // GET: Wagons1/Details/5
@@ -59,7 +60,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: Wagons1/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -92,7 +93,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: Wagons1/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -180,12 +181,10 @@ namespace VinarishMvc.Controllers
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Tip: To access the first worksheet, try index 1, not 0
                     int totalRows = worksheet.Dimension.Rows;
 
-
                     for (int i = 1; i < totalRows; i++)
                     {
                         Wagons.Add(new Wagon
                         {
-                            Number = Convert.ToInt32(((object[,])(worksheet.Cells.Value))[i, 0]),
                             Name = ((object[,])(worksheet.Cells.Value))[i, 1].ToString()
                         });
                     }

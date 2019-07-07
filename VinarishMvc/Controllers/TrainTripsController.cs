@@ -23,7 +23,7 @@ namespace VinarishMvc.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.TrainTrips
-                .Include(t => t.Reporter)
+                //.Include(t => t.Reporter)
                 .Include(t => t.Train)
                 .Include(t => t.WagonsOfTrip)
                 .ThenInclude(w => w.Wagon);
@@ -39,7 +39,7 @@ namespace VinarishMvc.Controllers
             }
 
             var trainTrip = await _context.TrainTrips
-                .Include(t => t.Reporter)
+                //.Include(t => t.Reporter)
                 .Include(t => t.Train)
                 .Include(t => t.WagonsOfTrip)
                 .ThenInclude(w => w.Wagon)
@@ -52,11 +52,13 @@ namespace VinarishMvc.Controllers
 
             return View(trainTrip);
         }
+
         public class CreateViewModel
         {
             public TrainTrip TrainTrip { get; set; }
             public Dictionary<string, bool> Wagons { get; set; } = new Dictionary<string, bool>();
         }
+
         // GET: TrainTrips/Create
         public IActionResult Create()
         {
@@ -72,7 +74,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: TrainTrips/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -127,7 +129,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: TrainTrips/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -166,7 +168,7 @@ namespace VinarishMvc.Controllers
             }
 
             var trainTrip = await _context.TrainTrips
-                .Include(t => t.Reporter)
+                //.Include(t => t.Reporter)
                 .Include(t => t.Train)
                 .FirstOrDefaultAsync(m => m.TrainTripId == id);
             if (trainTrip == null)

@@ -22,12 +22,11 @@
     <tbody>
         @foreach (var item in Model)
         {
-            
+
             <tr>
                 <td style="transform: rotate(0);">
                     @Html.DisplayFor(modelItem => item.Name)
                     <a asp-action="Details" asp-route-id="@item.WagonId" class="stretched-link"></a>
-
                 </td>
                 @{
                     int warning = 0;
@@ -51,22 +50,22 @@
                 <td>
                     @if (warning > 0)
                     {
-                        <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع نشده">@warning</span>
+                        <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.MalfunctionReportToolTip">@warning</span>
 
                     }
                     @if (success > 0)
                     {
-                        <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع شده">@success</span>
+                        <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.RepairReportToolTip">@success</span>
 
                     }
                     @if (danger > 0)
                     {
-                        <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top" title="خرابی رفع نشدنی">@danger</span>
+                        <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.NotRepairedReportToolTip">@danger</span>
 
                     }
                     @if (info > 0)
                     {
-                        <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="در دست بررسی">@info</span>
+                        <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.InProgressToolTip">@info</span>
 
                     }
                 </td>

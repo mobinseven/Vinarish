@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using OfficeOpenXml.Table;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
@@ -30,7 +32,7 @@ namespace VinarishMvc.Controllers
         // GET: Reports
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Reports.Include(r => r.DevicePlace).Include(r => r.DeviceStatus).Include(r => r.ParentReport).Include(r => r.Reporter).Include(r => r.Wagon);
+            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Report, Wagon> applicationDbContext = _context.Reports.Include(r => r.DevicePlace).Include(r => r.DeviceStatus).Include(r => r.ParentReport).Include(r => r.Reporter).Include(r => r.Wagon);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -42,7 +44,7 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            var report = await _context.Reports
+            Report report = await _context.Reports
                 .Include(r => r.DevicePlace)
                 .Include(r => r.DeviceStatus)
                 .Include(r => r.ParentReport)
@@ -59,39 +61,65 @@ namespace VinarishMvc.Controllers
 
         public class CreateViewModel
         {
-            [DisplayName("مامور")]
+            [DisplayName(Expressions.Reporter)]
             public string Username { get; set; }
-            [DisplayName("رده دستگاه")]
+
+            [DisplayName(Expressions.DeviceTypes)]
             public Guid DeviceTypeId { get; set; }
+
             public Report Report { get; set; } = new Report();
+
             public int ParentReportId { get; set; }
+
+            public Dictionary<int, bool> Assistants = new Dictionary<int, bool>();
         }
 
-        void GenerateReportCode(ref CreateViewModel model)
+        private void GenerateReportCode(ref CreateViewModel model)
         {
-            var dp = _context.DevicePlaces.Find(model.Report.DevicePlaceId);
-            var ds = _context.DeviceStatus.Find(model.Report.DeviceStatusId);
-            var rep= _context.Reporters.Find(model.Report.ReporterId);
-            model.Report.Code = dp.Code.ToUpper() + ds.Code.ToUpper() + rep.UserName.ToUpper() + DateTime.Now.ToString("yyMMdd");
+            Report report = model.Report;
+            GenerateReportCode(ref report);
+            model.Report = report;
+        }
+
+        private void GenerateReportCode(ref Report report)
+        {
+            report.Code = GenerateReportCode(report.DevicePlaceId, report.DeviceStatusId, report.ReporterId, report.WagonId, DateTime.Now);
+        }
+
+        private string GenerateReportCode(Guid DevicePlaceId, Guid DeviceStatusId, int ReporterId, Guid WagonId, DateTime date)
+        {
+            DevicePlace dp = _context.DevicePlaces.Find(DevicePlaceId);
+            DeviceStatus ds = _context.DeviceStatus.Find(DeviceStatusId);
+            Reporter rep = _context.Reporters.Find(ReporterId);
+            Wagon w = _context.Wagons.Find(WagonId);
+            return w.Number + dp.Code.ToUpper() + ds.Code.ToUpper() + rep.UserName.ToUpper() + date.ToString("yyMMdd");
         }
 
         // GET: Reports/CreateTripRepairingReport/[ReportId]
         public IActionResult CreateTripRepairingReport(int id)
         {
-            CreateViewModel model = new CreateViewModel();
-            model.Report = _context.Reports.Find(id);
-            model.ParentReportId = id;
+            CreateViewModel model = new CreateViewModel
+            {
+                Report = _context.Reports.Find(id),
+                ParentReportId = id
+            };
+            ViewData["SiteId"] = new SelectList(_context.Sites, "SiteId", "Name");
+            List<Reporter> assistants = _context.Reporters.OrderBy(r => r.UserName).ToList();
+            foreach (Reporter assitant in assistants)
+            {
+                model.Assistants.Add(assitant.ReporterId, false);
+            }
             ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
-                     .Where(ds => (ds.DeviceTypeId == model.Report.DevicePlace.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Repair) ||
-                     ds.DeviceStatusType == DeviceStatusType.Unrepairable), "StatusId", "Text");
+                      .Where(ds => (ds.DeviceTypeId == model.Report.DevicePlace.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Repair) ||
+                      ds.DeviceStatusType == DeviceStatusType.Unrepairable), "StatusId", "Text");
             return View(model);
         }
 
         // GET: Reports/CreateTripReport/[WagonTripId]
         public IActionResult CreateTripReport(Guid id)
         {
-            var wagonTrip = _context.WagonTrips.Find(id);
-            var wagon = wagonTrip.Wagon;
+            WagonTrip wagonTrip = _context.WagonTrips.Find(id);
+            Wagon wagon = wagonTrip.Wagon;
             CreateViewModel model = new CreateViewModel();
             model.Report.WagonId = wagon.WagonId;
             model.Report.Wagon = wagon;
@@ -125,11 +153,12 @@ namespace VinarishMvc.Controllers
                 GenerateReportCode(ref model);
                 _context.Reports.Add(model.Report);
                 await _context.SaveChangesAsync();
-                var wt = _context.WagonTrips.Find(model.Report.WagonTripId);
+                WagonTrip wt = _context.WagonTrips.Find(model.Report.WagonTripId);
                 return RedirectToAction("Details", "TrainTrips", new { id = model.Report.WagonTrip.TrainTripId });
             }
             return RedirectToAction(nameof(CreateTripReport), model.Report.WagonId);
         }
+
         // POST: Reports/CreateTripRepairingReport
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -140,17 +169,22 @@ namespace VinarishMvc.Controllers
                 model.Report.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
                 model.Report.ParentReportId = model.ParentReportId;
                 model.Report.Status = ReportStatus.Processed;
-                var ds = _context.DeviceStatus.Find(model.Report.DeviceStatusId);
+                DeviceStatus ds = _context.DeviceStatus.Find(model.Report.DeviceStatusId);
                 Report ParentReport = _context.Reports.Find(model.ParentReportId);
                 if (ds.DeviceStatusType == DeviceStatusType.Repair)
+                {
                     ParentReport.Status = ReportStatus.Processed;
+                }
                 else if (ds.DeviceStatusType == DeviceStatusType.Unrepairable)
+                {
                     ParentReport.Status = ReportStatus.Postponed;
+                }
+
                 _context.Update(ParentReport);
                 GenerateReportCode(ref model);
                 _context.Reports.Add(model.Report);
                 await _context.SaveChangesAsync();
-                var wt = _context.WagonTrips.Find(model.Report.WagonTripId);
+                WagonTrip wt = _context.WagonTrips.Find(model.Report.WagonTripId);
                 return RedirectToAction("Details", "TrainTrips", new { id = wt.TrainTripId });
             }
             return RedirectToAction(nameof(CreateTripRepairingReport), model.ParentReportId);
@@ -164,7 +198,7 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            var report = await _context.Reports.FindAsync(id);
+            Report report = await _context.Reports.FindAsync(id);
             if (report == null)
             {
                 return NotFound();
@@ -178,7 +212,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: Reports/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -225,7 +259,7 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            var report = await _context.Reports
+            Report report = await _context.Reports
                 .Include(r => r.DevicePlace)
                 .Include(r => r.DeviceStatus)
                 .Include(r => r.ParentReport)
@@ -245,7 +279,7 @@ namespace VinarishMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var report = await _context.Reports.FindAsync(id);
+            Report report = await _context.Reports.FindAsync(id);
             _context.Reports.Remove(report);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -256,43 +290,216 @@ namespace VinarishMvc.Controllers
             return _context.Reports.Any(e => e.ReportId == id);
         }
 
-        public IActionResult Export()
+        // GET: Reports/Upload
+        public IActionResult Upload()
         {
-            string rootFolder = _env.WebRootPath;
-            string fileName = @"/Excel/ExportReports.xlsx";
+            return View();
+        }
 
-            FileInfo file = new FileInfo(Path.Combine(rootFolder, fileName));
+        private class ReportValues
+        {
+            [DisplayName(Expressions.DateTime)]
+            public DateTime Date { get; set; }
 
-            using (ExcelPackage package = new ExcelPackage(file))
+            [DisplayName(Expressions.Wagon)]
+            public string WagonNum { get; set; }
+
+            [DisplayName(Expressions.DevicePlaces)]
+            public string DevicePlaceCode { get; set; }
+
+            [DisplayName(Expressions.UserName)]
+            public string UserName { get; set; }
+
+            [DisplayName(Expressions.DeviceStatus)]
+            public string DeviceStatusCode { get; set; }
+        }
+
+        // POST: Reports/Upload
+        [HttpPost, ActionName("Upload")]
+        [ValidateAntiForgeryToken]
+        [RequestSizeLimit(5000000)]
+        public async Task<IActionResult> Upload(IFormFile File)
+        {
+            IFormFile file = File;
+            if (file == null || file.Length == 0)
             {
+                return RedirectToAction(nameof(Index));
+            }
+            List<Report> Reports = new List<Report>();
+            Dictionary<string, Report> ChildReports = new Dictionary<string, Report>();
+            List<ReportValues> LostReports = new List<ReportValues>();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream).ConfigureAwait(false);
 
-                IList<Report> reports = _context.Reports.ToList();
-
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Reports");
-                int totalRows = reports.Count();
-
-                worksheet.Cells[0, 0].Value = "Code";
-                worksheet.Cells[0, 1].Value = "Date";
-                worksheet.Cells[0, 1].Value = "Wagon";
-                worksheet.Cells[0, 2].Value = "Reporter";
-                worksheet.Cells[0, 3].Value = "Device Code";
-                worksheet.Cells[0, 4].Value = "Device";
-                worksheet.Cells[0, 5].Value = "Status Code";
-                worksheet.Cells[0, 6].Value = "Status";
-                int i = 0;
-                for (int row = 2; row <= totalRows + 1; row++)
+                using (ExcelPackage package = new ExcelPackage(memoryStream))
                 {
-                    //worksheet.Cells[row, 1].Value = reports[i].CustomerId;
-                    //worksheet.Cells[row, 2].Value = reports[i].CustomerName;
-                    //worksheet.Cells[row, 3].Value = reports[i].CustomerEmail;
-                    //worksheet.Cells[row, 4].Value = reports[i].CustomerCountry;
-                    //i++;
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Tip: To access the first worksheet, try index 1, not 0
+                    int totalRows = worksheet.Dimension.Rows;
+                    int[] ReportCells = { 0, 2, 3, 4, 6 };
+                    int[] RepairCells = { 5, 7, 11 };
+                    for (int i = 2; i < totalRows; i++)
+                    {
+                        string[] ReportCellValues = new string[ReportCells.Length];
+                        bool SkipRow = false;
+                        for (int c = 0; c < ReportCells.Length; c++)
+                        {
+                            object CellValue = ((object[,])(worksheet.Cells.Value))[i, ReportCells[c]];
+                            if (CellValue == null || CellValue.ToString().Length < 2)
+                            {
+                                SkipRow = true;
+                                break;
+                            }
+                            ReportCellValues[c] = CellValue.ToString();
+                        }
+                        if (SkipRow)
+                        {
+                            continue;
+                        }
+
+                        DateTime date = Convert.ToDateTime(ReportCellValues[0]);
+                        Wagon wagon = _context.Wagons.Where(w => w.Number == Convert.ToInt32(ReportCellValues[1])).FirstOrDefault();
+                        DevicePlace devp = _context.DevicePlaces.Where(dp => dp.Code == ReportCellValues[2]).FirstOrDefault();
+                        Reporter rep = _context.Reporters.Where(r => r.UserName == ReportCellValues[3]).FirstOrDefault();
+                        DeviceStatus devS = _context.DeviceStatus.Where(ds => ds.Code == ReportCellValues[4]).FirstOrDefault();
+                        string Code;
+                        try
+                        {
+                            Code = GenerateReportCode(devp.DevicePlaceId, devS.StatusId, rep.ReporterId, wagon.WagonId, date);
+                        }
+                        catch
+                        {
+                            LostReports.Add(new ReportValues
+                            {
+                                Date = date,
+                                WagonNum = ReportCellValues[1],
+                                DevicePlaceCode = ReportCellValues[2],
+                                UserName = ReportCellValues[3],
+                                DeviceStatusCode = ReportCellValues[4]
+                            });
+                            continue;
+                        }
+                        if (_context.Reports.Where(r => r.Code == Code).Count() == 0 &&
+                            Reports.Where(r => r.Code == Code).Count() == 0)
+                        {
+                            Reports.Add(new Report
+                            {
+                                DateTimeCreated = date,
+                                WagonId = wagon.WagonId,
+                                DevicePlaceId = devp.DevicePlaceId,
+                                DeviceStatusId = devS.StatusId,
+                                ReporterId = rep.ReporterId,
+                                Code = Code
+                            });
+                        }
+                        //else
+                        //    LostReports.Add(new ReportValues
+                        //    {
+                        //        Date = date,
+                        //        WagonNum = ReportCellValues[1],
+                        //        DevicePlaceCode = ReportCellValues[2],
+                        //        UserName = ReportCellValues[3],
+                        //        DeviceStatusCode = ReportCellValues[4]
+                        //    });
+
+                        string[] RepairCellValues = new string[RepairCells.Length];
+                        bool NoChild = false;
+                        for (int c = 0; c < RepairCells.Length; c++)
+                        {
+                            object CellValue = ((object[,])(worksheet.Cells.Value))[i, RepairCells[c]];
+                            if (CellValue == null || CellValue.ToString().Length < 2)
+                            {
+                                NoChild = true;
+                                break;
+                            }
+                            RepairCellValues[c] = CellValue.ToString();
+                        }
+                        if (NoChild)
+                        {
+                            continue;
+                        }
+
+                        Reporter repairer = _context.Reporters.Where(r => r.UserName == RepairCellValues[0]).FirstOrDefault();
+                        DeviceStatus dsRep = _context.DeviceStatus.Where(ds => ds.Code == RepairCellValues[1]).FirstOrDefault();
+                        DateTime RepDate = Convert.ToDateTime(RepairCellValues[2]);
+                        string RepCode;
+                        try
+                        {
+                            RepCode = GenerateReportCode(devp.DevicePlaceId, dsRep.StatusId, repairer.ReporterId, wagon.WagonId, RepDate);
+                        }
+                        catch
+                        {
+                            LostReports.Add(new ReportValues
+                            {
+                                Date = RepDate,
+                                WagonNum = ReportCellValues[1],
+                                DevicePlaceCode = ReportCellValues[2],
+                                UserName = RepairCellValues[0],
+                                DeviceStatusCode = RepairCellValues[1]
+                            });
+                            continue;
+                        }
+                        ChildReports.Add(Code, new Report
+                        {
+                            DateTimeCreated = RepDate,
+                            WagonId = wagon.WagonId,
+                            DevicePlaceId = devp.DevicePlaceId,
+                            DeviceStatusId = dsRep.StatusId,
+                            ReporterId = repairer.ReporterId,
+                            Code = RepCode
+                        });
+                    }
                 }
+            }
+            _context.Reports.AddRange(Reports);
+            await _context.SaveChangesAsync();
 
-                package.Save();
+            string fileName = _env.WebRootPath + @"\Excel\LostReports.xlsx";
 
+            FileInfo LostReportsFile = new FileInfo(fileName);
+            if (LostReportsFile.Exists)
+            {
+                LostReportsFile.Delete();
             }
 
+            using (ExcelPackage ExcelPackage = new ExcelPackage(LostReportsFile))
+            {
+                ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.LostReports);
+                worksheet.Cells["A1"].LoadFromCollection(LostReports, true, TableStyles.Medium25);
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                ExcelPackage.Save();
+            }
+            if (LostReports.Count > 0)
+            {
+                DownloadLostReports(fileName);
+            }
+
+            List<Report> ChildReports2 = new List<Report>();
+            foreach (KeyValuePair<string, Report> item in ChildReports)
+            {
+                Report parentReport = _context.Reports.Where(r => r.Code == item.Key).FirstOrDefault();
+                if (parentReport == null)
+                {
+                    continue;
+                }
+
+                item.Value.ParentReportId = parentReport.ReportId;
+                ChildReports2.Add(item.Value);
+                parentReport.Status = ReportStatus.Processed;
+                _context.Reports.Update(parentReport);
+            }
+            _context.Reports.AddRange(ChildReports2);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public FileResult DownloadLostReports(string filename)
+        {
+            return PhysicalFile(filename, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.LostReports + ".xlsx");
+        }
+
+        public IActionResult Download()
+        {
             return View();
         }
     }

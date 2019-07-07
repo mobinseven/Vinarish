@@ -8,81 +8,73 @@
 // the code is regenerated.
 //------------------------------------------------------------------------------
 
-using System;
-using System.Data;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Data.Common;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace VinarishMvc.Models
 {
     public partial class Report
     {
-
         public Report()
         {
-            this.AppendixReports = new List<Report>();
+            AppendixReports = new List<Report>();
+            Assistants = new List<Assistant>();
             OnCreated();
         }
 
         public virtual int ReportId
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
-        [System.ComponentModel.DisplayName(Expressions.DateTime)]
+        [DisplayName(Expressions.DateTime)]
         public virtual System.DateTime DateTimeCreated
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.DateTimeModified)]
+        [DisplayName(Expressions.DateTimeModified)]
         public virtual System.DateTime DateTimeModified
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Reporter)]
+        [DisplayName(Expressions.Reporter)]
         public virtual int ReporterId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Status)]
+        [DisplayName(Expressions.Status)]
         public virtual ReportStatus Status
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.DeviceStatus)]
+        [DisplayName(Expressions.DeviceStatus)]
         public virtual System.Guid DeviceStatusId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.ParentReport)]
+        [DisplayName(Expressions.ParentReport)]
         public virtual int? ParentReportId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.DevicePlaces)]
+        [DisplayName(Expressions.DevicePlaces)]
         public virtual System.Guid DevicePlaceId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Wagon)]
+        [DisplayName(Expressions.Wagon)]
         public virtual System.Guid WagonId
         {
             get;
@@ -95,49 +87,49 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Code+Expressions.Report)]
+        [DisplayName(Expressions.Code + Expressions.Report)]
         public virtual string Code
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Reporter)]
+        [DisplayName(Expressions.Reporter)]
         public virtual Reporter Reporter
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.DeviceStatus)]
+        [DisplayName(Expressions.DeviceStatus)]
         public virtual DeviceStatus DeviceStatus
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.ChildReports)]
+        [DisplayName(Expressions.ChildReports)]
         public virtual IList<Report> AppendixReports
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.ParentReport)]
+        [DisplayName(Expressions.ParentReport)]
         public virtual Report ParentReport
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.DevicePlaces)]
+        [DisplayName(Expressions.DevicePlaces)]
         public virtual DevicePlace DevicePlace
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName(Expressions.Wagon)]
+        [DisplayName(Expressions.Wagon)]
         public virtual Wagon Wagon
         {
             get;
@@ -156,11 +148,17 @@ namespace VinarishMvc.Models
         [DisplayName(Expressions.Site)]
         public virtual Site Site { get; set; }
 
+        [DisplayName(Expressions.Wagons)]
+        public virtual IList<Assistant> Assistants
+        {
+            get;
+            set;
+        }
+
         #region Extensibility Method Definitions
 
         partial void OnCreated();
 
-        #endregion
+        #endregion Extensibility Method Definitions
     }
-
 }

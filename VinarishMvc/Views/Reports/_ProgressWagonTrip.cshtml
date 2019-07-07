@@ -22,7 +22,7 @@
         }
         <div class="card">
             <div class="card-header" id="headingOne">
-                <div class="mb-0" data-toggle="collapse" data-target="#wagon-@w.Number">
+                <div class="mb-0" data-toggle="collapse" data-target="#wagon-@w.Name">
                     <div class="d-flex justify-content-between">
                         <strong class="">@w.Name</strong>
 
@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            <div id="wagon-@w.Number" class="collapse" data-parent="#accordion">
+            <div id="wagon-@w.Name" class="collapse" data-parent="#accordion">
                 @await Html.PartialAsync("~/Views/Reports/_ProgressList.cshtml", w.Reports)
             </div>
         </div>

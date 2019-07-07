@@ -1,11 +1,11 @@
 ﻿@model VinarishMvc.Models.TrainTrip
 
 @{
-    ViewData["Title"] = "سفر";
+    ViewData["Title"] = Expressions.Trip;
 }
 
 <div class="table-responsive">
-    <h4>سفر</h4>
+    <h4>@Expressions.Trip</h4>
     <table class="table">
         <thead>
             <tr>
@@ -15,9 +15,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Train)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Reporter)
-                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.Reporter)
+                    </th>*@
             </tr>
         </thead>
         <tbody>
@@ -25,14 +25,13 @@
                 <td>
                     @{ var dt = Model.DateTime.ToString("yy/MM/dd");}
                     @Html.DisplayFor(modelItem => dt)
-
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => Model.Train.Name)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model.Reporter.UserName)
-                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => Model.Reporter.UserName)
+                    </td>*@
             </tr>
             <tr>
                 <td colspan="3">
@@ -44,6 +43,6 @@
     </table>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.TrainTripId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.TrainTripId"><i class="fa fa-edit fa-lg m-2"></i> </a> |
+    <a asp-action="Index">@Expressions.BackToIndex</a>
 </div>

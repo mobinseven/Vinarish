@@ -9,66 +9,48 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Data;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Data.Common;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace VinarishMvc.Models
 {
-    public partial class TrainTrip {
-
+    public partial class TrainTrip
+    {
         public TrainTrip()
         {
-            this.WagonsOfTrip = new List<WagonTrip>();
+            WagonsOfTrip = new List<WagonTrip>();
             OnCreated();
         }
 
-        public virtual System.Guid TrainTripId
+        public virtual Guid TrainTripId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("زمان")]
-        public virtual System.DateTime DateTime
+        [DisplayName(Expressions.DateTime)]
+        public virtual DateTime DateTime
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("رام")]
+        [DisplayName(Expressions.Train)]
         public virtual int TrainId
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("مامور")]
-        public virtual int ReporterId
-        {
-            get;
-            set;
-        }
-
-        [System.ComponentModel.DisplayName("رام")]
+        [DisplayName(Expressions.Train)]
         public virtual Train Train
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("واگنها")]
+        [DisplayName(Expressions.Wagons)]
         public virtual IList<WagonTrip> WagonsOfTrip
-        {
-            get;
-            set;
-        }
-
-        [System.ComponentModel.DisplayName("مامور")]
-        public virtual Reporter Reporter
         {
             get;
             set;
@@ -78,7 +60,6 @@ namespace VinarishMvc.Models
 
         partial void OnCreated();
 
-        #endregion
+        #endregion Extensibility Method Definitions
     }
-
 }

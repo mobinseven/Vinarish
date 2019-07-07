@@ -18,8 +18,8 @@ using System.Collections.Generic;
 
 namespace VinarishMvc.Models
 {
-    public partial class Train {
-
+    public partial class Train
+    {
         public Train()
         {
             this.TrainTrips = new List<TrainTrip>();
@@ -32,14 +32,14 @@ namespace VinarishMvc.Models
             set;
         }
 
-        [System.ComponentModel.DisplayName("رام")]
+        [System.ComponentModel.DisplayName(Expressions.Train)]
         public virtual string Name
         {
             get;
             set;
         }
 
-        [System.ComponentModel.DisplayName("سفرها")]
+        [System.ComponentModel.DisplayName(Expressions.Trips)]
         public virtual IList<TrainTrip> TrainTrips
         {
             get;
@@ -50,7 +50,6 @@ namespace VinarishMvc.Models
 
         partial void OnCreated();
 
-        #endregion
+        #endregion Extensibility Method Definitions
     }
-
 }

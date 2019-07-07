@@ -22,18 +22,18 @@
                 <label asp-for="TrainTrip.TrainId" class="control-label"></label>
                 <select asp-for="TrainTrip.TrainId" class="form-control" asp-items="ViewBag.TrainId"></select>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="TrainTrip.ReporterId" class="control-label"></label>
                 <select asp-for="TrainTrip.ReporterId" class="form-control" asp-items="ViewBag.ReporterId"></select>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="TrainTrip.WagonsOfTrip" class="control-label"></label>
                 @foreach (var item in Model.Wagons)
                 {
-                    <div class="checkbox form-check form-check-inline">
-                        <input type="checkbox" asp-for="@Model.Wagons[item.Key]" />
-                        <label asp-for="@Model.Wagons[item.Key]" class="btn btn-light">@item.Key</label>
-                    </div>
+                <div class="checkbox form-check">
+                    <input type="checkbox" asp-for="@Model.Wagons[item.Key]" />
+                    <label asp-for="@Model.Wagons[item.Key]" class="btn btn-light">@item.Key</label>
+                </div>
                 }
             </div>
             <div class="form-group">
@@ -48,22 +48,22 @@
 </div>
 
 @section Scripts{
-    <script src="~/lib/persian-datepicker/assets/persian-date.min.js"></script>
-    <script src="~/lib/persian-datepicker/dist/js/persian-datepicker.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var nDate = new Date().toISOString().substr(0, 19);
-            console.log(nDate);
-                    $("#TrainTrip_DateTime").val(nDate);
-            $(".persianDate").persianDatepicker({
-                autoClose: true,
-                initialValueType: 'persian',
-                format: 'YYYY/MM/DD',
-                onSelect: function (unix) {
-                    var nDate = new Date(unix).toISOString().substr(0, 19);
-                    $("#TrainTrip_DateTime").val(nDate);
-                }
-            });
+<script src="~/lib/persian-datepicker/assets/persian-date.min.js"></script>
+<script src="~/lib/persian-datepicker/dist/js/persian-datepicker.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var nDate = new Date().toISOString().substr(0, 19);
+        console.log(nDate);
+        $("#TrainTrip_DateTime").val(nDate);
+        $(".persianDate").persianDatepicker({
+            autoClose: true,
+            initialValueType: 'persian',
+            format: 'YYYY/MM/DD',
+            onSelect: function (unix) {
+                var nDate = new Date(unix).toISOString().substr(0, 19);
+                $("#TrainTrip_DateTime").val(nDate);
+            }
         });
-    </script>
+    });
+</script>
 }

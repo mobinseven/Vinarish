@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<VinarishMvc.Models.TrainTrip>
 
 @{
-    ViewData["Title"] = "سفرها";
+    ViewData["Title"] = Expressions.Trips;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -18,9 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Train)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reporter)
-            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Reporter)
+                </th>*@
             <th></th>
             <th></th>
         </tr>
@@ -38,9 +38,9 @@
                     @Html.DisplayFor(modelItem => item.Train.Name)
                     <a asp-action="Details" asp-route-id="@item.TrainTripId" class="stretched-link"></a>
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Reporter.UserName)
-                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Reporter.UserName)
+                    </td>*@
                 @{
                     int warning = 0;
                     int success = 0;

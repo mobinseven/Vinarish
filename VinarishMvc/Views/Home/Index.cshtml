@@ -14,16 +14,15 @@
         <div class="card-group align-middle">
             <div class="card text-center mr-1 rounded-lg">
                 <div class="card-body">
-                    @*<a asp-action="Index" asp-controller="Departments" class="btn btn-outline-dark btn-lg btn-block" role="button">بخش‌ها</a>*@
-                    <a asp-action="Index" asp-controller="Trains" class="btn btn-outline-dark btn-lg btn-block" role="button">رام</a>
-                    <a asp-action="Index" asp-controller="Wagons" class="btn btn-outline-dark btn-lg btn-block" role="button">واگن</a>
-                    <a asp-action="Index" asp-controller="DeviceTypes" class="btn btn-outline-dark btn-lg btn-block" role="button">دستگاه‌ها</a>
-                    <a asp-action="Index" asp-controller="TrainTrips" class="btn btn-outline-dark btn-lg btn-block" role="button">سفر‌ها</a>
+                    <a asp-action="Index" asp-controller="Trains" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Train</a>
+                    <a asp-action="Index" asp-controller="Wagons" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Wagon</a>
+                    <a asp-action="Index" asp-controller="DeviceTypes" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Devices</a>
+                    <a asp-action="Index" asp-controller="TrainTrips" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Trips</a>
+                    <a asp-action="Index" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Reports</a>
                     <a asp-area="Authentication" asp-controller="UserProfiles" asp-action="Index" class="btn btn-outline-dark btn-lg btn-block">کاربران</a>
                 </div>
             </div>
         </div>
     }
     <p>contact@@vinarish.com</p>
-
 </div>

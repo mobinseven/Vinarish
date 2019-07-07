@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<VinarishMvc.Models.Report>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = Expressions.Reports;
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"><i class="fa fa-plus-square fa-lg m-2"></i></a>
+    <a asp-action="Upload"><i class="fa fa-upload fa-lg m-2"></i></a>
+    <a asp-action="Download"><i class="fa fa-download fa-lg m-2"></i></a>
 </p>
 <table class="table">
     <thead>
@@ -16,10 +18,10 @@
                 @Html.DisplayNameFor(model => model.DateTimeCreated)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTimeModified)
+                @Html.DisplayNameFor(model => model.Wagon)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.DevicePlace)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Reporter)
@@ -28,50 +30,64 @@
                 @Html.DisplayNameFor(model => model.DeviceStatus)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ParentReport)
+                @Html.DisplayNameFor(model => model.Site)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DevicePlace)
+                @Expressions.Options
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Wagon)
+                @*.ChildReports.UserName.*@
+                @Expressions.Repairer
             </th>
-            <th></th>
+            <th>
+                @*.ChildReports.Code.*@
+                @Html.DisplayNameFor(model => model.DeviceStatus)
+            </th>
+            <th>
+                @*.ChildReports.DateTimeCreated.*@
+                @Html.DisplayNameFor(model => model.DateTimeCreated)  @Expressions.Repair
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTimeCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTimeModified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reporter.VinarishUserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeviceStatus.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParentReport.ReportId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DevicePlace.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Wagon.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ReportId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ReportId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReportId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            if (item.ParentReport == null)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateTimeCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Wagon.Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DevicePlace.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reporter.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeviceStatus.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Site.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ReportId"><i class="fa fa-edit fa-lg m-3"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.ReportId"><i class="fa fa-trash fa-lg m-3"></i></a>
+                    </td>
+                    <td>
+                        @if (item.AppendixReports.Count() > 0) { Html.DisplayFor(modelItem => item.AppendixReports[0].Reporter.UserName); }
+                    </td>
+                    <td>
+                        @if (item.AppendixReports.Count() == 1) { Html.DisplayFor(modelItem => item.AppendixReports[0].DeviceStatus.Code); }
+                    </td>
+                    <td>
+                        @if (item.AppendixReports.Count() == 1) { Html.DisplayFor(modelItem => item.AppendixReports[0].DateTimeCreated); }
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>
