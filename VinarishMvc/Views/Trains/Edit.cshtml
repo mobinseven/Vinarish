@@ -1,7 +1,7 @@
 ﻿@model VinarishMvc.Models.Train
 
 @{
-    ViewData["Title"] = "ویرایش رام "+Model.Name;
+    ViewData["Title"] = Expressions.EditItemTitle(Expressions.Train);
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -16,16 +16,15 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-success">
-                    <i class="fa fa-save fa-lg"></i>
-                </button>
+                <input type="submit" value="@Expressions.Edit" class="btn btn-primary" />
+
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index"><i class="fa fa-undo fa-lg m-2"></i></a>
+    <a asp-action="Index">@Expressions.BackToIndex</a>
 </div>
 
 @section Scripts {

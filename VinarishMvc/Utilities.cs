@@ -18,7 +18,8 @@ namespace VinarishMvc
         public const string DateTimeModified = "واپسین ویرایش";
         public const string Delete = "پاک شود";
         public const string ToDelete = "پاک کردن ";
-        public const string Departments = "بخش ";
+        public const string Department = "بخش ";
+        public const string Departments = "بخش‌ها ";
         public const string DevicePlaces = "موقعیت تجهیز ";
         public const string DeviceStatus = "کد راهنما ";
         public const string DeviceStatusMalfunction = "کد خرابی ";
@@ -39,6 +40,7 @@ namespace VinarishMvc
         public const string AsAssistant = "در جایگاه همکار ";
         public const string Reports = "گزارش‌ها ";
         public const string Site = "سایت";
+        public const string Sites = "سایت ها";
         public const string Edit = "ویرایش ";
         public const string Add = "افزودن ";
         public const string Status = "وضعیت ";
@@ -48,7 +50,7 @@ namespace VinarishMvc
         public const string Type = "نوع ";
         public const string UserName = "نام کاربری";
         public const string Wagon = "واگن";
-        public const string Wagons = "واگنها";
+        public const string Wagons = "واگن‌ها";
         public const string WagonNumber = "شماره واگن";
         public const string Details = "جزئیات ";
         public const string Devices = "تجهیزات ";
@@ -56,7 +58,12 @@ namespace VinarishMvc
         public const string LostReports = "گزارشهای نادرست";
         public const string Repairer = "تعمیرکننده";
         public const string Repair = "تعمیر";
+        public const string Index = "فهرست ";
 
+        public static string IndexTitle(string item)
+        {
+            return Index + item;
+        }
         public static string DeleteItemTitle(string item)
         {
             return ToDelete + item;

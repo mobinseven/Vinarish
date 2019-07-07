@@ -1,13 +1,9 @@
 ﻿@model VinarishMvc.Models.Site
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = Expressions.EditItemTitle(Expressions.Site);
 }
-
-<h1>Edit</h1>
-
-<h4>Site</h4>
-<hr />
+<h4>@ViewData["Title"]</h4>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -19,14 +15,14 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="@Expressions.Edit" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@Expressions.BackToIndex</a>
 </div>
 
 @section Scripts {

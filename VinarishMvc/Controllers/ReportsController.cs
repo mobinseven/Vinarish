@@ -507,53 +507,6 @@ namespace VinarishMvc.Controllers
             return PhysicalFile(filename, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.LostReports + ".xlsx");
         }
 
-        private class RepairType
-        {
-            [DisplayName(Expressions.DateTime)]
-            public DateTime DateTime { get; set; }
-            [DisplayName(Expressions.Code + Expressions.DeviceStatus)]
-            public string DeviceStatusCode { get; set; }
-            [DisplayName(Expressions.DeviceStatus)]
-            public string DeviceStatus { get; set; }
-            [DisplayName(Expressions.Repairer)]
-            public string Repairer { get; set; }
-        }
-
-        private class ReportRow
-        {
-            [DisplayName(Expressions.Code)]
-            public string Code { get; set; }
-            [DisplayName(Expressions.DateTime)]
-            public DateTime DateTime { get; set; }
-            [DisplayName(Expressions.Wagon)]
-            public string Wagon { get; set; }
-            [DisplayName(Expressions.Code + Expressions.DevicePlaces)]
-            public string DevicePlaceCode { get; set; }
-            [DisplayName(Expressions.DevicePlaces)]
-            public string DevicePlace { get; set; }
-            [DisplayName(Expressions.Code + Expressions.DeviceStatus)]
-            public string DeviceStatusCode { get; set; }
-            [DisplayName(Expressions.DeviceStatus)]
-            public string DeviceStatus { get; set; }
-            [DisplayName(Expressions.Reporter)]
-            public string Reporter { get; set; }
-            public List<RepairType> ChildReports { get; set; }
-        }
-        private List<RepairType> ConvertToRepairRow(IList<Report> ChildReports)
-        {
-            List<RepairType> Row = new List<RepairType>();
-            foreach (Report r in ChildReports)
-            {
-                Row.Add(new RepairType
-                {
-                    DateTime = r.DateTimeCreated,
-                    DeviceStatusCode = r.DeviceStatus.Code,
-                    DeviceStatus = r.DeviceStatus.Text,
-                    Repairer = r.Reporter.UserName,
-                });
-            }
-            return Row;
-        }
         public IActionResult Download()
         {
             string fileName = _env.WebRootPath + @"\Excel\Reports.xlsx";
@@ -563,29 +516,16 @@ namespace VinarishMvc.Controllers
                 file.Delete();
             using (ExcelPackage ExcelPackage = new ExcelPackage(file))
             {
-                //IList<ReportRow> reports = 
-                //    _context.Reports.Select(r => new ReportRow {
-                //        Code = r.Code,
-                //        DateTime = r.DateTimeCreated,
-                //        Wagon = r.Wagon.Name,
-                //        DevicePlaceCode = r.DevicePlace.Code,
-
-                //        DevicePlace = r.DevicePlace.Description,
-                //        DeviceStatusCode = r.DeviceStatus.Code,
-                //        DeviceStatus = r.DeviceStatus.Text,
-                //        Reporter = r.Reporter.UserName,
-                //        ChildReports = ConvertToRepairRow(r.AppendixReports),
-                //    }).ToList();
                 ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.DevicePlaces);
                 List<Report> reports = _context.Reports.ToList();
-                int row=0;
+                int row = 0;
                 int col = -1;
                 worksheet.Cells[row, col++].Value = Expressions.DateTime;
                 worksheet.Cells[row, col++].Value = Expressions.Wagon;
-                worksheet.Cells[row, col++].Value = Expressions.Code+Expressions.DevicePlaces;
+                worksheet.Cells[row, col++].Value = Expressions.Code + Expressions.DevicePlaces;
                 worksheet.Cells[row, col++].Value = Expressions.DevicePlaces;
                 worksheet.Cells[row, col++].Value = Expressions.Reporter;
-                worksheet.Cells[row, col++].Value = Expressions.Code+Expressions.DeviceStatus;
+                worksheet.Cells[row, col++].Value = Expressions.Code + Expressions.DeviceStatus;
                 worksheet.Cells[row, col++].Value = Expressions.DeviceStatus;
                 foreach (Report r in reports)
                 {
@@ -598,7 +538,7 @@ namespace VinarishMvc.Controllers
                     worksheet.Cells[row, col++].Value = r.Reporter.UserName;
                     worksheet.Cells[row, col++].Value = r.DeviceStatus.Code;
                     worksheet.Cells[row, col++].Value = r.DeviceStatus.Text;
-                    foreach(Report cr  in r.AppendixReports)
+                    foreach (Report cr in r.AppendixReports)
                     {
                         worksheet.Cells[row, col++].Value = cr.DateTimeCreated.ToString();
                         worksheet.Cells[row, col++].Value = cr.Reporter.UserName;
@@ -609,7 +549,7 @@ namespace VinarishMvc.Controllers
                 //worksheet.Cells["A1"].LoadFromCollection(reports, true, TableStyles.Medium25);
 
                 var range = worksheet.Cells[worksheet.Dimension.Address];
-                var table=worksheet.Tables.Add(range, "Reports");
+                var table = worksheet.Tables.Add(range, "Reports");
                 table.TableStyle = TableStyles.Medium25;
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                 ExcelPackage.Save();
