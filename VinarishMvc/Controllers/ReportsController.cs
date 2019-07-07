@@ -297,11 +297,20 @@ namespace VinarishMvc.Controllers
         {
             return View();
         }
-
+        private DateTime FromOldExcelDateTime(string InDate)
+        {
+            string persianDate = InDate;
+            string[] userDateParts = persianDate.Split(new[] { "/" }, System.StringSplitOptions.None);
+            int Year = int.Parse(userDateParts[2]);
+            int Month = int.Parse(userDateParts[1]);
+            int Day = int.Parse(userDateParts[0]);
+            var persianDateTime = new PersianDateTime(Year, Month, Day);
+            return persianDateTime.ToDateTime();
+        }
         private class ReportValues
         {
             [DisplayName(Expressions.DateTime)]
-            public DateTime Date { get; set; }
+            public string Date { get; set; }
 
             [DisplayName(Expressions.Wagon)]
             public string WagonNum { get; set; }
@@ -329,7 +338,7 @@ namespace VinarishMvc.Controllers
             }
             List<Report> Reports = new List<Report>();
             Dictionary<string, Report> ChildReports = new Dictionary<string, Report>();
-            List<ReportValues> LostReports = new List<ReportValues>();
+            List<int> LostReports = new List<int>();
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream).ConfigureAwait(false);
@@ -340,31 +349,35 @@ namespace VinarishMvc.Controllers
                     int totalRows = worksheet.Dimension.Rows;
                     int[] ReportCells = { 0, 2, 3, 4, 6 };//بر اساس فایل گزارشهای شرکت ریل پرداز
                     int[] RepairCells = { 5, 7, 11 };//بر اساس فایل گزارشهای شرکت ریل پرداز
-                    for (int i = 2; i < 30; i++)
+                    for (int i = 2; i < totalRows; i++)
                     {
                         string[] ReportCellValues = new string[ReportCells.Length];
                         bool SkipRow = false;
                         for (int c = 0; c < ReportCells.Length; c++)
                         {
                             object CellValue = ((object[,])(worksheet.Cells.Value))[i, ReportCells[c]];
-                            if (CellValue == null || CellValue.ToString().Length < 2)
+                            if (CellValue == null)
                             {
                                 SkipRow = true;
-                                break;
+                                continue;
                             }
                             ReportCellValues[c] = CellValue.ToString();
                         }
                         if (SkipRow)
                         {
+                            LostReports.Add(i+1);
                             continue;
                         }
-                        string persianDate = ReportCellValues[0];
-                        System.String[] userDateParts = persianDate.Split(new[] { "/" }, System.StringSplitOptions.None);
-                        int Year = int.Parse(userDateParts[2]);
-                        int Month = int.Parse(userDateParts[1]);
-                        int Day = int.Parse(userDateParts[0]);
-                        var persianDateTime = new PersianDateTime(Year, Month, Day);
-                        DateTime date = persianDateTime.ToDateTime();
+                        DateTime date;
+                        try
+                        {
+                            date = FromOldExcelDateTime(ReportCellValues[0]);
+                        }
+                        catch
+                        {
+                            LostReports.Add(i + 1);
+                            continue;
+                        }
                         Wagon wagon = _context.Wagons.Where(w => w.Number == Convert.ToInt32(ReportCellValues[1])).FirstOrDefault();
                         DevicePlace devp = _context.DevicePlaces.Where(dp => dp.Code == ReportCellValues[2]).FirstOrDefault();
                         Reporter rep = _context.Reporters.Where(r => r.UserName == ReportCellValues[3]).FirstOrDefault();
@@ -376,18 +389,11 @@ namespace VinarishMvc.Controllers
                         }
                         catch
                         {
-                            LostReports.Add(new ReportValues
-                            {
-                                Date = date,
-                                WagonNum = ReportCellValues[1],
-                                DevicePlaceCode = ReportCellValues[2],
-                                UserName = ReportCellValues[3],
-                                DeviceStatusCode = ReportCellValues[4]
-                            });
+                            LostReports.Add(i+1);
                             continue;
                         }
-                        if (_context.Reports.Where(r => r.Code == Code).Count() == 0 &&
-                            Reports.Where(r => r.Code == Code).Count() == 0)
+                        if (!_context.Reports.Any(r => r.Code == Code) &&
+                            !Reports.Any(r => r.Code == Code))
                         {
                             Reports.Add(new Report
                             {
@@ -428,7 +434,7 @@ namespace VinarishMvc.Controllers
 
                         Reporter repairer = _context.Reporters.Where(r => r.UserName == RepairCellValues[0]).FirstOrDefault();
                         DeviceStatus dsRep = _context.DeviceStatus.Where(ds => ds.Code == RepairCellValues[1]).FirstOrDefault();
-                        DateTime RepDate = Convert.ToDateTime(RepairCellValues[2]);
+                        DateTime RepDate = FromOldExcelDateTime(RepairCellValues[2]);
                         string RepCode;
                         try
                         {
@@ -436,14 +442,7 @@ namespace VinarishMvc.Controllers
                         }
                         catch
                         {
-                            LostReports.Add(new ReportValues
-                            {
-                                Date = RepDate,
-                                WagonNum = ReportCellValues[1],
-                                DevicePlaceCode = ReportCellValues[2],
-                                UserName = RepairCellValues[0],
-                                DeviceStatusCode = RepairCellValues[1]
-                            });
+                            LostReports.Add(i+1);
                             continue;
                         }
                         ChildReports.Add(Code, new Report
@@ -472,8 +471,12 @@ namespace VinarishMvc.Controllers
             using (ExcelPackage ExcelPackage = new ExcelPackage(LostReportsFile))
             {
                 ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.LostReports);
-                worksheet.Cells["A1"].LoadFromCollection(LostReports, true, TableStyles.Medium25);
-                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                worksheet.Cells[1, 1].Value = "شماره ردیف";
+                int row = 2;
+                foreach(int r in LostReports)
+                {
+                    worksheet.Cells[row++, 1].Value = r.ToString();
+                }
                 ExcelPackage.Save();
             }
             if (LostReports.Count > 0)
@@ -489,11 +492,15 @@ namespace VinarishMvc.Controllers
                 Report parentReport = _context.Reports.Where(r => r.Code == item.Key).FirstOrDefault();
                 if (parentReport == null)
                 {
-                    continue;
+                    continue;//ParentReportIsLost
                 }
 
                 item.Value.ParentReportId = parentReport.ReportId;
-                ChildReports2.Add(item.Value);
+
+                if (!_context.Reports.Any(r => r.Code == item.Value.Code))
+                    ChildReports2.Add(item.Value);
+                else
+                    continue;
                 parentReport.Status = ReportStatus.Processed;
                 _context.Reports.Update(parentReport);
             }
@@ -504,7 +511,7 @@ namespace VinarishMvc.Controllers
 
         public FileResult DownloadLostReports(string filename)
         {
-            return PhysicalFile(filename, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.LostReports + ".xlsx");
+            return PhysicalFile(filename, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.LostReports + ".xlsx");
         }
 
         public IActionResult Download()
@@ -516,10 +523,11 @@ namespace VinarishMvc.Controllers
                 file.Delete();
             using (ExcelPackage ExcelPackage = new ExcelPackage(file))
             {
-                ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.DevicePlaces);
+                ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.Reports);
+                worksheet.View.RightToLeft = true;
                 List<Report> reports = _context.Reports.ToList();
-                int row = 0;
-                int col = -1;
+                int row = 1;
+                int col = 1;
                 worksheet.Cells[row, col++].Value = Expressions.DateTime;
                 worksheet.Cells[row, col++].Value = Expressions.Wagon;
                 worksheet.Cells[row, col++].Value = Expressions.Code + Expressions.DevicePlaces;
@@ -529,9 +537,10 @@ namespace VinarishMvc.Controllers
                 worksheet.Cells[row, col++].Value = Expressions.DeviceStatus;
                 foreach (Report r in reports)
                 {
-                    col = -1;
+                    if (r.ParentReport != null) continue;
+                    col = 1;
                     row++;
-                    worksheet.Cells[row, col++].Value = r.DateTimeCreated.ToString();
+                    worksheet.Cells[row, col++].Value = r.DateTimeCreated.ToString("yy/MM/dd");
                     worksheet.Cells[row, col++].Value = r.Wagon.Name;
                     worksheet.Cells[row, col++].Value = r.DevicePlace.Code;
                     worksheet.Cells[row, col++].Value = r.DevicePlace.Description;
@@ -540,7 +549,7 @@ namespace VinarishMvc.Controllers
                     worksheet.Cells[row, col++].Value = r.DeviceStatus.Text;
                     foreach (Report cr in r.AppendixReports)
                     {
-                        worksheet.Cells[row, col++].Value = cr.DateTimeCreated.ToString();
+                        worksheet.Cells[row, col++].Value = cr.DateTimeCreated.ToString("yy/MM/dd");
                         worksheet.Cells[row, col++].Value = cr.Reporter.UserName;
                         worksheet.Cells[row, col++].Value = cr.DeviceStatus.Code;
                         worksheet.Cells[row, col++].Value = cr.DeviceStatus.Text;

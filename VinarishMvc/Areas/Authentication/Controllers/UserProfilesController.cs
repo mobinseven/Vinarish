@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using VinarishMvc.Areas.Authentication.Data;
 using VinarishMvc.Areas.Authentication.Models;
 using VinarishMvc.Areas.Authentication.Services;
@@ -302,6 +305,63 @@ namespace VinarishMvc.Areas.Authentication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(userProfile);
+        }
+
+        // GET: Authentication/UserProfiles/Upload
+        public IActionResult Upload()
+        {
+            return View();
+        }
+        // POST: Authentication/UserProfiles/Upload
+        [HttpPost, ActionName("Upload")]
+        [ValidateAntiForgeryToken]
+        [RequestSizeLimit(5000000)]
+        public async Task<IActionResult> Upload(IFormFile File)
+        {
+            IFormFile file = File;
+            if (file == null || file.Length == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            List<UserProfile> UserProfiles = new List<UserProfile>();
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream).ConfigureAwait(false);
+
+                using (var package = new ExcelPackage(memoryStream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Tip: To access the first worksheet, try index 1, not 0
+                    int totalRows = worksheet.Dimension.Rows;
+
+
+                    for (int i = 1; i < totalRows; i++)
+                    {
+                        var name = ((object[,])(worksheet.Cells.Value))[i, 0].ToString();
+                        UserProfile register = new UserProfile
+                        {
+                            Email = name,
+                            Password = "123456",
+                            ConfirmPassword = "123456"
+                        };
+                        if (register.Password.Equals(register.ConfirmPassword))
+                        {
+                            var username = register.Email;
+                            register.Email = register.Email + "@vinarish.com";
+                            VinarishUser user = new VinarishUser() { Email = register.Email, UserName = username, EmailConfirmed = true };
+                            var result = await _userManager.CreateAsync(user, register.Password);
+                            if (result.Succeeded)
+                            {
+                                register.Password = user.PasswordHash;
+                                register.ConfirmPassword = user.PasswordHash;
+                                register.VinarishUserId = user.Id;
+                                _context.UserProfile.Add(register);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                    }
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

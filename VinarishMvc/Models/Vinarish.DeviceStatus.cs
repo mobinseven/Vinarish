@@ -53,7 +53,7 @@ namespace VinarishMvc.Models
             get;
             set;
         }
-
+        
         [System.ComponentModel.DisplayName(Expressions.DeviceTypes)]
         public virtual System.Guid? DeviceTypeId
         {

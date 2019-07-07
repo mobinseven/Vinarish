@@ -11,7 +11,7 @@
     <a asp-action="Upload"><i class="fa fa-upload fa-lg m-2"></i></a>
     <a asp-action="Download"><i class="fa fa-download fa-lg m-2"></i></a>
 </p>
-<table class="table">
+<table class="table table-hover table-striped table-sm">
     <thead>
         <tr>
             <th>
@@ -74,17 +74,21 @@
                         @Html.DisplayFor(modelItem => item.Site.Name)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ReportId"><i class="fa fa-edit fa-lg m-3"></i></a>
-                        <a asp-action="Delete" asp-route-id="@item.ReportId"><i class="fa fa-trash fa-lg m-3"></i></a>
+                        <a asp-action="Edit" asp-route-id="@item.ReportId"><i class="fa fa-edit fa-lg m-1"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.ReportId"><i class="fa fa-trash fa-lg m-1"></i></a>
                     </td>
                     <td>
-                        @if (item.AppendixReports.Count() > 0) { Html.DisplayFor(modelItem => item.AppendixReports[0].Reporter.UserName); }
+                        @if (item.AppendixReports != null && 
+                        item.AppendixReports.Count > 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.AppendixReports[0].Reporter.UserName);
+                    }
                     </td>
                     <td>
-                        @if (item.AppendixReports.Count() == 1) { Html.DisplayFor(modelItem => item.AppendixReports[0].DeviceStatus.Code); }
+                        @if (item.AppendixReports.Count > 0) { @Html.DisplayFor(modelItem => item.AppendixReports[0].DeviceStatus.Code); }
                     </td>
                     <td>
-                        @if (item.AppendixReports.Count() == 1) { Html.DisplayFor(modelItem => item.AppendixReports[0].DateTimeCreated); }
+                        @if (item.AppendixReports.Count > 0) { @Html.DisplayFor(modelItem => item.AppendixReports[0].DateTimeCreated); }
                     </td>
                 </tr>
             }

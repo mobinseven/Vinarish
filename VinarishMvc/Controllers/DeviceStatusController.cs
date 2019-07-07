@@ -253,12 +253,12 @@ namespace VinarishMvc.Controllers
                         var text = (string)((object[,])(worksheet.Cells.Value))[i, 1];
                         if (_context.DeviceStatus.Any(ds => ds.Text == text)) continue;
                         var dtidCell = (string)((object[,])(worksheet.Cells.Value))[i, 2];
-                        if (dtidCell == null) continue;
-                        var dt = _context.DeviceTypes.Where(x => x.Name == dtidCell).FirstOrDefault();
-                        if (dt == null) continue;
+                        DeviceType dt = null;
+                        if (dtidCell != null)
+                            dt = _context.DeviceTypes.Where(x => x.Name == dtidCell).FirstOrDefault();
                         DeviceStatus.Add(new DeviceStatus
                         {
-                            DeviceTypeId = dt.DeviceTypeId,
+                            DeviceTypeId = dt?.DeviceTypeId,
                             Code = code,
                             Text = text,
                             DeviceStatusType = DeviceStatusType.Unrepairable
