@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using MD.PersianDateTime.Core;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +9,7 @@ using OfficeOpenXml.Table;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -336,9 +338,9 @@ namespace VinarishMvc.Controllers
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Tip: To access the first worksheet, try index 1, not 0
                     int totalRows = worksheet.Dimension.Rows;
-                    int[] ReportCells = { 0, 2, 3, 4, 6 };
-                    int[] RepairCells = { 5, 7, 11 };
-                    for (int i = 2; i < totalRows; i++)
+                    int[] ReportCells = { 0, 2, 3, 4, 6 };//بر اساس فایل گزارشهای شرکت ریل پرداز
+                    int[] RepairCells = { 5, 7, 11 };//بر اساس فایل گزارشهای شرکت ریل پرداز
+                    for (int i = 2; i < 30; i++)
                     {
                         string[] ReportCellValues = new string[ReportCells.Length];
                         bool SkipRow = false;
@@ -356,8 +358,13 @@ namespace VinarishMvc.Controllers
                         {
                             continue;
                         }
-
-                        DateTime date = Convert.ToDateTime(ReportCellValues[0]);
+                        string persianDate = ReportCellValues[0];
+                        System.String[] userDateParts = persianDate.Split(new[] { "/" }, System.StringSplitOptions.None);
+                        int Year = int.Parse(userDateParts[2]);
+                        int Month = int.Parse(userDateParts[1]);
+                        int Day = int.Parse(userDateParts[0]);
+                        var persianDateTime = new PersianDateTime(Year, Month, Day);
+                        DateTime date = persianDateTime.ToDateTime();
                         Wagon wagon = _context.Wagons.Where(w => w.Number == Convert.ToInt32(ReportCellValues[1])).FirstOrDefault();
                         DevicePlace devp = _context.DevicePlaces.Where(dp => dp.Code == ReportCellValues[2]).FirstOrDefault();
                         Reporter rep = _context.Reporters.Where(r => r.UserName == ReportCellValues[3]).FirstOrDefault();
@@ -471,7 +478,9 @@ namespace VinarishMvc.Controllers
             }
             if (LostReports.Count > 0)
             {
-                DownloadLostReports(fileName);
+                //Action<string> action = (f) => DownloadLostReports(f);
+                //Task task = new Task(() => action(fileName));
+                //task.Start();
             }
 
             List<Report> ChildReports2 = new List<Report>();
@@ -498,9 +507,115 @@ namespace VinarishMvc.Controllers
             return PhysicalFile(filename, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.LostReports + ".xlsx");
         }
 
+        private class RepairType
+        {
+            [DisplayName(Expressions.DateTime)]
+            public DateTime DateTime { get; set; }
+            [DisplayName(Expressions.Code + Expressions.DeviceStatus)]
+            public string DeviceStatusCode { get; set; }
+            [DisplayName(Expressions.DeviceStatus)]
+            public string DeviceStatus { get; set; }
+            [DisplayName(Expressions.Repairer)]
+            public string Repairer { get; set; }
+        }
+
+        private class ReportRow
+        {
+            [DisplayName(Expressions.Code)]
+            public string Code { get; set; }
+            [DisplayName(Expressions.DateTime)]
+            public DateTime DateTime { get; set; }
+            [DisplayName(Expressions.Wagon)]
+            public string Wagon { get; set; }
+            [DisplayName(Expressions.Code + Expressions.DevicePlaces)]
+            public string DevicePlaceCode { get; set; }
+            [DisplayName(Expressions.DevicePlaces)]
+            public string DevicePlace { get; set; }
+            [DisplayName(Expressions.Code + Expressions.DeviceStatus)]
+            public string DeviceStatusCode { get; set; }
+            [DisplayName(Expressions.DeviceStatus)]
+            public string DeviceStatus { get; set; }
+            [DisplayName(Expressions.Reporter)]
+            public string Reporter { get; set; }
+            public List<RepairType> ChildReports { get; set; }
+        }
+        private List<RepairType> ConvertToRepairRow(IList<Report> ChildReports)
+        {
+            List<RepairType> Row = new List<RepairType>();
+            foreach (Report r in ChildReports)
+            {
+                Row.Add(new RepairType
+                {
+                    DateTime = r.DateTimeCreated,
+                    DeviceStatusCode = r.DeviceStatus.Code,
+                    DeviceStatus = r.DeviceStatus.Text,
+                    Repairer = r.Reporter.UserName,
+                });
+            }
+            return Row;
+        }
         public IActionResult Download()
         {
-            return View();
+            string fileName = _env.WebRootPath + @"\Excel\Reports.xlsx";
+
+            FileInfo file = new FileInfo(fileName);
+            if (file.Exists)
+                file.Delete();
+            using (ExcelPackage ExcelPackage = new ExcelPackage(file))
+            {
+                //IList<ReportRow> reports = 
+                //    _context.Reports.Select(r => new ReportRow {
+                //        Code = r.Code,
+                //        DateTime = r.DateTimeCreated,
+                //        Wagon = r.Wagon.Name,
+                //        DevicePlaceCode = r.DevicePlace.Code,
+
+                //        DevicePlace = r.DevicePlace.Description,
+                //        DeviceStatusCode = r.DeviceStatus.Code,
+                //        DeviceStatus = r.DeviceStatus.Text,
+                //        Reporter = r.Reporter.UserName,
+                //        ChildReports = ConvertToRepairRow(r.AppendixReports),
+                //    }).ToList();
+                ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.DevicePlaces);
+                List<Report> reports = _context.Reports.ToList();
+                int row=0;
+                int col = -1;
+                worksheet.Cells[row, col++].Value = Expressions.DateTime;
+                worksheet.Cells[row, col++].Value = Expressions.Wagon;
+                worksheet.Cells[row, col++].Value = Expressions.Code+Expressions.DevicePlaces;
+                worksheet.Cells[row, col++].Value = Expressions.DevicePlaces;
+                worksheet.Cells[row, col++].Value = Expressions.Reporter;
+                worksheet.Cells[row, col++].Value = Expressions.Code+Expressions.DeviceStatus;
+                worksheet.Cells[row, col++].Value = Expressions.DeviceStatus;
+                foreach (Report r in reports)
+                {
+                    col = -1;
+                    row++;
+                    worksheet.Cells[row, col++].Value = r.DateTimeCreated.ToString();
+                    worksheet.Cells[row, col++].Value = r.Wagon.Name;
+                    worksheet.Cells[row, col++].Value = r.DevicePlace.Code;
+                    worksheet.Cells[row, col++].Value = r.DevicePlace.Description;
+                    worksheet.Cells[row, col++].Value = r.Reporter.UserName;
+                    worksheet.Cells[row, col++].Value = r.DeviceStatus.Code;
+                    worksheet.Cells[row, col++].Value = r.DeviceStatus.Text;
+                    foreach(Report cr  in r.AppendixReports)
+                    {
+                        worksheet.Cells[row, col++].Value = cr.DateTimeCreated.ToString();
+                        worksheet.Cells[row, col++].Value = cr.Reporter.UserName;
+                        worksheet.Cells[row, col++].Value = cr.DeviceStatus.Code;
+                        worksheet.Cells[row, col++].Value = cr.DeviceStatus.Text;
+                    }
+                }
+                //worksheet.Cells["A1"].LoadFromCollection(reports, true, TableStyles.Medium25);
+
+                var range = worksheet.Cells[worksheet.Dimension.Address];
+                var table=worksheet.Tables.Add(range, "Reports");
+                table.TableStyle = TableStyles.Medium25;
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                ExcelPackage.Save();
+
+            }
+            return PhysicalFile(fileName, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.Reports + ".xlsx");
         }
     }
 }

@@ -1,4 +1,10 @@
-﻿<form asp-action="Upload" method="post"
+﻿
+@{
+    ViewData["Title"] = Expressions.ImportFromExcelTitle(Expressions.Reports) ;
+}
+
+<h1>@ViewData["Title"]</h1>
+<form asp-action="Upload" method="post"
       enctype="multipart/form-data">
     <input type="file" name="file" class="btn btn-light" />
     <div class="form-group">
