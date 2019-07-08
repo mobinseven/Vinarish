@@ -148,7 +148,7 @@ namespace VinarishMvc.Models
         [DisplayName(Expressions.Site)]
         public virtual Site Site { get; set; }
 
-        [DisplayName(Expressions.Wagons)]
+        [DisplayName(Expressions.Assistants)]
         public virtual IList<Assistant> Assistants
         {
             get;

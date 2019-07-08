@@ -11,21 +11,29 @@
     }
 }
 <div>
-    <div class="card text-right border-@color" data-toggle="collapse" data-target="#body-footer-@Model.ReportId">
-        <div class="card-header">@Model.DevicePlace.Description</div>
+    <div class="card text-right border-@color" style="border-width:3px;" data-toggle="collapse" data-target="#body-footer-@Model.ReportId">
+        <div class="card-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        @Html.DisplayFor(modelItem => Model.DevicePlace.Description)
+                    </div>
+                    <div class="col-sm">
+                        @Html.DisplayFor(modelItem => Model.DeviceStatus.Text)
+                    </div>
+                    <div class="col-sm">
+                        @Html.DisplayFor(modelItem => Model.DateTimeCreated)
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="body-footer-@Model.ReportId" class="collapse hsparent">
             <div class="card-group">
-                <div class="card">
+                <div class="card" style="margin:0;">
                     <div class="card-body">
-                        <p>
-                            @Html.DisplayFor(modelItem =>Model.DeviceStatus.Text)
-                        </p>
-                        <p>
-                            @Html.DisplayFor(modelItem =>Model.Reporter.UserName)
-                        </p>
-                        <p>
-                            @Html.DisplayFor(modelItem =>Model.DateTimeCreated)
-                        </p>
+                        <span>
+                            @Html.DisplayFor(modelItem => Model.Reporter.UserName)
+                        </span>
                     </div>
                     <div class="card-footer">
                         <a asp-action="Delete" asp-controller="Reports" asp-route-id="@Model.ReportId">
@@ -38,20 +46,25 @@
                 </div>
                 @foreach (Report r in Model.AppendixReports)
                 {
-                    <div class="card">
+                    <div class="card" style="margin:0;">
                         <div class="card-body">
-                            <p>
-                                @Html.DisplayFor(modelItem =>r.DeviceStatus.Text)
-                            </p>
-                            <p>
-                                @Html.DisplayFor(modelItem =>r.Reporter.UserName)
-                            </p>
-                            <p>
-                                @Html.DisplayFor(modelItem =>r.Site.Name)
-                            </p>
-                            <p>
-                                @Html.DisplayFor(modelItem =>r.DateTimeCreated)
-                            </p>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        @Html.DisplayFor(modelItem => r.DateTimeCreated)
+                                    </div>
+                                    <div class="col">
+                                        @Html.DisplayFor(modelItem => r.DeviceStatus.Text)
+                                    </div>
+                                    <div class="w-100"></div>
+                                    <div class="col">
+                                        @Html.DisplayFor(modelItem => r.Reporter.UserName)
+                                    </div>
+                                    <div class="col">
+                                        @Html.DisplayFor(modelItem => r.Site.Name)
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <a asp-action="Delete" asp-controller="Reports" asp-route-id="@r.ReportId">

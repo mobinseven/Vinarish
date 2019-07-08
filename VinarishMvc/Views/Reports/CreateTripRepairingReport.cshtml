@@ -1,7 +1,7 @@
 ﻿@model VinarishMvc.Controllers.ReportsController.CreateViewModel
 
 @{
-    ViewData["Title"] = "گزارش تعمیر واگن " + Model.Report.Wagon.Name;
+    ViewData["Title"] = Expressions.Wagon + Model.Report.Wagon.Number + " : " + Expressions.Report + Expressions.Repair + Model.Report.DevicePlace.Description;
 }
 @using VinarishMvc.Areas.Identity.Models
 

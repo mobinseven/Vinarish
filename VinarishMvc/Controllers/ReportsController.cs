@@ -73,7 +73,8 @@ namespace VinarishMvc.Controllers
 
             public int ParentReportId { get; set; }
 
-            public Dictionary<int, bool> Assistants = new Dictionary<int, bool>();
+            [DisplayName(Expressions.Assistants)]
+            public Dictionary<string, bool> Assistants { get; set; } = new Dictionary<string, bool>();
         }
 
         private void GenerateReportCode(ref CreateViewModel model)
@@ -109,7 +110,7 @@ namespace VinarishMvc.Controllers
             List<Reporter> assistants = _context.Reporters.OrderBy(r => r.UserName).ToList();
             foreach (Reporter assitant in assistants)
             {
-                model.Assistants.Add(assitant.ReporterId, false);
+                model.Assistants.Add(assitant.UserName, false);
             }
             ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
                       .Where(ds => (ds.DeviceTypeId == model.Report.DevicePlace.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Repair) ||
@@ -181,7 +182,19 @@ namespace VinarishMvc.Controllers
                 {
                     ParentReport.Status = ReportStatus.Postponed;
                 }
-
+                List<Assistant> assistants = new List<Assistant>();
+                foreach (var item in model.Assistants)
+                {
+                    if (item.Value)
+                    {
+                        assistants.Add(new Assistant
+                        {
+                            ReportId= model.Report.ReportId,
+                            PersonId = _context.Reporters.Where(r => r.UserName == item.Key).FirstOrDefault().ReporterId
+                        });
+                    }
+                }
+                _context.AddRange(assistants);
                 _context.Update(ParentReport);
                 GenerateReportCode(ref model);
                 _context.Reports.Add(model.Report);
