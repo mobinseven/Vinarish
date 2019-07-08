@@ -18,13 +18,13 @@
                 <div class="card">
                     <div class="card-body">
                         <p>
-                            @Model.DeviceStatus.Text
+                            @Html.DisplayFor(modelItem =>Model.DeviceStatus.Text)
                         </p>
                         <p>
-                            @Model.Reporter.UserName
+                            @Html.DisplayFor(modelItem =>Model.Reporter.UserName)
                         </p>
                         <p>
-                            @Model.DateTimeCreated.ToString("yy/MM/dd")
+                            @Html.DisplayFor(modelItem =>Model.DateTimeCreated)
                         </p>
                     </div>
                     <div class="card-footer">
@@ -41,16 +41,16 @@
                     <div class="card">
                         <div class="card-body">
                             <p>
-                                @r.DeviceStatus.Text
+                                @Html.DisplayFor(modelItem =>r.DeviceStatus.Text)
                             </p>
                             <p>
-                                @r.Reporter.UserName
+                                @Html.DisplayFor(modelItem =>r.Reporter.UserName)
                             </p>
                             <p>
-                                @r.Site.Name
+                                @Html.DisplayFor(modelItem =>r.Site.Name)
                             </p>
                             <p>
-                                @r.DateTimeCreated.ToString("yy/MM/dd")
+                                @Html.DisplayFor(modelItem =>r.DateTimeCreated)
                             </p>
                         </div>
                         <div class="card-footer">

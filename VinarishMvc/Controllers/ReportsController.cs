@@ -479,12 +479,6 @@ namespace VinarishMvc.Controllers
                 }
                 ExcelPackage.Save();
             }
-            if (LostReports.Count > 0)
-            {
-                //Action<string> action = (f) => DownloadLostReports(f);
-                //Task task = new Task(() => action(fileName));
-                //task.Start();
-            }
 
             List<Report> ChildReports2 = new List<Report>();
             foreach (KeyValuePair<string, Report> item in ChildReports)

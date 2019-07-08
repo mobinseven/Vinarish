@@ -16,6 +16,9 @@ a.navbar-brand {
     word-break: break-all;
 }
 
+tr{
+    cursor:pointer;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 html {

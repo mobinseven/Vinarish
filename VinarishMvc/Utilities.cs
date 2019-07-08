@@ -45,6 +45,7 @@ namespace VinarishMvc
         public const string Add = "افزودن ";
         public const string Status = "وضعیت ";
         public const string Train = "رام";
+        public const string Trains = "رام‌ها";
         public const string Trips = "سفرها";
         public const string Trip = "سفر";
         public const string Type = "نوع ";
@@ -59,6 +60,8 @@ namespace VinarishMvc
         public const string Repairer = "تعمیرکننده";
         public const string Repair = "تعمیر";
         public const string Index = "فهرست ";
+        public const string WaitingReports = "گزارش‌ها ";
+        public const string ProcessedReports = "خرابی‌های رفع شده ";
 
         public static string IndexTitle(string item)
         {

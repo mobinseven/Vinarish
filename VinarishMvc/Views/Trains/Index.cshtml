@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<VinarishMvc.Models.Train>
 
 @{
-    ViewData["Title"] = "فهرست رام‌ها";
+    ViewData["Title"] = Expressions.IndexTitle(Expressions.Trains);
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -19,16 +19,32 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TrainId"><i class="fa fa-edit fa-lg m-2"></i></a>
-                <a asp-action="Delete" asp-route-id="@item.TrainId"><i class="fa fa-trash fa-lg m-2"></i></a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr data-toggle="collapse" data-target="#accordion-@item.TrainId">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.TrainId"><i class="fa fa-edit fa-lg m-2"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.TrainId"><i class="fa fa-trash fa-lg m-2"></i></a>
+                </td>
+            </tr>
+            <tr id="accordion-@item.TrainId" class="list-group collapse">
+                <td>
+                    @Expressions.Trips :
+                </td>
+                <td>
+                    <div>
+                        @foreach (var tr in item.TrainTrips)
+                        {
+                            <a asp-controller="TrainTrips" asp-action="Details" asp-route-id="@tr.TrainTripId" class="list-group-item list-group-item-action">
+                                @Html.DisplayFor(modelItem =>tr.DateTime)
+                            </a>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
