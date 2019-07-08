@@ -4,45 +4,36 @@
     ViewData["Title"] = Expressions.Trip;
 }
 
-<div class="table-responsive">
+<div class="container">
     <h4>@Expressions.Trip</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Train)
-                </th>
-                @*<th>
-                        @Html.DisplayNameFor(model => model.Reporter)
-                    </th>*@
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    @{ var dt = Model.DateTime.ToString("yy/MM/dd");}
-                    @Html.DisplayFor(modelItem => dt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model.Train.Name)
-                </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => Model.Reporter.UserName)
-                    </td>*@
-            </tr>
-            <tr>
-                <td colspan="3">
-                    @Html.DisplayNameFor(model => model.WagonsOfTrip)
-                    @await Html.PartialAsync("~/Views/Reports/_ProgressWagonTrip.cshtml", Model.WagonsOfTrip)
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col">
+            @Html.DisplayNameFor(model => model.DateTime)
+        </div>
+        <div class="col">
+            @Html.DisplayNameFor(model => model.Train)
+        </div>
+        <div class="col"></div>
+        @*<div class="col">
+                @Html.DisplayNameFor(model => model.Reporter)
+            </div>*@
+    </div>
+    <div class="row">
+        <div class="col">
+            @{ var dt = Model.DateTime.ToString("yy/MM/dd");}
+            @Html.DisplayFor(modelItem => dt)
+        </div>
+        <div class="col">
+            @Html.DisplayFor(modelItem => Model.Train.Name)
+        </div>
+        @*<div class="col">
+                @Html.DisplayFor(modelItem => Model.Reporter.UserName)
+            </div>*@
+        <div class="col">
+            <a asp-action="Edit" asp-route-id="@Model.TrainTripId"><i class="fa fa-edit fa-lg m-2"></i> </a> |
+            <a asp-action="Index">@Expressions.BackToIndex</a>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.TrainTripId"><i class="fa fa-edit fa-lg m-2"></i> </a> |
-    <a asp-action="Index">@Expressions.BackToIndex</a>
-</div>
+@Html.DisplayNameFor(model => model.WagonsOfTrip)
+@await Html.PartialAsync("~/Views/Reports/_ProgressWagonTrip.cshtml", Model.WagonsOfTrip)

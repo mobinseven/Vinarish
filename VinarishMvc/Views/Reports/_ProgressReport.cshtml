@@ -11,30 +11,31 @@
     }
 }
 <div>
-    <div class="card text-right border-@color" style="border-width:3px;" data-toggle="collapse" data-target="#body-footer-@Model.ReportId">
-        <div class="card-header">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm">
-                        @Html.DisplayFor(modelItem => Model.DevicePlace.Description)
-                    </div>
-                    <div class="col-sm">
-                        @Html.DisplayFor(modelItem => Model.DeviceStatus.Text)
-                    </div>
-                    <div class="col-sm">
-                        @Html.DisplayFor(modelItem => Model.DateTimeCreated)
+    <div class="card text-right border-@color" style="border-width:3px;">
+        <a style="text-decoration:none;" href="#body-footer-@Model.ReportId" data-toggle="collapse">
+
+            <div class="card-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-6 col-md-6">
+                            @Html.DisplayFor(modelItem => Model.DevicePlace.Description)
+                        </div>
+                        <div class="col-6 col-md-6">
+                            @Html.DisplayFor(modelItem => Model.DeviceStatus.Text)
+                        </div>
+                        <div class="col-6 col-md-6">
+                            @Html.DisplayFor(modelItem => Model.DateTimeCreated)
+                        </div>
+                        <div class="col-6 col-md-6">
+                            @Html.DisplayFor(modelItem => Model.Reporter.UserName)
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
         <div id="body-footer-@Model.ReportId" class="collapse hsparent">
             <div class="card-group">
                 <div class="card" style="margin:0;">
-                    <div class="card-body">
-                        <span>
-                            @Html.DisplayFor(modelItem => Model.Reporter.UserName)
-                        </span>
-                    </div>
                     <div class="card-footer">
                         <a asp-action="Delete" asp-controller="Reports" asp-route-id="@Model.ReportId">
                             <i class="fa fa-trash  fa-lg m-2"></i>
