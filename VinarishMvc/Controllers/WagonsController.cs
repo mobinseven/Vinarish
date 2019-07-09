@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using VinarishMvc.Areas.Authentication.Data;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
+    [Authorize(Policy = "Wagons")]
     public class WagonsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,13 +25,13 @@ namespace VinarishMvc.Controllers
             _context = context;
         }
 
-        // GET: Wagons1
+        // GET: Wagons
         public async Task<IActionResult> Index()
         {
             return View(await _context.Wagons.OrderBy(w => w.Name).ToListAsync());
         }
 
-        // GET: Wagons1/Details/5
+        // GET: Wagons/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -53,7 +56,6 @@ namespace VinarishMvc.Controllers
             return View(wagon);
         }
 
-        // GET: Wagons1/Create
         public IActionResult Create()
         {
             return View();

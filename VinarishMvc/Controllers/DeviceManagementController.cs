@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml;
+using System.Linq;
+using VinarishMvc.Areas.Authentication.Data;
 using VinarishMvc.Data;
-using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
+    [Authorize(Roles = RolesList.Devices.RoleName)]
     public class DeviceManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,6 +15,7 @@ namespace VinarishMvc.Controllers
         {
             _context = context;
         }
+
         // GET: DeviceManagement
         public ActionResult Index()
         {

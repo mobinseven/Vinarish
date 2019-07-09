@@ -11,6 +11,7 @@ namespace VinarishMvc
 {
     static public class Expressions
     {
+        public const string AccessesOf = "دسترسی‌های ";
         public const string BackToIndex = "بازگشت به فهرست";
         public const string ChildReports = "گزارشهای فرزند";
         public const string Code = "کد ";
@@ -63,6 +64,7 @@ namespace VinarishMvc
         public const string Index = "فهرست ";
         public const string WaitingReports = "گزارش‌ها ";
         public const string ProcessedReports = "خرابی‌های رفع شده ";
+        public const string Users = "کاربران ";
 
         public static string IndexTitle(string item)
         {

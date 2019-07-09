@@ -3,22 +3,24 @@
 @inject SignInManager<VinarishUser> SignInManager
 @inject UserManager<VinarishUser> UserManager
 
-<ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">کاربر: @User.Identity.Name</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-danger text-light">پایان</button>
-        </form>
-    </li>
+    <div class="btn-group dropup">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="dropdown-menu bg-dark" style="padding:0px;">
+            <a class="btn text-light btn-block" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">کاربر&nbsp;<i class="fas fa-id-card"></i>&nbsp;: @User.Identity.Name</a>
+            <a class="btn btn-danger btn-block" style="margin:1px;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" title="Manage">
+                <i class="fas fa-sign-out-alt"></i>&nbsp;پایان
+            </a>
+        </div>
+    </div>
 }
 else
 {
-    <li class="nav-item">
+    <div class="col">
         <a class="btn btn-primary" role="button" asp-area="Identity" asp-page="/Account/Login">آغاز</a>
-    </li>
+    </div>
+
 }
-</ul>

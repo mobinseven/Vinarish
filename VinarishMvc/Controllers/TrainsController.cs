@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using VinarishMvc.Areas.Authentication.Data;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
+    [Authorize(Roles = RolesList.Trains.RoleName)]
     public class TrainsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +25,7 @@ namespace VinarishMvc.Controllers
         // GET: Trains
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Trains.Include(t=>t.TrainTrips).ToListAsync());
+            return View(await _context.Trains.Include(t => t.TrainTrips).ToListAsync());
         }
 
         // GET: Trains/Details/5
@@ -50,7 +53,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: Trains/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -82,7 +85,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: Trains/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]

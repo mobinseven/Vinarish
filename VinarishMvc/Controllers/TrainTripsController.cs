@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using VinarishMvc.Areas.Authentication.Data;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
+    [Authorize(Roles = RolesList.Trips.RoleName)]
     public class TrainTripsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -39,7 +42,7 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            var trainTrip = await _context.TrainTrips
+            TrainTrip trainTrip = await _context.TrainTrips
                 //.Include(t => t.Reporter)
                 .Include(t => t.Train)
                 .Include(t => t.WagonsOfTrip)
@@ -99,7 +102,7 @@ namespace VinarishMvc.Controllers
             model.TrainTrip.TrainTripId = Guid.NewGuid();
             _context.Add(model.TrainTrip);
             List<WagonTrip> WagonTrips = new List<WagonTrip>();
-            foreach (var item in model.Wagons)
+            foreach (KeyValuePair<string, bool> item in model.Wagons)
             {
                 if (item.Value)
                 {
@@ -122,8 +125,10 @@ namespace VinarishMvc.Controllers
             {
                 return NotFound();
             }
-            CreateViewModel model = new CreateViewModel();
-            model.TrainTrip = await _context.TrainTrips.FindAsync(id);
+            CreateViewModel model = new CreateViewModel
+            {
+                TrainTrip = await _context.TrainTrips.FindAsync(id)
+            };
             if (model.TrainTrip == null)
             {
                 return NotFound();
@@ -158,7 +163,7 @@ namespace VinarishMvc.Controllers
             _context.Update(model.TrainTrip);
             _context.WagonTrips.RemoveRange(_context.WagonTrips.Where(w => w.TrainTripId == id).Include(wt => wt.Wagon).ToList());
             List<WagonTrip> WagonTrips = new List<WagonTrip>();
-            foreach (var item in model.Wagons)
+            foreach (KeyValuePair<string, bool> item in model.Wagons)
             {
                 if (item.Value)
                 {
@@ -183,7 +188,7 @@ namespace VinarishMvc.Controllers
                 return NotFound();
             }
 
-            var trainTrip = await _context.TrainTrips
+            TrainTrip trainTrip = await _context.TrainTrips
                 //.Include(t => t.Reporter)
                 .Include(t => t.Train)
                 .FirstOrDefaultAsync(m => m.TrainTripId == id);
@@ -200,7 +205,7 @@ namespace VinarishMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var trainTrip = await _context.TrainTrips.FindAsync(id);
+            TrainTrip trainTrip = await _context.TrainTrips.FindAsync(id);
             _context.TrainTrips.Remove(trainTrip);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
