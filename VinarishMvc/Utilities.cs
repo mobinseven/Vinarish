@@ -44,10 +44,10 @@ namespace VinarishMvc
         public const string Edit = "ویرایش ";
         public const string Add = "افزودن ";
         public const string Status = "وضعیت ";
-        public const string Train = "رام";
+        public const string Train = "رام ";
         public const string Trains = "رام‌ها";
         public const string Trips = "سفرها";
-        public const string Trip = "سفر";
+        public const string Trip = "سفر ";
         public const string Type = "نوع ";
         public const string UserName = "نام کاربری";
         public const string Wagon = "واگن";
@@ -94,10 +94,10 @@ namespace VinarishMvc
 
     static public class Utilities
     {
-        //static public string GetPErsianDateTimeNow()
-        //{
-        //    return ConvertToPersianDate(DateTime.Now);
-        //}
+        static public DateTime GetPErsianDateTimeNow()
+        {
+            return PersianDateTime.Today.ToDateTime();
+        }
 
         static public string ConvertToPersianDate(DateTime dateTime)
         {

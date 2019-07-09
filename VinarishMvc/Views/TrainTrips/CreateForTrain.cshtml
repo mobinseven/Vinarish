@@ -1,0 +1,126 @@
+﻿@model VinarishMvc.Controllers.TrainTripsController.CreateViewModel
+
+@{
+    ViewData["Title"] = Expressions.AddItemTitle(Expressions.Trip + Expressions.Train+Model.TrainTrip.Train.Name);
+}
+<link rel="stylesheet" href="~/lib/persian-datepicker/dist/css/persian-datepicker.min.css" />
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <input type="hidden" asp-for="TrainTrip.TrainId" value="@Model.TrainTrip.Train.TrainId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TrainTrip.DateTime" class="control-label"></label>
+                <input class="form-control persianDate" />
+                <input asp-for="TrainTrip.DateTime" class="form-control" hidden />
+                <span asp-validation-for="TrainTrip.DateTime" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                    <label asp-for="TrainTrip.TrainId" class="control-label"></label>
+                    <select asp-for="TrainTrip.TrainId" class="form-control" asp-items="ViewBag.TrainId"></select>
+                </div>*@
+            @*<div class="form-group">
+                    <label asp-for="TrainTrip.ReporterId" class="control-label"></label>
+                    <select asp-for="TrainTrip.ReporterId" class="form-control" asp-items="ViewBag.ReporterId"></select>
+                </div>*@
+            <div class="form-group border">
+                <table class="table-bordered" id="wagonstable">
+                    <thead>
+                        <tr>
+                            <td>
+                                <label asp-for="TrainTrip.WagonsOfTrip" class="control-label"></label>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody class="col overflow-auto" style="height:200px;">
+                        @foreach (var item in Model.Wagons)
+                        {
+                            <tr style="transform:rotate(0);">
+                                <td>
+                                    <div class="input-group" dir="ltr">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox" asp-for="@Model.Wagons[item.Key]">
+                                            </div>
+                                        </div>
+                                        <label asp-for="@Model.Wagons[item.Key]" class="stretched-link m-2">@item.Key</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@Expressions.Add" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">@Expressions.BackToIndex</a>
+</div>
+<style>
+    div.dataTables_filter {
+        position: sticky; /* Fix to the top */
+        top: 100px;
+    }
+</style>
+@section Scripts{
+    <script src="~/lib/persian-datepicker/assets/persian-date.min.js"></script>
+    <script src="~/lib/persian-datepicker/dist/js/persian-datepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var nDate = new Date().toISOString().substr(0, 19);
+            console.log(nDate);
+            $("#TrainTrip_DateTime").val(nDate);
+            $(".persianDate").persianDatepicker({
+                autoClose: true,
+                initialValueType: 'persian',
+                format: 'YYYY/MM/DD',
+                onSelect: function (unix) {
+                    var nDate = new Date(unix).toISOString().substr(0, 19);
+                    $("#TrainTrip_DateTime").val(nDate);
+                }
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#wagonstable').DataTable({
+
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "paging": false,
+                "fixedHeader": {
+                    header: true,
+                },
+                responsive: true,
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "بدون ردیف",
+                    "info": "_START_ تا _END_ از _TOTAL_ ردیف",
+                    "infoEmpty": " 0 تا 0 از 0 ردیف",
+                    "infoFiltered": "(پالایش شده از _MAX_ ردیف)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "نمایش _MENU_",
+                    "loadingRecords": "دریافت داده‌ها ...",
+                    "processing": "پردازش داده‌ها ...",
+                    "search": "جستجو:",
+                    "zeroRecords": "ردیفی یافت نشد",
+                    "paginate": {
+                        "first": "نخستین",
+                        "last": "واپسین",
+                        "next": "پسین",
+                        "previous": "پیشین"
+                    }
+                }
+            });
+        });
+    </script>
+}

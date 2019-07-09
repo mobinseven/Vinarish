@@ -9,38 +9,40 @@
 <p>
     <a asp-action="Create"><i class="fa fa-plus-square fa-2x"></i></a>
 </p>
-<div class="container-fluid card">
-    <div class="row">
-        <div class="col">
-            @Html.DisplayNameFor(model => model.Name)
-        </div>
-        <div class="col"></div>
-    </div>
-    @foreach (var item in Model)
-    {
-        <div class="row list-group-item-action" data-toggle="collapse" data-target="#accordion-@item.TrainId">
-            <div class="col">
+<div class="container">
+    <ul class="list-group">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#accordion-@item.TrainId">
                 @Html.DisplayFor(modelItem => item.Name)
-            </div>
-            <div class="col">
-                <a asp-action="Edit" asp-route-id="@item.TrainId"><i class="fa fa-edit fa-lg m-2"></i></a>
-                <a asp-action="Delete" asp-route-id="@item.TrainId"><i class="fa fa-trash fa-lg m-2"></i></a>
-            </div>
-        </div>
-        <div id="accordion-@item.TrainId" class="row list-group collapse">
-            <div class="col">
-                @Expressions.Trips :
-            </div>
-            <div class="col">
-                <div>
+                <span>
+                    @if (item.TrainTrips.Count != 0)
+                    {
+                        <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.Trips">@Html.DisplayFor(itemmodel => item.TrainTrips.Count)</span>
+                    }
+                    <a asp-action="Edit" asp-route-id="@item.TrainId"><i class="fa fa-edit fa-lg m-2"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.TrainId"><i class="fa fa-trash fa-lg m-2"></i></a>
+                    <a asp-action="CreateForTrain" asp-controller="TrainTrips" asp-route-id="@item.TrainId"><i class="fa fa-route fa-lg m-2"></i></a>
+                </span>
+            </li>
+            @if (item.TrainTrips.Count == 0)
+            {
+
+            }
+            else
+            {
+                <li id="accordion-@item.TrainId" class="list-group-item list-group-item-secondary collapse">
+
+                    @Expressions.Trips :
                     @foreach (var tr in item.TrainTrips)
                     {
                         <a asp-controller="TrainTrips" asp-action="Details" asp-route-id="@tr.TrainTripId" class="list-group-item list-group-item-action">
                             @Html.DisplayFor(modelItem => tr.DateTime)
                         </a>
                     }
-                </div>
-            </div>
-        </div>
-    }
+
+                </li>
+            }
+        }
+    </ul>
 </div>

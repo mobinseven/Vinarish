@@ -55,7 +55,7 @@ namespace VinarishMvc.Controllers
 
         public class CreateViewModel
         {
-            public TrainTrip TrainTrip { get; set; }
+            public TrainTrip TrainTrip { get; set; } = new TrainTrip { DateTime = Utilities.GetPErsianDateTimeNow() };
             public Dictionary<string, bool> Wagons { get; set; } = new Dictionary<string, bool>();
         }
 
@@ -65,6 +65,21 @@ namespace VinarishMvc.Controllers
             ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName");
             ViewData["TrainId"] = new SelectList(_context.Trains, "TrainId", "Name");
             CreateViewModel model = new CreateViewModel();
+            List<Wagon> wagons = _context.Wagons.OrderBy(w => w.Name).ToList();
+            foreach (Wagon w in wagons)
+            {
+                model.Wagons.Add(w.Name, false);
+            }
+            return View(model);
+        }
+
+        // GET: TrainTrips/CreateForTrain/[TrainId]
+        public IActionResult CreateForTrain(int? id)
+        {
+            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName");
+            //ViewData["TrainId"] = new SelectList(_context.Trains, "TrainId", "Name");
+            CreateViewModel model = new CreateViewModel();
+            model.TrainTrip.Train = _context.Trains.Find(id);
             List<Wagon> wagons = _context.Wagons.OrderBy(w => w.Name).ToList();
             foreach (Wagon w in wagons)
             {
