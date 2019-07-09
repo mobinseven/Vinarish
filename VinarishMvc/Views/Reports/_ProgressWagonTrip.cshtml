@@ -47,8 +47,9 @@
                                 <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.InProgressToolTip">@info</span>
 
                             }
-                            <a asp-action="CreateTripReport" asp-controller="Reports" asp-route-id="@wt.WagonTripId" data-toggle="tooltip" data-placement="top" title="ثبت گزارش خرابی">
-                                <i class="fa fa-plus-circle fa-lg m-2 text-danger"></i>
+                            <a class="btn btn-danger" asp-action="CreateTripReport" asp-controller="Reports" asp-route-id="@wt.WagonTripId" data-toggle="tooltip" data-placement="top" title="ثبت گزارش خرابی">
+                                <span>@Expressions.AddItemTitle(Expressions.Report)</span>
+                                <i class="fa fa-plus-circle fa-lg m-2"></i>
                             </a>
                         </div>
                     </div>

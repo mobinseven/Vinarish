@@ -20,14 +20,15 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: TrainTrips
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.TrainTrips
-                //.Include(t => t.Reporter)
-                .Include(t => t.Train)
-                .Include(t => t.WagonsOfTrip)
-                .ThenInclude(w => w.Wagon);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.TrainTrips
+            //    //.Include(t => t.Reporter)
+            //    .Include(t => t.Train)
+            //    .Include(t => t.WagonsOfTrip)
+            //    .ThenInclude(w => w.Wagon);
+            //return View(await applicationDbContext.ToListAsync());
+            return RedirectToAction("Index", "Trains");
         }
 
         // GET: TrainTrips/Details/5

@@ -7,7 +7,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create"><i class="fa fa-plus-square fa-2x"></i></a>
+    <a asp-action="Create" data-toggle="tooltip" data-placement="top" title="@Expressions.AddItemTitle(Expressions.Train)"><i class="fa fa-plus-square fa-2x"></i></a>
 </p>
 <div class="container">
     <ul class="list-group">
@@ -15,15 +15,25 @@
         {
             <li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#accordion-@item.TrainId">
                 @Html.DisplayFor(modelItem => item.Name)
-                <span>
+                <div>
                     @if (item.TrainTrips.Count != 0)
                     {
                         <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.Trips">@Html.DisplayFor(itemmodel => item.TrainTrips.Count)</span>
                     }
-                    <a asp-action="Edit" asp-route-id="@item.TrainId"><i class="fa fa-edit fa-lg m-2"></i></a>
-                    <a asp-action="Delete" asp-route-id="@item.TrainId"><i class="fa fa-trash fa-lg m-2"></i></a>
-                    <a asp-action="CreateForTrain" asp-controller="TrainTrips" asp-route-id="@item.TrainId"><i class="fa fa-route fa-lg m-2"></i></a>
-                </span>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+                            @Expressions.Options
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.EditItemTitle(Expressions.Train)<i class="fa fa-edit fa-lg m-2"></i></a>
+                            <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.DeleteItemTitle(Expressions.Train)<i class="fa fa-trash fa-lg m-2"></i></a>
+                            <a class="dropdown-item" asp-action="CreateForTrain" asp-controller="TrainTrips" asp-route-id="@item.TrainId">
+                                <span>@Expressions.AddItemTitle(Expressions.Trip)</span>
+                                <i class="fa fa-route fa-lg m-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </li>
             @if (item.TrainTrips.Count == 0)
             {
@@ -36,11 +46,16 @@
                     @Expressions.Trips :
                     @foreach (var tr in item.TrainTrips)
                     {
-                        <a asp-controller="TrainTrips" asp-action="Details" asp-route-id="@tr.TrainTripId" class="list-group-item list-group-item-action">
+                        <a asp-controller="TrainTrips" asp-action="Details" asp-route-id="@tr.TrainTripId" class="list-group-item list-group-item-action @Utilities.ActiveToday(tr.DateTime)">
                             @Html.DisplayFor(modelItem => tr.DateTime)
+                            <span>
+                                @if (item.TrainTrips.Count != 0)
+                                {
+                                    <span class="badge badge-primary badge-pill"></span>
+                                }
+                            </span>
                         </a>
                     }
-
                 </li>
             }
         }

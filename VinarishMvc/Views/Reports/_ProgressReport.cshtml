@@ -11,7 +11,7 @@
     }
 }
 <div>
-    <div class="card text-right border-@color" style="border-width:3px;">
+    <div class="card text-right border-@color" style="border-width:3px;margin:1px;">
         <a style="text-decoration:none;" href="#body-footer-@Model.ReportId" data-toggle="collapse">
 
             <div class="card-header">
@@ -36,11 +36,13 @@
         <div id="body-footer-@Model.ReportId" class="collapse hsparent">
             <div class="card-group">
                 <div class="card" style="margin:0;">
-                    <div class="card-footer">
-                        <a asp-action="Delete" asp-controller="Reports" asp-route-id="@Model.ReportId">
+                    <div class="card-footer btn-group" dir="ltr">
+                        <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@Model.ReportId">
+                            <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
                             <i class="fa fa-trash  fa-lg m-2"></i>
                         </a>
-                        <a asp-controller="Reports" asp-action="CreateTripRepairingReport" asp-route-id="@Model.ReportId">
+                        <a class="btn btn-success" asp-controller="Reports" asp-action="CreateTripRepairingReport" asp-route-id="@Model.ReportId">
+                            <span>@Expressions.AddItemTitle(Expressions.Report + Expressions.Repair)</span>
                             <i class="fa fa-wrench  fa-lg m-2"></i>
                         </a>
                     </div>

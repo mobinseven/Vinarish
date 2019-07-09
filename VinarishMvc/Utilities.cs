@@ -52,6 +52,7 @@ namespace VinarishMvc
         public const string UserName = "نام کاربری";
         public const string Wagon = "واگن";
         public const string Wagons = "واگن‌ها";
+        public const string Count = "شمار";
         public const string WagonNumber = "شماره واگن";
         public const string Details = "جزئیات ";
         public const string Devices = "تجهیزات ";
@@ -67,10 +68,12 @@ namespace VinarishMvc
         {
             return Index + item;
         }
+
         public static string DeleteItemTitle(string item)
         {
             return ToDelete + item;
         }
+
         public static string ImportFromExcelTitle(string item)
         {
             return "افزودن " + item + "  از اکسل";
@@ -94,6 +97,11 @@ namespace VinarishMvc
 
     static public class Utilities
     {
+        public static string ActiveToday(DateTime dt)
+        {
+            return (dt.Date == DateTime.Today) ? "active" : "";
+        }
+
         static public DateTime GetPErsianDateTimeNow()
         {
             return PersianDateTime.Today.ToDateTime();
@@ -115,6 +123,7 @@ namespace VinarishMvc
                           persianDateTime.Minute);
             return time.ToString();
         }
+
         private static readonly CultureInfo persian = new CultureInfo("fa-IR");
 
         public static string DigitsToPersian(string input)

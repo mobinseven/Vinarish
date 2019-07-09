@@ -18,7 +18,7 @@ else
                 </a>
 
                 <div id="collapseOne" class="collapse" data-parent="#accordionExample">
-                    <div class="card-body">
+                    <div class="card-body p-1">
                         @foreach (Report r in reports)
                         {
                             if (r.ParentReportId == null)
@@ -41,7 +41,7 @@ else
                     @Expressions.ProcessedReports
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                    <div class="card-body">
+                    <div class="card-body p-1">
                         @foreach (Report r in reports)
                         {
                             if (r.ParentReportId == null)
