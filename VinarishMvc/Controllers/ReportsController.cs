@@ -548,6 +548,7 @@ namespace VinarishMvc.Controllers
                 worksheet.Cells[row, col++].Value = Expressions.Reporter;
                 worksheet.Cells[row, col++].Value = Expressions.Code + Expressions.DeviceStatus;
                 worksheet.Cells[row, col++].Value = Expressions.DeviceStatus;
+                worksheet.Cells[row, col++].Value = Expressions.Site;
                 foreach (Report r in reports)
                 {
                     if (r.ParentReport != null) continue;
@@ -560,6 +561,7 @@ namespace VinarishMvc.Controllers
                     worksheet.Cells[row, col++].Value = r.Reporter.UserName;
                     worksheet.Cells[row, col++].Value = r.DeviceStatus.Code;
                     worksheet.Cells[row, col++].Value = r.DeviceStatus.Text;
+                    worksheet.Cells[row, col++].Value = r.Site.Name;
                     foreach (Report cr in r.AppendixReports)
                     {
                         worksheet.Cells[row, col++].Value = cr.DateTimeCreated.ToString("yy/MM/dd");
