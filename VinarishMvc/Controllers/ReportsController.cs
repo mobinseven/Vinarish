@@ -189,7 +189,7 @@ namespace VinarishMvc.Controllers
                     {
                         assistants.Add(new Assistant
                         {
-                            ReportId= model.Report.ReportId,
+                            ReportId = model.Report.ReportId,
                             PersonId = _context.Reporters.Where(r => r.UserName == item.Key).FirstOrDefault().ReporterId
                         });
                     }
@@ -310,6 +310,7 @@ namespace VinarishMvc.Controllers
         {
             return View();
         }
+
         private DateTime FromOldExcelDateTime(string InDate)
         {
             string persianDate = InDate;
@@ -320,6 +321,7 @@ namespace VinarishMvc.Controllers
             var persianDateTime = new PersianDateTime(Year, Month, Day);
             return persianDateTime.ToDateTime();
         }
+
         private class ReportValues
         {
             [DisplayName(Expressions.DateTime)]
@@ -378,7 +380,7 @@ namespace VinarishMvc.Controllers
                         }
                         if (SkipRow)
                         {
-                            LostReports.Add(i+1);
+                            LostReports.Add(i + 1);
                             continue;
                         }
                         DateTime date;
@@ -402,7 +404,7 @@ namespace VinarishMvc.Controllers
                         }
                         catch
                         {
-                            LostReports.Add(i+1);
+                            LostReports.Add(i + 1);
                             continue;
                         }
                         if (!_context.Reports.Any(r => r.Code == Code) &&
@@ -455,7 +457,7 @@ namespace VinarishMvc.Controllers
                         }
                         catch
                         {
-                            LostReports.Add(i+1);
+                            LostReports.Add(i + 1);
                             continue;
                         }
                         ChildReports.Add(Code, new Report
@@ -486,7 +488,7 @@ namespace VinarishMvc.Controllers
                 ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.LostReports);
                 worksheet.Cells[1, 1].Value = "شماره ردیف";
                 int row = 2;
-                foreach(int r in LostReports)
+                foreach (int r in LostReports)
                 {
                     worksheet.Cells[row++, 1].Value = r.ToString();
                 }
@@ -540,7 +542,7 @@ namespace VinarishMvc.Controllers
                 worksheet.Cells[row, col++].Value = Expressions.Code + Expressions.DevicePlaces;
                 worksheet.Cells[row, col++].Value = Expressions.DevicePlaces;
                 worksheet.Cells[row, col++].Value = Expressions.Reporter;
-                worksheet.Cells[row, col++].Value = Expressions.Code + Expressions.DeviceStatus;
+                worksheet.Cells[row, col++].Value = Expressions.Code + Expressions.Status;
                 worksheet.Cells[row, col++].Value = Expressions.DeviceStatus;
                 foreach (Report r in reports)
                 {
@@ -557,9 +559,13 @@ namespace VinarishMvc.Controllers
                     foreach (Report cr in r.AppendixReports)
                     {
                         worksheet.Cells[row, col++].Value = cr.DateTimeCreated.ToString("yy/MM/dd");
+                        worksheet.Cells[1, col].Value = Expressions.DateTime;
                         worksheet.Cells[row, col++].Value = cr.Reporter.UserName;
+                        worksheet.Cells[1, col].Value = Expressions.Reporter;
                         worksheet.Cells[row, col++].Value = cr.DeviceStatus.Code;
+                        worksheet.Cells[1, col].Value = Expressions.Code + Expressions.Status;
                         worksheet.Cells[row, col++].Value = cr.DeviceStatus.Text;
+                        worksheet.Cells[1, col].Value = Expressions.DeviceStatus;
                     }
                 }
                 //worksheet.Cells["A1"].LoadFromCollection(reports, true, TableStyles.Medium25);
@@ -569,7 +575,6 @@ namespace VinarishMvc.Controllers
                 table.TableStyle = TableStyles.Medium25;
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                 ExcelPackage.Save();
-
             }
             return PhysicalFile(fileName, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.Reports + ".xlsx");
         }
