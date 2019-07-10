@@ -1,4 +1,5 @@
 ﻿using MD.PersianDateTime.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using VinarishMvc.Areas.Authentication.Data;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
+    [Authorize(Roles = RolesList.User.RoleName)]
     public class ReportsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -206,6 +209,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: Reports/Edit/5
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -267,6 +271,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: Reports/Delete/5
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -306,6 +311,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: Reports/Upload
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public IActionResult Upload()
         {
             return View();

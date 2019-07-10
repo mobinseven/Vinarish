@@ -12,7 +12,7 @@ using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
-    [Authorize(Roles = RolesList.Trains.RoleName)]
+    [Authorize(Roles = RolesList.User.RoleName)]
     public class TrainsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -47,6 +47,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: Trains/Create
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public IActionResult Create()
         {
             return View();
@@ -69,6 +70,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: Trains/Edit/5
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -120,6 +122,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: Trains/Delete/5
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

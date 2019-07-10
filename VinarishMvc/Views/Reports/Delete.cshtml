@@ -1,15 +1,11 @@
 ﻿@model VinarishMvc.Models.Report
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = Expressions.DeleteItemTitle(Expressions.Report);
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>@Expressions.DeleteItemAsk(Expressions.Report)</h3>
 <div>
-    <h4>Report</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateTimeCreated)
@@ -63,7 +59,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ReportId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="@Expressions.Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">@Expressions.BackToIndex</a>
     </form>
 </div>

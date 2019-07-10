@@ -15,7 +15,7 @@ using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
-    [Authorize(Policy = "Wagons")]
+    [Authorize(Roles = RolesList.User.RoleName)]
     public class WagonsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -56,6 +56,7 @@ namespace VinarishMvc.Controllers
             return View(wagon);
         }
 
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public IActionResult Create()
         {
             return View();
@@ -99,6 +100,7 @@ namespace VinarishMvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public async Task<IActionResult> Edit(Guid id, [Bind("WagonId,Number,Name")] Wagon wagon)
         {
             if (id != wagon.WagonId)
@@ -130,6 +132,7 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: Wagons1/Delete/5
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -166,6 +169,7 @@ namespace VinarishMvc.Controllers
         // POST: Wagons/Upload
         [HttpPost, ActionName("Upload")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = RolesList.Admin.RoleName)]
         public async Task<IActionResult> Upload(IFormFile File)
         {
             IFormFile file = File;

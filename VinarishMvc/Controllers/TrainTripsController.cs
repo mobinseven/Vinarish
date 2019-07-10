@@ -12,7 +12,7 @@ using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
-    [Authorize(Roles = RolesList.Trips.RoleName)]
+    [Authorize(Roles = RolesList.User.RoleName)]
     public class TrainTripsController : Controller
     {
         private readonly ApplicationDbContext _context;
