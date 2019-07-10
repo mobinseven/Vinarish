@@ -34,7 +34,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => reporters.Where(r => r.VinarishUserId == item.VinarishUserId).FirstOrDefault().UserName)
+                    @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => reporters.Where(r => r.VinarishUserId == item.VinarishUserId).FirstOrDefault().Department.Name)

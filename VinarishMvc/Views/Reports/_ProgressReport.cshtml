@@ -70,6 +70,14 @@
                                         @Html.DisplayFor(modelItem => r.Site.Name)
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col">
+                                        @foreach (var a in r.Assistants)
+                                        {
+                                        <span class="badge badge-info">@Html.DisplayFor(modelItem => a.Person.UserName)</span>
+                                        }
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer">
