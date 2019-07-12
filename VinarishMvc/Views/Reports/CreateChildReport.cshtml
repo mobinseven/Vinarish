@@ -1,7 +1,7 @@
 ﻿@model VinarishMvc.Controllers.ReportsController.CreateViewModel
 
 @{
-    ViewData["Title"] = Expressions.Wagon + Model.Report.Wagon.Number + " : " + Expressions.Report + Expressions.Repair + Expressions.Or + Expressions.RepairNot + Model.Report.DevicePlace.Description;
+    ViewData["Title"] = Expressions.Wagon + Model.Report.Wagon.Number + " : " + Model.Report.DevicePlace.Description;
 }
 @using VinarishMvc.Areas.Identity.Models
 
@@ -11,7 +11,7 @@
 <h4>@ViewData["Title"]</h4>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateRepairingReport">
+        <form asp-action="CreateChildReport">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="Username" value="@User.Identity.Name" hidden />
@@ -27,22 +27,17 @@
                     <option>***گزینش وضعیت***</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label asp-for="Report.SiteId" class="control-label"></label>
-                <select asp-for="Report.SiteId" class="form-control" asp-items="ViewBag.SiteId">
-                    <option>***گزینش سایت***</option>
-                </select>
-            </div>
-            @*<div class="form-group">
-                    <label asp-for="Assistants" class="control-label"></label>
-                    @foreach (var item in Model.Assistants)
-                    {
-                        <div class="checkbox form-check">
-                            <input type="checkbox" asp-for="@Model.Assistants[item.Key]" />
-                            <label asp-for="@Model.Assistants[item.Key]" class="btn btn-light">@item.Key</label>
-                        </div>
-                    }
+            @if (ViewBag.SiteId != null)
+            {
+                <div class="form-group">
+                    <label asp-for="Report.SiteId" class="control-label"></label>
+                    <select asp-for="Report.SiteId" class="form-control" asp-items="ViewBag.SiteId">
+                        <option>***گزینش سایت***</option>
+                    </select>
                 </div>
+            }
+            @if (Model.Assistants != null)
+            {
                 <div class="container">
                     <div class="row">
                         <div class="col">
@@ -57,18 +52,21 @@
                                 <tbody>
                                     @foreach (var item in Model.Assistants)
                                     {
-                                        <tr style="transform:rotate(0);">
-                                            <td>
-                                                <div class="input-group" dir="ltr">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">
-                                                            <input type="checkbox" asp-for="@Model.Assistants[item.Key]">
+                                        if (item.Key != User.Identity.Name)
+                                        {
+                                            <tr style="transform:rotate(0);">
+                                                <td>
+                                                    <div class="input-group" dir="ltr">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <input type="checkbox" asp-for="@Model.Assistants[item.Key]">
+                                                            </div>
                                                         </div>
+                                                        <label asp-for="@Model.Assistants[item.Key]" class="stretched-link m-2">@item.Key</label>
                                                     </div>
-                                                    <label asp-for="@Model.Assistants[item.Key]" class="stretched-link m-2">@item.Key</label>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        }
                                     }
                                 </tbody>
                             </table>
@@ -88,7 +86,10 @@
                             </table>
                         </div>
                     </div>
-                </div>*@
+                </div>
+
+            }
+
             <div class="form-group">
                 <input type="submit" value="فرستادن گزارش" class="btn btn-primary" />
             </div>

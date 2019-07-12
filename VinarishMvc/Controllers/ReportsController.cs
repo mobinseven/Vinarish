@@ -77,7 +77,7 @@ namespace VinarishMvc.Controllers
             public int ParentReportId { get; set; }
 
             [DisplayName(Expressions.Assistants)]
-            public Dictionary<string, bool> Assistants { get; set; } = new Dictionary<string, bool>();
+            public Dictionary<string, bool> Assistants { get; set; }
         }
 
         private void GenerateReportCode(ref CreateViewModel model)
@@ -163,13 +163,27 @@ namespace VinarishMvc.Controllers
             return RedirectToAction(nameof(CreateReport), model.Report.WagonId);
         }
 
+        // GET: Reports/Edit/[ReportId]
+        public IActionResult Edit(int id)
+        {
+            CreateViewModel model = new CreateViewModel
+            {
+                Report = _context.Reports.Find(id),
+                ParentReportId = id
+            };
+            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
+                      .Where(ds => (ds.DeviceTypeId == model.Report.DevicePlace.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Malfunction)), "StatusId", "Text");
+            return View("CreateChildReport", model);
+        }
+
         // GET: Reports/CreateRepairingReport/[ReportId]
         public IActionResult CreateRepairingReport(int id)
         {
             CreateViewModel model = new CreateViewModel
             {
                 Report = _context.Reports.Find(id),
-                ParentReportId = id
+                ParentReportId = id,
+                Assistants = new Dictionary<string, bool>()
             };
             ViewData["SiteId"] = new SelectList(_context.Sites, "SiteId", "Name");
             List<Reporter> assistants = _context.Reporters.OrderBy(r => r.UserName).ToList();
@@ -178,113 +192,128 @@ namespace VinarishMvc.Controllers
                 model.Assistants.Add(assitant.UserName, false);
             }
             ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
-                      .Where(ds => (ds.DeviceTypeId == model.Report.DevicePlace.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Repair) ||
-                      ds.DeviceStatusType == DeviceStatusType.Unrepairable), "StatusId", "Text");
-            return View(model);
+                      .Where(ds => (ds.DeviceTypeId == model.Report.DevicePlace.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Repair)), "StatusId", "Text");
+            return View("CreateChildReport", model);
+        }
+
+        // GET: Reports/CreateUnrepairedReport/[ReportId]
+        public IActionResult CreateUnrepairedReport(int id)
+        {
+            CreateViewModel model = new CreateViewModel
+            {
+                Report = _context.Reports.Find(id),
+                ParentReportId = id
+            };
+            ViewData["SiteId"] = new SelectList(_context.Sites, "SiteId", "Name");
+            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
+                      .Where(ds => ds.DeviceStatusType == DeviceStatusType.Unrepairable), "StatusId", "Text");
+            return View("CreateChildReport", model);
         }
 
         // POST: Reports/CreateRepairingReport
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRepairingReport(CreateViewModel model)
+        public async Task<IActionResult> CreateChildReport(CreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                model.Report.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
-                model.Report.ParentReportId = model.ParentReportId;
-                DeviceStatus ds = _context.DeviceStatus.Find(model.Report.DeviceStatusId);
-                Report ParentReport = _context.Reports.Find(model.ParentReportId);
-                List<Assistant> assistants = new List<Assistant>();
-                foreach (var item in model.Assistants)
-                {
-                    if (item.Value)
-                    {
-                        assistants.Add(new Assistant
-                        {
-                            ReportId = model.Report.ReportId,
-                            PersonId = _context.Reporters.Where(r => r.UserName == item.Key).FirstOrDefault().ReporterId
-                        });
-                    }
-                }
-                _context.AddRange(assistants);
-                _context.Update(ParentReport);
-                GenerateReportCode(ref model);
-                _context.Reports.Add(model.Report);
+                Report NewReport = model.Report;
+                NewReport.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
+                NewReport.ParentReportId = model.ParentReportId;
+                GenerateReportCode(ref NewReport);
+                _context.Reports.Add(NewReport);
                 await _context.SaveChangesAsync();
-                if (model.Report.WagonTripId != null)
+                if (model.Assistants != null)
                 {
-                    WagonTrip wt = _context.WagonTrips.Find(model.Report.WagonTripId);
+                    List<Assistant> assistants = new List<Assistant>();
+                    foreach (var item in model.Assistants)
+                    {
+                        if (item.Value)
+                        {
+                            assistants.Add(new Assistant
+                            {
+                                ReportId = NewReport.ReportId,
+                                PersonId = _context.Reporters.Where(r => r.UserName == item.Key).FirstOrDefault().ReporterId
+                            });
+                        }
+                    }
+                    _context.AddRange(assistants);
+                    await _context.SaveChangesAsync();
+                }
+                if (NewReport.WagonTripId != null)
+                {
+                    WagonTrip wt = _context.WagonTrips.Find(NewReport.WagonTripId);
                     return RedirectToAction(nameof(Details), "TrainTrips", new { id = wt.TrainTripId });
                 }
                 else
                 {
-                    return RedirectToAction("Details", "Wagons", new { id = model.Report.WagonId });
+                    return RedirectToAction("Details", "Wagons", new { id = NewReport.WagonId });
                 }
             }
-            return RedirectToAction(nameof(CreateRepairingReport), model.ParentReportId);
+            return View("CreateChildReport", model);
         }
 
-        // GET: Reports/Edit/5
-        [Authorize(Roles = RolesList.Admin.RoleName)]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Reports/Edit/5
+        //[Authorize(Roles = RolesList.Admin.RoleName)]
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            Report report = await _context.Reports.FindAsync(id);
-            if (report == null)
-            {
-                return NotFound();
-            }
-            ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", report.DevicePlaceId);
-            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus, "StatusId", "Code", report.DeviceStatusId);
-            ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "Code", report.ParentReportId);
-            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName", report.ReporterId);
-            ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", report.WagonId);
-            return View(report);
-        }
+        //    Report report = await _context.Reports.FindAsync(id);
+        //    if (report == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", report.DevicePlaceId);
+        //    ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus, "StatusId", "Code", report.DeviceStatusId);
+        //    ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "Code", report.ParentReportId);
+        //    ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName", report.ReporterId);
+        //    ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", report.WagonId);
+        //    return View(report);
+        //}
 
-        // POST: Reports/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReportId,DateTimeCreated,DateTimeModified,ReporterId,Status,DeviceStatusId,ParentReportId,DevicePlaceId,WagonId")] Report report)
-        {
-            if (id != report.ReportId)
-            {
-                return NotFound();
-            }
+        //// POST: Reports/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("ReportId,DateTimeCreated,DateTimeModified,ReporterId,Status,DeviceStatusId,ParentReportId,DevicePlaceId,WagonId")] Report report)
+        //{
+        //    if (id != report.ReportId)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(report);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReportExists(report.ReportId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", report.DevicePlaceId);
-            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus, "StatusId", "Code", report.DeviceStatusId);
-            ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "Code", report.ParentReportId);
-            ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName", report.ReporterId);
-            ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", report.WagonId);
-            return View(report);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(report);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!ReportExists(report.ReportId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces, "DevicePlaceId", "Code", report.DevicePlaceId);
+        //    ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus, "StatusId", "Code", report.DeviceStatusId);
+        //    ViewData["ParentReportId"] = new SelectList(_context.Reports, "ReportId", "Code", report.ParentReportId);
+        //    ViewData["ReporterId"] = new SelectList(_context.Reporters, "ReporterId", "UserName", report.ReporterId);
+        //    ViewData["WagonId"] = new SelectList(_context.Wagons, "WagonId", "Name", report.WagonId);
+        //    return View(report);
+        //}
 
         // GET: Reports/Delete/5
         [Authorize(Roles = RolesList.Admin.RoleName)]
@@ -363,9 +392,9 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: Reports/Upload
-        [HttpPost, ActionName("Upload")]
-        [ValidateAntiForgeryToken]
-        [RequestSizeLimit(5000000)]
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[RequestSizeLimit(5000000)]
         public async Task<IActionResult> Upload(IFormFile File)
         {
             IFormFile file = File;

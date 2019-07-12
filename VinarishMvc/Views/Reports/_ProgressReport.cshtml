@@ -7,7 +7,7 @@
         case ReportStatus.Waiting: color = "warning"; break;
         case ReportStatus.Processed: color = "success"; break;
         case ReportStatus.Postponed: color = "danger"; break;
-            //case ReportStatus.InProgress: color = "bg-info"; break; TODO: InProgress
+        case ReportStatus.InProgress: color = "bg-info"; break;// TODO: InProgress
     }
 }
 <div class="@Model.Status.ToString()">
@@ -34,14 +34,11 @@
             <div class="card-group">
                 <div class="card" style="margin:0;">
                     <div class="card-footer btn-group" dir="ltr">
-                        @if (Model.AppendixReports.Count == 0)
-                        {
-                            <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@Model.ReportId">
-                                <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
-                                <i class="fa fa-trash  fa-lg m-2"></i>
-                            </a>
-                        }
-                        <a asp-controller="Reports" asp-action="CreateRepairingReport" asp-route-id="@Model.ReportId" role="button" class="btn btn-danger">
+                        <a asp-controller="Reports" asp-action="Edit" asp-route-id="@Model.ReportId" role="button" class="btn btn-info">
+                            @(Expressions.Edit)
+                            <i class="fa fa-edit fa-lg m-2"></i>
+                        </a>
+                        <a asp-controller="Reports" asp-action="CreateUnrepairedReport" asp-route-id="@Model.ReportId" role="button" class="btn btn-danger">
                             @(Expressions.Report + Expressions.RepairNot)
                             <i class="fa fa-warning fa-lg m-2"></i>
                         </a>
@@ -79,12 +76,12 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@r.ReportId">
-                                <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
-                                <i class="fa fa-trash  fa-lg m-2"></i>
-                            </a>
-                        </div>
+                        @*<div class="card-footer">
+                                <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@r.ReportId">
+                                    <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
+                                    <i class="fa fa-trash  fa-lg m-2"></i>
+                                </a>
+                            </div>*@
                     </div>
                 }
             </div>

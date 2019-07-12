@@ -8,40 +8,46 @@
     var w = wt.Wagon;
     foreach (Report r in w.Reports)
     {
-        switch (r.Status)
+        if (r.ParentReport == null)
         {
-            case ReportStatus.Waiting: warning++; break;
-            case ReportStatus.InProgress: info++; break;
-            case ReportStatus.Processed: success++; break;
-            case ReportStatus.Postponed: danger++; break;
+            switch (r.Status)
+            {
+                case ReportStatus.Waiting: warning++; break;
+                case ReportStatus.InProgress: info++; break;
+                case ReportStatus.Processed: success++; break;
+                case ReportStatus.Postponed: danger++; break;
+            }
         }
+
     }
     <div class="card">
         <div class="justify-content-between card-header row">
-            <a class="bg-light col text-black mt-2" style="text-decoration:none;" data-toggle="collapse" href="#wagon-@w.Name">
-                <strong>@w.Name</strong>
-                <span>
-                    @if (warning > 0)
-                    {
-                        <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.MalfunctionReportToolTip">@warning</span>
+            <a class="bg-light col text-black" style="text-decoration:none;" data-toggle="collapse" href="#wagon-@w.Name">
+                <h4>
+                    @w.Number
+                    <span>
+                        @if (warning > 0)
+                        {
+                            <span class="badge badge-warning badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.MalfunctionReportToolTip">@warning</span>
 
-                    }
-                    @if (success > 0)
-                    {
-                        <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.RepairReportToolTip">@success</span>
+                        }
+                        @if (success > 0)
+                        {
+                            <span class="badge badge-success badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.RepairReportToolTip">@success</span>
 
-                    }
-                    @if (danger > 0)
-                    {
-                        <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.NotRepairedReportToolTip">@danger</span>
+                        }
+                        @if (danger > 0)
+                        {
+                            <span class="badge badge-danger badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.NotRepairedReportToolTip">@danger</span>
 
-                    }
-                    @if (info > 0)
-                    {
-                        <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.InProgressToolTip">@info</span>
+                        }
+                        @if (info > 0)
+                        {
+                            <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.InProgressToolTip">@info</span>
 
-                    }
-                </span>
+                        }
+                    </span>
+                </h4>
             </a>
             <a class="btn btn-danger" asp-action="CreateTripReport" asp-controller="Reports" asp-route-id="@wt.WagonTripId">
                 <span>@Expressions.Report</span>

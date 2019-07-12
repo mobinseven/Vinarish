@@ -4,74 +4,48 @@
 }
 @if (Model.Count() == 0)
 {
-    <div>بدون گزارش</div>
+    <div class="text-center">بدون گزارش</div>
 }
 else
 {
-    <style>
-        .Repaired.custom-control-input:checked ~ .custom-control-label::before {
-            background-color: green;
-        }
-
-        .Waiting.custom-control-input:checked ~ .custom-control-label::before {
-            background-color: goldenrod;
-        }
-
-        .NRepaired.custom-control-input:checked ~ .custom-control-label::before {
-            background-color: red;
-        }
-    </style>
-
     <div>
         <div class="card">
             <div class="card-header bg-dark text-light">
-                <div class="row">
-                    <div class="col-sm custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input Repaired" id="RepairedSwitch" data-content="@ReportStatus.Processed.ToString()" checked>
-                        <label class="custom-control-label" for="RepairedSwitch">
-                            <span class="badge badge-success">@reports.Where(r => r.Status == ReportStatus.Processed).Count()</span>
-                            @Expressions.RepairReportToolTip
-                        </label>
-                    </div>
-                    <div class="col-sm custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input Waiting" id="WaitingSwitch" data-content="@ReportStatus.Waiting.ToString()" checked>
-                        <label class="custom-control-label" for="WaitingSwitch">
-                            <span class="badge badge-warning">@reports.Where(r => r.Status == ReportStatus.Waiting).Count()</span>
-                            @Expressions.MalfunctionReportToolTip
-                        </label>
-                    </div>
-                    <div class="col-sm custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input NRepaired" id="NRepairedSwitch" data-content="@ReportStatus.Postponed.ToString()" checked>
-                        <label class="custom-control-label" for="NRepairedSwitch">
-                            <span class="badge badge-danger">@reports.Where(r => r.Status == ReportStatus.Postponed).Count()</span>
-                            @Expressions.NotRepairedReportToolTip
-                        </label>
-                    </div>
+                <div class="btn-group-toggle row" data-toggle="buttons">
+                    <label class="btn btn-success col m-1">
+                        <input type="checkbox" checked autocomplete="off" data-content="@ReportStatus.Processed.ToString()"> @Expressions.RepairReportToolTip
+                    </label>
+                    <label class="btn btn-warning col m-1">
+                        <input type="checkbox" checked autocomplete="off" data-content="@ReportStatus.Waiting.ToString()"> @Expressions.MalfunctionReportToolTip
+                    </label>
+                    <label class="btn btn-danger col m-1">
+                        <input type="checkbox" checked autocomplete="off" data-content="@ReportStatus.Postponed.ToString()"> @Expressions.NotRepairedReportToolTip
+                    </label>
                 </div>
             </div>
             <div>
                 <div class="card-body p-1">
                     @foreach (Report r in reports)
                     {
-                        @await Html.PartialAsync("~/Views/Reports/_ProgressReport.cshtml", r)
+                        @if (r.ParentReport == null)
+                        {
+                            @await Html.PartialAsync("~/Views/Reports/_ProgressReport.cshtml", r)
+                        }
                     }
                 </div>
             </div>
         </div>
     </div>
-
     <script>
-        $('.custom-control-input').change(function () {
+        $('input[type=checkbox]').change(function () {
             var content = $(this).data("content");
-            console.log(content);
             if ($(this).prop("checked") == true) {
-                $("." + content).fadeIn(300);
+                $("." + content).fadeOut(300);
             }
 
             if ($(this).prop("checked") == false) {
-                $("." + content).fadeOut(300);
+                $("." + content).fadeIn(300);
             }
         });
     </script>
-    @section Scripts{}
 }
