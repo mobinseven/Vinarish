@@ -10,5 +10,10 @@
     <span>@Expressions.Report</span>
     <i class="fa fa-plus-circle fa-lg m-2"></i>
 </a>
+@if (User.IsInRole(RolesList.Admin.RoleName))
+{
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.WagonId"><i class="fa fa-edit"></i></a>
+    <a class="btn btn-secondary" asp-action="Delete" asp-route-id="@Model.WagonId"><i class="fa fa-trash"></i></a>
 
+}
 @await Html.PartialAsync("~/Views/Reports/_ProgressList.cshtml", Model.Reports)

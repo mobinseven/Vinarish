@@ -16,15 +16,14 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>@Expressions.Reports</th>
-            <th>@Expressions.Options</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
 
-            <tr>
-                <td style="transform: rotate(0);">
+            <tr style="transform: rotate(0);">
+                <td>
                     @Html.DisplayFor(modelItem => item.Number)
                     <a asp-action="Details" asp-route-id="@item.WagonId" class="stretched-link"></a>
                 </td>
@@ -35,15 +34,12 @@
                     int info = 0;
                     foreach (Report r in item.Reports)
                     {
-                        if (r.DeviceStatus.DeviceStatusType == DeviceStatusType.Malfunction)
+                        switch (r.Status)
                         {
-                            switch (r.Status)
-                            {
-                                case ReportStatus.Waiting: warning++; break;
-                                case ReportStatus.InProgress: info++; break;
-                                case ReportStatus.Processed: success++; break;
-                                case ReportStatus.Postponed: danger++; break;
-                            }
+                            case ReportStatus.Waiting: warning++; break;
+                            case ReportStatus.InProgress: info++; break;
+                            case ReportStatus.Processed: success++; break;
+                            case ReportStatus.Postponed: danger++; break;
                         }
                     }
                 }
@@ -68,11 +64,6 @@
                         <span class="badge badge-info badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.InProgressToolTip">@info</span>
 
                     }
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.WagonId"><i class="fa fa-edit"></i></a>
-                    <a asp-action="Details" asp-route-id="@item.WagonId"><i class="fa fa-info"></i></a>
-                    <a asp-action="Delete" asp-route-id="@item.WagonId"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
         }

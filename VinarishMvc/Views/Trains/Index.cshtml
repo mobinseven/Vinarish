@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Expressions.IndexTitle(Expressions.Trains);
 }
+@using VinarishMvc.Areas.Authentication.Data
 
 <h1>@ViewData["Title"]</h1>
 
@@ -13,20 +14,23 @@
     <ul class="list-group">
         @foreach (var item in Model)
         {
-            <li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#accordion-@item.TrainId">
+            <li class="list-group-item d-flex justify-content-center align-items-center" style="transform:rotate(0);">
+                <a class="stretched-link" href="#accordion-@item.TrainId" data-toggle="collapse"></a>
                 @Html.DisplayFor(modelItem => item.Name)
-                <div>
-                    @if (item.TrainTrips.Count != 0)
-                    {
-                        <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="@Expressions.Trips">@Html.DisplayFor(itemmodel => item.TrainTrips.Count)</span>
-                    }
+            </li>
+            <li id="accordion-@item.TrainId" class="list-group-item list-group-item-secondary collapse">
+                <div class="d-flex justify-content-between">
+                    <div> @Expressions.Trips :</div>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             @Expressions.Options
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.EditItemTitle(Expressions.Train)<i class="fa fa-edit fa-lg m-2"></i></a>
-                            <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.DeleteItemTitle(Expressions.Train)<i class="fa fa-trash fa-lg m-2"></i></a>
+                            @if (User.IsInRole(RolesList.Admin.RoleName))
+                            {
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.EditItemTitle(Expressions.Train)<i class="fa fa-edit fa-lg m-2"></i></a>
+                                <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.DeleteItemTitle(Expressions.Train)<i class="fa fa-trash fa-lg m-2"></i></a>
+                            }
                             <a class="dropdown-item" asp-action="CreateForTrain" asp-controller="TrainTrips" asp-route-id="@item.TrainId">
                                 <span>@Expressions.AddItemTitle(Expressions.Trip)</span>
                                 <i class="fa fa-route fa-lg m-2"></i>
@@ -34,30 +38,24 @@
                         </div>
                     </div>
                 </div>
-            </li>
-            @if (item.TrainTrips.Count == 0)
-            {
-
-            }
-            else
-            {
-                <li id="accordion-@item.TrainId" class="list-group-item list-group-item-secondary collapse">
-
-                    @Expressions.Trips :
+                @if (item.TrainTrips.Count == 0)
+                {
+                    <span>بدون سفر</span>
+                }
+                else
+                {
                     @foreach (var tr in item.TrainTrips)
                     {
                         <a asp-controller="TrainTrips" asp-action="Details" asp-route-id="@tr.TrainTripId" class="list-group-item list-group-item-action @Utilities.ActiveToday(tr.DateTime)">
-                            @Html.DisplayFor(modelItem => tr.DateTime)
-                            <span>
-                                @if (item.TrainTrips.Count != 0)
-                                {
-                                    <span class="badge badge-primary badge-pill"></span>
-                                }
-                            </span>
+                            @Html.DisplayFor(modelItem => tr.DateTime):
+                            @foreach (var w in tr.WagonsOfTrip)
+                            {
+                                <span class="badge badge-dark">@w.Wagon.Number</span>
+                            }
                         </a>
                     }
-                </li>
-            }
+                }
+            </li>
         }
     </ul>
 </div>

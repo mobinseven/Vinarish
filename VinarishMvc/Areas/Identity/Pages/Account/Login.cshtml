@@ -5,7 +5,7 @@
     ViewData["Title"] = "آغاز";
 }
 
-<div class="row">
+<div class="row text-center">
     <div class="col-md-3">
         <section>
             <form id="account" method="post">
@@ -30,7 +30,7 @@
                     <div class="checkbox">
                         <label asp-for="Input.RememberMe" class="btn btn-light active">
                             @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            <input asp-for="Input.RememberMe" class="" />
+                            <input asp-for="Input.RememberMe" class="" checked />
                         </label>
                     </div>
                 </div>
@@ -48,5 +48,5 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }

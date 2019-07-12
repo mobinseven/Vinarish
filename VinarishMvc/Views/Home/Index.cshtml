@@ -1,9 +1,7 @@
 ﻿@{
     ViewData["Title"] = "سامانه‌ی نگهداری و بازسازی سازوبرگ راه‌آهن";
 }
-@using VinarishMvc.Areas.Identity.Models
-@using VinarishMvc.Areas.Authentication.Data
-@using Microsoft.AspNetCore.Identity
+
 @inject SignInManager<VinarishUser> SignInManager
 <div class="text-center">
     <img src="~/img/ویناریش.png" width="150" />
@@ -16,8 +14,6 @@
                 <div class="card-body">
                     <a asp-action="Index" asp-controller="Trains" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Trains</a>
                     <a asp-action="Index" asp-controller="Wagons" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Wagons</a>
-                    <a asp-action="Index" asp-controller="Reports" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Reports</a>
-                    <a asp-area="Authentication" asp-controller="UserProfiles" asp-action="Index" class="btn btn-outline-dark btn-lg btn-block">@Expressions.Users</a>
                 </div>
             </div>
         </div>
@@ -26,9 +22,11 @@
             <div class="card-group align-middle">
                 <div class="card text-center mr-1 rounded-lg">
                     <div class="card-body">
-                        <a asp-action="Index" asp-controller="Departments" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Departments</a>
-                        <a asp-action="Index" asp-controller="sites" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Sites</a>
-                        <a asp-action="Index" asp-controller="DeviceTypes" class="btn btn-outline-dark btn-lg btn-block" role="button">@Expressions.Devices</a>
+                        <a asp-area="Authentication" asp-controller="UserProfiles" asp-action="Index" class="btn btn-outline-info btn-lg btn-block">@Expressions.Users</a>
+                        <a asp-action="Index" asp-controller="Reports" class="btn btn-outline-info btn-lg btn-block" role="button">@Expressions.Reports</a>
+                        <a asp-action="Index" asp-controller="Departments" class="btn btn-outline-info btn-lg btn-block" role="button">@Expressions.Departments</a>
+                        <a asp-action="Index" asp-controller="sites" class="btn btn-outline-info btn-lg btn-block" role="button">@Expressions.Sites</a>
+                        <a asp-action="Index" asp-controller="DeviceTypes" class="btn btn-outline-info btn-lg btn-block" role="button">@Expressions.Devices</a>
                     </div>
                 </div>
             </div>
