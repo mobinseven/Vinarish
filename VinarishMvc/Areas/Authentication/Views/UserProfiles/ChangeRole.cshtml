@@ -1,7 +1,7 @@
 ﻿@model VinarishMvc.Areas.Authentication.Controllers.UserProfilesController.UserRoleViewModel
 
 @{
-    ViewData["Title"] = Expressions.AccessesOf + @Model.Profile.LastName;
+    ViewData["Title"] = Expressions.AccessesOf + @Model.Profile.Email;
 }
 <h4>@ViewData["Title"]</h4>
 <form asp-action="ChangeRole">

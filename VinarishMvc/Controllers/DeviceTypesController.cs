@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,13 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
+using VinarishMvc.Areas.Authentication.Data;
 using VinarishMvc.Data;
 using VinarishMvc.Models;
 
 namespace VinarishMvc.Controllers
 {
+    [Authorize(Roles = RolesList.Admin.RoleName)]
     public class DeviceTypesController : Controller
     {
         private readonly ApplicationDbContext _context;

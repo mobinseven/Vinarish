@@ -6,7 +6,7 @@ using VinarishMvc.Data;
 
 namespace VinarishMvc.Controllers
 {
-    [Authorize(Roles = RolesList.Devices.RoleName)]
+    [Authorize(Roles = RolesList.Admin.RoleName)]
     public class DeviceManagementController : Controller
     {
         private readonly ApplicationDbContext _context;

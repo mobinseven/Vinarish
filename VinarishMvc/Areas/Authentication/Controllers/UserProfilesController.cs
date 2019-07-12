@@ -19,6 +19,7 @@ using VinarishMvc.Data;
 namespace VinarishMvc.Areas.Authentication.Controllers
 {
     [Area("Authentication")]
+    [Authorize(Roles = RolesList.Admin.RoleName)]
     public class UserProfilesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -37,7 +38,6 @@ namespace VinarishMvc.Areas.Authentication.Controllers
             _roles = roles;
         }
 
-        [Authorize(Roles = RolesList.UserRoleManagement.RoleName)]
         // GET: Authentication/UserProfiles
         public async Task<IActionResult> Index()
         {
@@ -74,7 +74,6 @@ namespace VinarishMvc.Areas.Authentication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = RolesList.UserRoleManagement.RoleName)]
         public async Task<IActionResult> Create([Bind("UserProfileId,FirstName,LastName,Email,Password,ConfirmPassword,OldPassword,ProfilePicture,VinarishUserId")] UserProfile userProfile)
         {
             if (ModelState.IsValid)

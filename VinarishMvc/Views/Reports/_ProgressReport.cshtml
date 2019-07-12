@@ -37,10 +37,13 @@
             <div class="card-group">
                 <div class="card" style="margin:0;">
                     <div class="card-footer btn-group" dir="ltr">
-                        <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@Model.ReportId">
-                            <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
-                            <i class="fa fa-trash  fa-lg m-2"></i>
-                        </a>
+                        @if (Model.AppendixReports.Count == 0)
+                        {
+                            <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@Model.ReportId">
+                                <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
+                                <i class="fa fa-trash  fa-lg m-2"></i>
+                            </a>
+                        }
                         <a class="btn btn-success" asp-controller="Reports" asp-action="CreateTripRepairingReport" asp-route-id="@Model.ReportId">
                             <span>@Expressions.AddItemTitle(Expressions.Report + Expressions.Repair)</span>
                             <i class="fa fa-wrench  fa-lg m-2"></i>
@@ -67,10 +70,19 @@
                                         @Html.DisplayFor(modelItem => r.Site.Name)
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col">
+                                        @foreach (var a in r.Assistants)
+                                        {
+                                        <span class="badge badge-info">@Html.DisplayFor(modelItem => a.Person.UserName)</span>
+                                        }
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a asp-action="Delete" asp-controller="Reports" asp-route-id="@r.ReportId">
+                            <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@r.ReportId">
+                                <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
                                 <i class="fa fa-trash  fa-lg m-2"></i>
                             </a>
                         </div>
