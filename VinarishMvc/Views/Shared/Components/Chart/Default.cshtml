@@ -1,0 +1,73 @@
+﻿@model IEnumerable<VinarishMvc.Models.Report>
+@{
+    var waiting = Model.Where(r => r.Status == ReportStatus.Waiting).Count();
+
+    var postponed = Model.Where(r => r.Status == ReportStatus.Postponed).Count();
+
+    var processed = Model.Where(r => r.Status == ReportStatus.Processed).Count();
+
+}
+<div class="chart-container" style="height: 100%">
+    <canvas id="canvas"></canvas>
+</div>
+
+<script>
+    //var months = [];
+    //for (var m = 0; m < 3; m++) {
+    //    months.push(new persianDate().subtract('months', m).format('MMMM'));
+    //}
+    new persianDate().add('days', 7).subtract('months', 1)
+    var barChartData = {
+        labels: ['آمار گزارش‌ها'],
+        datasets: [{
+            label: "گزارش‌ها",
+            backgroundColor: 'rgb(255, 205, 86)',
+            stack: 'Stack 0',
+            data: [
+                @waiting
+            ]
+        }, {
+            label: "رفع نشده",
+            backgroundColor: 'rgb(255, 99, 132)',
+            stack: 'Stack 1',
+            data: [
+                @postponed
+            ]
+        }, {
+            label: "رفع شده",
+            backgroundColor: 'rgb(75, 192, 192)',
+            stack: 'Stack 1',
+            data: [
+                @processed
+            ]
+        }]
+
+    };
+    window.onload = function () {
+        Chart.defaults.global.defaultFontFamily = 'BNazanin';
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
+                maintainAspectRatio: false,
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            }
+        });
+    };
+</script>
