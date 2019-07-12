@@ -12,6 +12,7 @@ namespace VinarishMvc
     static public class Expressions
     {
         public const string AccessesOf = "دسترسی‌های ";
+        public const string Or = "یا ";
         public const string LogOut = "برون رفت از سامانه ";
         public const string LogOutMessage = "شما از سامانه بیرون شدید. ";
         public const string Admin = "مدیر سامانه  ";
@@ -64,11 +65,13 @@ namespace VinarishMvc
         public const string LostReports = "گزارشهای نادرست";
         public const string Repairer = "تعمیرکننده";
         public const string Repair = "تعمیر";
+        public const string RepairNot = "عدم تعمیر";
         public const string Index = "فهرست ";
         public const string WaitingReports = "گزارش‌ها ";
         public const string ProcessedReports = "خرابی‌های رفع شده ";
         public const string Users = "کاربران ";
         public const string User = "کاربر ";
+        public const string Malfunction = "خرابی ";
 
         public static string IndexTitle(string item)
         {

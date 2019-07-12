@@ -10,6 +10,8 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace VinarishMvc.Models
 {
@@ -46,11 +48,25 @@ namespace VinarishMvc.Models
             set;
         }
 
+        [NotMapped]
         [DisplayName(Expressions.Status)]
         public virtual ReportStatus Status
         {
-            get;
-            set;
+            get
+            {
+                if (AppendixReports.Any(r => r.DeviceStatus.DeviceStatusType == DeviceStatusType.Repair))
+                {
+                    return ReportStatus.Processed;
+                }
+                else if (AppendixReports.Any(r => r.DeviceStatus.DeviceStatusType == DeviceStatusType.Unrepairable))
+                {
+                    return ReportStatus.Postponed;
+                }
+                else
+                {
+                    return ReportStatus.Waiting;
+                }
+            }
         }
 
         [DisplayName(Expressions.DeviceStatus)]

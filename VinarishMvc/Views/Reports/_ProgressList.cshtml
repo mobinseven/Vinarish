@@ -8,54 +8,70 @@
 }
 else
 {
+    <style>
+        .Repaired.custom-control-input:checked ~ .custom-control-label::before {
+            background-color: green;
+        }
 
-    <div class="accordion" id="accordionExample">
-        @if (reports.Any(r => r.Status == ReportStatus.Waiting || r.Status == ReportStatus.Postponed))
-        {
-            <div class="card">
-                <a class="card-header bg-warning" style="text-decoration:none;color:black" id="headingOne" data-toggle="collapse" href="#collapseOne">
-                    @Expressions.WaitingReports
-                </a>
+        .Waiting.custom-control-input:checked ~ .custom-control-label::before {
+            background-color: goldenrod;
+        }
 
-                <div id="collapseOne" class="collapse" data-parent="#accordionExample">
-                    <div class="card-body p-1">
-                        @foreach (Report r in reports)
-                        {
-                            if (r.ParentReportId == null)
-                            {
-                                @if (r.Status == ReportStatus.Waiting || r.Status == ReportStatus.Postponed)
-                                {
-                                    @await Html.PartialAsync("~/Views/Reports/_ProgressReport.cshtml", r)
-                                }
-                            }
-                        }
+        .NRepaired.custom-control-input:checked ~ .custom-control-label::before {
+            background-color: red;
+        }
+    </style>
+
+    <div>
+        <div class="card">
+            <div class="card-header bg-dark text-light">
+                <div class="row">
+                    <div class="col-sm custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input Repaired" id="RepairedSwitch" data-content="@ReportStatus.Processed.ToString()" checked>
+                        <label class="custom-control-label" for="RepairedSwitch">
+                            <span class="badge badge-success">@reports.Where(r => r.Status == ReportStatus.Processed).Count()</span>
+                            @Expressions.RepairReportToolTip
+                        </label>
+                    </div>
+                    <div class="col-sm custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input Waiting" id="WaitingSwitch" data-content="@ReportStatus.Waiting.ToString()" checked>
+                        <label class="custom-control-label" for="WaitingSwitch">
+                            <span class="badge badge-warning">@reports.Where(r => r.Status == ReportStatus.Waiting).Count()</span>
+                            @Expressions.MalfunctionReportToolTip
+                        </label>
+                    </div>
+                    <div class="col-sm custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input NRepaired" id="NRepairedSwitch" data-content="@ReportStatus.Postponed.ToString()" checked>
+                        <label class="custom-control-label" for="NRepairedSwitch">
+                            <span class="badge badge-danger">@reports.Where(r => r.Status == ReportStatus.Postponed).Count()</span>
+                            @Expressions.NotRepairedReportToolTip
+                        </label>
                     </div>
                 </div>
             </div>
-        }
-
-        @if (reports.Any(r => r.Status == ReportStatus.Processed))
-        {
-            <div class="card">
-                <a class="card-header bg-success" style="text-decoration:none;color:black" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo">
-                    @Expressions.ProcessedReports
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                    <div class="card-body p-1">
-                        @foreach (Report r in reports)
-                        {
-                            if (r.ParentReportId == null)
-                            {
-                                @if (r.Status == ReportStatus.Processed)
-                                {
-                                    @await Html.PartialAsync("~/Views/Reports/_ProgressReport.cshtml", r)
-                                }
-                            }
-                        }
-                    </div>
+            <div>
+                <div class="card-body p-1">
+                    @foreach (Report r in reports)
+                    {
+                        @await Html.PartialAsync("~/Views/Reports/_ProgressReport.cshtml", r)
+                    }
                 </div>
             </div>
-
-        }
+        </div>
     </div>
+
+    <script>
+        $('.custom-control-input').change(function () {
+            var content = $(this).data("content");
+            console.log(content);
+            if ($(this).prop("checked") == true) {
+                $("." + content).fadeIn(300);
+            }
+
+            if ($(this).prop("checked") == false) {
+                $("." + content).fadeOut(300);
+            }
+        });
+    </script>
+    @section Scripts{}
 }

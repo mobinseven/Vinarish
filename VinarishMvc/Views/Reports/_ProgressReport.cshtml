@@ -10,25 +10,22 @@
             //case ReportStatus.InProgress: color = "bg-info"; break; TODO: InProgress
     }
 }
-<div>
+<div class="@Model.Status.ToString()">
     <div class="card text-right border-@color" style="border-width:3px;margin:1px;">
-        <a style="text-decoration:none;" href="#body-footer-@Model.ReportId" data-toggle="collapse">
-
-            <div class="card-header">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-6 col-md-6">
-                            @Html.DisplayFor(modelItem => Model.DevicePlace.Description)
-                        </div>
-                        <div class="col-6 col-md-6">
-                            @Html.DisplayFor(modelItem => Model.DeviceStatus.Text)
-                        </div>
-                        <div class="col-6 col-md-6">
-                            @Html.DisplayFor(modelItem => Model.DateTimeCreated)
-                        </div>
-                        <div class="col-6 col-md-6">
-                            @Html.DisplayFor(modelItem => Model.Reporter.UserName)
-                        </div>
+        <a class="text-dark card-header bg-light" style="text-decoration:none;" href="#body-footer-@Model.ReportId" data-toggle="collapse">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-6 col-md-6">
+                        @Html.DisplayFor(modelItem => Model.DevicePlace.Description)
+                    </div>
+                    <div class="col-6 col-md-6">
+                        @Html.DisplayFor(modelItem => Model.DeviceStatus.Text)
+                    </div>
+                    <div class="col-6 col-md-6">
+                        @Html.DisplayFor(modelItem => Model.DateTimeCreated)
+                    </div>
+                    <div class="col-6 col-md-6">
+                        @Html.DisplayFor(modelItem => Model.Reporter.UserName)
                     </div>
                 </div>
             </div>
@@ -44,8 +41,12 @@
                                 <i class="fa fa-trash  fa-lg m-2"></i>
                             </a>
                         }
-                        <a class="btn btn-success" asp-controller="Reports" asp-action="CreateTripRepairingReport" asp-route-id="@Model.ReportId">
-                            <span>@Expressions.AddItemTitle(Expressions.Report + Expressions.Repair)</span>
+                        <a asp-controller="Reports" asp-action="CreateRepairingReport" asp-route-id="@Model.ReportId" role="button" class="btn btn-danger">
+                            @(Expressions.Report + Expressions.RepairNot)
+                            <i class="fa fa-warning fa-lg m-2"></i>
+                        </a>
+                        <a asp-controller="Reports" asp-action="CreateRepairingReport" asp-route-id="@Model.ReportId" rol="button" class="btn btn-success">
+                            @(Expressions.Report + Expressions.Repair)
                             <i class="fa fa-wrench  fa-lg m-2"></i>
                         </a>
                     </div>
@@ -55,29 +56,27 @@
                     <div class="card" style="margin:0;">
                         <div class="card-body">
                             <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        @Html.DisplayFor(modelItem => r.DateTimeCreated)
-                                    </div>
-                                    <div class="col">
-                                        @Html.DisplayFor(modelItem => r.DeviceStatus.Text)
-                                    </div>
-                                    <div class="w-100"></div>
-                                    <div class="col">
-                                        @Html.DisplayFor(modelItem => r.Reporter.UserName)
-                                    </div>
-                                    <div class="col">
-                                        @Html.DisplayFor(modelItem => r.Site.Name)
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        @foreach (var a in r.Assistants)
-                                        {
+                                <span>
+                                    @Html.DisplayFor(modelItem => r.DateTimeCreated)
+                                </span>
+                                <span>
+                                    @Html.DisplayFor(modelItem => r.Site.Name)
+                                </span>
+                                <br />
+                                <span>
+                                    @Html.DisplayFor(modelItem => r.DeviceStatus.Text)
+                                </span>
+                                <br />
+                                <span>
+                                    @Html.DisplayFor(modelItem => r.Reporter.UserName)
+                                </span>
+                                <br />
+                                <span>
+                                    @foreach (var a in r.Assistants)
+                                    {
                                         <span class="badge badge-info">@Html.DisplayFor(modelItem => a.Person.UserName)</span>
-                                        }
-                                    </div>
-                                </div>
+                                    }
+                                </span>
                             </div>
                         </div>
                         <div class="card-footer">

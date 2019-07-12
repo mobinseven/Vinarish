@@ -101,8 +101,70 @@ namespace VinarishMvc.Controllers
             return w.Number + dp.Code.ToUpper() + ds.Code.ToUpper() + rep.UserName.ToUpper() + date.ToString("yyMMdd");
         }
 
-        // GET: Reports/CreateTripRepairingReport/[ReportId]
-        public IActionResult CreateTripRepairingReport(int id)
+        // GET: Reports/CreateTripReport/[WagonTripId]
+        public IActionResult CreateTripReport(Guid id)
+        {
+            WagonTrip wagonTrip = _context.WagonTrips.Find(id);
+            Wagon wagon = wagonTrip.Wagon;
+            CreateViewModel model = new CreateViewModel();
+            model.Report.WagonId = wagon.WagonId;
+            model.Report.Wagon = wagon;
+            model.Report.WagonTripId = wagonTrip.WagonTripId;
+            model.Report.WagonTrip = wagonTrip;
+
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name");
+            return View("Create", model);
+        }
+
+        // GET: Reports/CreateWagonReport/[WagonId]
+        public IActionResult CreateWagonReport(Guid id)
+        {
+            Wagon wagon = _context.Wagons.Find(id);
+            CreateViewModel model = new CreateViewModel();
+            model.Report.WagonId = wagon.WagonId;
+            model.Report.Wagon = wagon;
+
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name");
+            return View("Create", model);
+        }
+
+        // GET: Reports/CreateTripReport/DeviceTypeSelected
+        public IActionResult DeviceTypeSelected(CreateViewModel model)
+        {
+            model.Report.Wagon = _context.Wagons.Find(model.Report.WagonId);
+            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", model.DeviceTypeId);
+            ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces.Where(dp => dp.DeviceTypeId == model.DeviceTypeId), "DevicePlaceId", "Description");
+            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
+                .Where(ds => ds.DeviceTypeId == model.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Malfunction), "StatusId", "Text");
+            return View("Create", model);
+        }
+
+        // POST: Reports/CreateTripReport
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReport(CreateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Report.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
+                GenerateReportCode(ref model);
+                _context.Reports.Add(model.Report);
+                await _context.SaveChangesAsync();
+                if (model.Report.WagonTripId != null)
+                {
+                    WagonTrip wt = _context.WagonTrips.Find(model.Report.WagonTripId);
+                    return RedirectToAction("Details", "TrainTrips", new { id = model.Report.WagonTrip.TrainTripId });
+                }
+                else
+                {
+                    return RedirectToAction("Details", "Wagons", new { id = model.Report.Wagon.WagonId });
+                }
+            }
+            return RedirectToAction(nameof(CreateReport), model.Report.WagonId);
+        }
+
+        // GET: Reports/CreateRepairingReport/[ReportId]
+        public IActionResult CreateRepairingReport(int id)
         {
             CreateViewModel model = new CreateViewModel
             {
@@ -121,70 +183,17 @@ namespace VinarishMvc.Controllers
             return View(model);
         }
 
-        // GET: Reports/CreateTripReport/[WagonTripId]
-        public IActionResult CreateTripReport(Guid id)
-        {
-            WagonTrip wagonTrip = _context.WagonTrips.Find(id);
-            Wagon wagon = wagonTrip.Wagon;
-            CreateViewModel model = new CreateViewModel();
-            model.Report.WagonId = wagon.WagonId;
-            model.Report.Wagon = wagon;
-            model.Report.WagonTripId = wagonTrip.WagonTripId;
-            model.Report.WagonTrip = wagonTrip;
-
-            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name");
-            return View(model);
-        }
-
-        // GET: Reports/CreateTripReport/DeviceTypeSelected
-        public IActionResult DeviceTypeSelected(CreateViewModel model)
-        {
-            model.Report.Wagon = _context.Wagons.Find(model.Report.WagonId);
-            ViewData["DeviceTypeId"] = new SelectList(_context.DeviceTypes, "DeviceTypeId", "Name", model.DeviceTypeId);
-            ViewData["DevicePlaceId"] = new SelectList(_context.DevicePlaces.Where(dp => dp.DeviceTypeId == model.DeviceTypeId), "DevicePlaceId", "Description");
-            ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
-                .Where(ds => ds.DeviceTypeId == model.DeviceTypeId && ds.DeviceStatusType == DeviceStatusType.Malfunction), "StatusId", "Text");
-            return View("CreateTripReport", model);
-        }
-
-        // POST: Reports/CreateTripReport
+        // POST: Reports/CreateRepairingReport
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTripReport(CreateViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                model.Report.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
-                model.Report.Status = ReportStatus.Waiting;
-                GenerateReportCode(ref model);
-                _context.Reports.Add(model.Report);
-                await _context.SaveChangesAsync();
-                WagonTrip wt = _context.WagonTrips.Find(model.Report.WagonTripId);
-                return RedirectToAction("Details", "TrainTrips", new { id = model.Report.WagonTrip.TrainTripId });
-            }
-            return RedirectToAction(nameof(CreateTripReport), model.Report.WagonId);
-        }
-
-        // POST: Reports/CreateTripRepairingReport
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTripRepairingReport(CreateViewModel model)
+        public async Task<IActionResult> CreateRepairingReport(CreateViewModel model)
         {
             if (ModelState.IsValid)
             {
                 model.Report.ReporterId = _context.Reporters.Where(r => r.UserName == model.Username).FirstOrDefault().ReporterId;
                 model.Report.ParentReportId = model.ParentReportId;
-                model.Report.Status = ReportStatus.Processed;
                 DeviceStatus ds = _context.DeviceStatus.Find(model.Report.DeviceStatusId);
                 Report ParentReport = _context.Reports.Find(model.ParentReportId);
-                if (ds.DeviceStatusType == DeviceStatusType.Repair)
-                {
-                    ParentReport.Status = ReportStatus.Processed;
-                }
-                else if (ds.DeviceStatusType == DeviceStatusType.Unrepairable)
-                {
-                    ParentReport.Status = ReportStatus.Postponed;
-                }
                 List<Assistant> assistants = new List<Assistant>();
                 foreach (var item in model.Assistants)
                 {
@@ -192,7 +201,7 @@ namespace VinarishMvc.Controllers
                     {
                         assistants.Add(new Assistant
                         {
-                            ReportId= model.Report.ReportId,
+                            ReportId = model.Report.ReportId,
                             PersonId = _context.Reporters.Where(r => r.UserName == item.Key).FirstOrDefault().ReporterId
                         });
                     }
@@ -202,10 +211,17 @@ namespace VinarishMvc.Controllers
                 GenerateReportCode(ref model);
                 _context.Reports.Add(model.Report);
                 await _context.SaveChangesAsync();
-                WagonTrip wt = _context.WagonTrips.Find(model.Report.WagonTripId);
-                return RedirectToAction("Details", "TrainTrips", new { id = wt.TrainTripId });
+                if (model.Report.WagonTripId != null)
+                {
+                    WagonTrip wt = _context.WagonTrips.Find(model.Report.WagonTripId);
+                    return RedirectToAction(nameof(Details), "TrainTrips", new { id = wt.TrainTripId });
+                }
+                else
+                {
+                    return RedirectToAction("Details", "Wagons", new { id = model.Report.WagonId });
+                }
             }
-            return RedirectToAction(nameof(CreateTripRepairingReport), model.ParentReportId);
+            return RedirectToAction(nameof(CreateRepairingReport), model.ParentReportId);
         }
 
         // GET: Reports/Edit/5
@@ -316,6 +332,7 @@ namespace VinarishMvc.Controllers
         {
             return View();
         }
+
         private DateTime FromOldExcelDateTime(string InDate)
         {
             string persianDate = InDate;
@@ -326,6 +343,7 @@ namespace VinarishMvc.Controllers
             var persianDateTime = new PersianDateTime(Year, Month, Day);
             return persianDateTime.ToDateTime();
         }
+
         private class ReportValues
         {
             [DisplayName(Expressions.DateTime)]
@@ -384,7 +402,7 @@ namespace VinarishMvc.Controllers
                         }
                         if (SkipRow)
                         {
-                            LostReports.Add(i+1);
+                            LostReports.Add(i + 1);
                             continue;
                         }
                         DateTime date;
@@ -408,7 +426,7 @@ namespace VinarishMvc.Controllers
                         }
                         catch
                         {
-                            LostReports.Add(i+1);
+                            LostReports.Add(i + 1);
                             continue;
                         }
                         if (!_context.Reports.Any(r => r.Code == Code) &&
@@ -461,7 +479,7 @@ namespace VinarishMvc.Controllers
                         }
                         catch
                         {
-                            LostReports.Add(i+1);
+                            LostReports.Add(i + 1);
                             continue;
                         }
                         ChildReports.Add(Code, new Report
@@ -492,7 +510,7 @@ namespace VinarishMvc.Controllers
                 ExcelWorksheet worksheet = ExcelPackage.Workbook.Worksheets.Add(Expressions.LostReports);
                 worksheet.Cells[1, 1].Value = "شماره ردیف";
                 int row = 2;
-                foreach(int r in LostReports)
+                foreach (int r in LostReports)
                 {
                     worksheet.Cells[row++, 1].Value = r.ToString();
                 }
@@ -514,7 +532,6 @@ namespace VinarishMvc.Controllers
                     ChildReports2.Add(item.Value);
                 else
                     continue;
-                parentReport.Status = ReportStatus.Processed;
                 _context.Reports.Update(parentReport);
             }
             _context.Reports.AddRange(ChildReports2);
@@ -567,9 +584,13 @@ namespace VinarishMvc.Controllers
                     foreach (Report cr in r.AppendixReports)
                     {
                         worksheet.Cells[row, col++].Value = cr.DateTimeCreated.ToString("yy/MM/dd");
+                        worksheet.Cells[1, col].Value = Expressions.DateTime;
                         worksheet.Cells[row, col++].Value = cr.Reporter.UserName;
+                        worksheet.Cells[1, col].Value = Expressions.Reporter;
                         worksheet.Cells[row, col++].Value = cr.DeviceStatus.Code;
+                        worksheet.Cells[1, col].Value = Expressions.Code + Expressions.Status;
                         worksheet.Cells[row, col++].Value = cr.DeviceStatus.Text;
+                        worksheet.Cells[1, col].Value = Expressions.DeviceStatus;
                     }
                 }
                 //worksheet.Cells["A1"].LoadFromCollection(reports, true, TableStyles.Medium25);
@@ -579,7 +600,6 @@ namespace VinarishMvc.Controllers
                 table.TableStyle = TableStyles.Medium25;
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                 ExcelPackage.Save();
-
             }
             return PhysicalFile(fileName, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.Reports + ".xlsx");
         }

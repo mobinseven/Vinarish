@@ -201,7 +201,7 @@ namespace VinarishMvc.Data
             modelBuilder.Entity<Report>().Property<System.DateTime>(x => x.DateTimeModified).HasColumnName(@"DateTimeModified").IsRequired().ValueGeneratedOnAddOrUpdate().HasDefaultValueSql(@"CURRENT_TIMESTAMP");
             modelBuilder.Entity<Report>().Property<int>(x => x.ReporterId).HasColumnName(@"ReporterId").ValueGeneratedNever();
             modelBuilder.Entity<Report>().Property<int?>(x => x.SiteId).HasColumnName(@"SiteId").ValueGeneratedNever();
-            modelBuilder.Entity<Report>().Property<VinarishMvc.Models.ReportStatus>(x => x.Status).HasColumnName(@"Status").IsRequired().ValueGeneratedNever();
+            //modelBuilder.Entity<Report>().Property<VinarishMvc.Models.ReportStatus>(x => x.Status).HasColumnName(@"Status").IsRequired().ValueGeneratedNever();
             modelBuilder.Entity<Report>().Property<System.Guid>(x => x.DeviceStatusId).HasColumnName(@"DeviceStatusId").ValueGeneratedNever();
             modelBuilder.Entity<Report>().Property(x => x.ParentReportId).HasColumnName(@"ParentReportId").ValueGeneratedNever();
             modelBuilder.Entity<Report>().Property<System.Guid>(x => x.DevicePlaceId).HasColumnName(@"DevicePlaceId").ValueGeneratedNever();

@@ -1,0 +1,195 @@
+﻿@model VinarishMvc.Controllers.ReportsController.CreateViewModel
+
+@{
+    ViewData["Title"] = Expressions.Wagon + Model.Report.Wagon.Number + " : " + Expressions.Report + Expressions.Repair + Expressions.Or + Expressions.RepairNot + Model.Report.DevicePlace.Description;
+}
+@using VinarishMvc.Areas.Identity.Models
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<VinarishUser> SignInManager
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateRepairingReport">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Username" value="@User.Identity.Name" hidden />
+                <input asp-for="ParentReportId" value="@Model.ParentReportId" class="form-control" hidden />
+                <input asp-for="Report.WagonId" value="@Model.Report.WagonId" class="form-control" hidden />
+                <input asp-for="DeviceTypeId" value="@Model.DeviceTypeId" class="form-control" hidden />
+                <input asp-for="Report.WagonTripId" value="@Model.Report.WagonTripId" class="form-control" hidden />
+                <input asp-for="Report.DevicePlaceId" value="@Model.Report.DevicePlaceId" class="form-control" hidden />
+            </div>
+            <div class="form-group">
+                <label asp-for="Report.DeviceStatusId" class="control-label"></label>
+                <select asp-for="Report.DeviceStatusId" class="form-control" asp-items="ViewBag.DeviceStatusId">
+                    <option>***گزینش وضعیت***</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Report.SiteId" class="control-label"></label>
+                <select asp-for="Report.SiteId" class="form-control" asp-items="ViewBag.SiteId">
+                    <option>***گزینش سایت***</option>
+                </select>
+            </div>
+            @*<div class="form-group">
+                    <label asp-for="Assistants" class="control-label"></label>
+                    @foreach (var item in Model.Assistants)
+                    {
+                        <div class="checkbox form-check">
+                            <input type="checkbox" asp-for="@Model.Assistants[item.Key]" />
+                            <label asp-for="@Model.Assistants[item.Key]" class="btn btn-light">@item.Key</label>
+                        </div>
+                    }
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <table class="table-bordered" id="AssistantsTable">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <label asp-for="Assistants" class="control-label"></label>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Assistants)
+                                    {
+                                        <tr style="transform:rotate(0);">
+                                            <td>
+                                                <div class="input-group" dir="ltr">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">
+                                                            <input type="checkbox" asp-for="@Model.Assistants[item.Key]">
+                                                        </div>
+                                                    </div>
+                                                    <label asp-for="@Model.Assistants[item.Key]" class="stretched-link m-2">@item.Key</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col">
+                            <h5>@Expressions.Count @Expressions.Assistants <span id="selectedCount" class="badge badge-info">0</span></h5>
+
+                            <table class="table-bordered " id="SelectedAssistantsTable">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <label asp-for="Assistants" class="control-label"></label>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody id="selectedAssistants"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>*@
+            <div class="form-group">
+                <input type="submit" value="فرستادن گزارش" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    div.dataTables_wrapper div.dataTables_filter {
+        direction: ltr;
+    }
+</style>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#AssistantsTable').DataTable({
+
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "paging": false,
+                "fixedHeader": {
+                    header: true,
+                },
+                responsive: true,
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "",
+                    "info": "_START_ تا _END_ از _TOTAL_ ردیف",
+                    "infoEmpty": " 0 تا 0 از 0 ردیف",
+                    "infoFiltered": "(پالایش شده از _MAX_ ردیف)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "نمایش _MENU_",
+                    "loadingRecords": "دریافت داده‌ها ...",
+                    "processing": "پردازش داده‌ها ...",
+                    "search": '<i class="fa fa-search"></i>',
+                    "zeroRecords": "",
+                    "paginate": {
+                        "first": "نخستین",
+                        "last": "واپسین",
+                        "next": "پسین",
+                        "previous": "پیشین"
+                    }
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#SelectedAssistantsTable').DataTable({
+
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "paging": false,
+                "fixedHeader": {
+                    header: true,
+                },
+                "searching": false,
+                "ordering": false,
+                "info": false,
+                responsive: true,
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "",
+                    "info": "_START_ تا _END_ از _TOTAL_ ردیف",
+                    "infoEmpty": " 0 تا 0 از 0 ردیف",
+                    "infoFiltered": "(پالایش شده از _MAX_ ردیف)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "نمایش _MENU_",
+                    "loadingRecords": "دریافت داده‌ها ...",
+                    "processing": "پردازش داده‌ها ...",
+                    "search": '<i class="fa fa-search"></i>',
+                    "zeroRecords": "",
+                    "paginate": {
+                        "first": "نخستین",
+                        "last": "واپسین",
+                        "next": "پسین",
+                        "previous": "پیشین"
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        var selected = [];
+        $('input[type=checkbox]').change(function () {
+            var label = $("label[for='" + $(this).attr('id') + "']");
+
+            var name = label.text();
+            var id = "SelAssistant" + name;
+            if ($(this).prop("checked") == true) {
+                $("#selectedAssistants").append("<tr id=\"" + id + "\"> <td>" + name + "</td></tr>");
+                selected.push(name);
+            }
+
+            if ($(this).prop("checked") == false) {
+                selected = selected.filter(function (ele) {
+                    return ele != name;
+                });
+                $("#" + id).remove();
+            }
+            $("#selectedCount").text(selected.length);
+        });
+    </script>
+}
