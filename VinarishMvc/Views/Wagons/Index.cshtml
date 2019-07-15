@@ -22,10 +22,11 @@
         @foreach (var item in Model)
         {
 
-            <tr style="transform: rotate(0);">
+            <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Number)
-                    <a asp-action="Details" asp-route-id="@item.WagonId" class="stretched-link"></a>
+                    <a class="btn btn-light btn-block" asp-action="Details" asp-route-id="@item.WagonId">
+                        @Html.DisplayFor(modelItem => item.Number)
+                    </a>
                 </td>
                 @{
                     int warning = 0;

@@ -28,7 +28,13 @@ namespace VinarishMvc.Controllers
         // GET: Wagons
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Wagons.OrderBy(w => w.Name).ToListAsync());
+            var items = await _context.Wagons.OrderBy(w => w.Name)
+                        .Include(w => w.Reports)
+                            .ThenInclude(r => r.DeviceStatus)
+                        .Include(w => w.Reports)
+                            .ThenInclude(r => r.AppendixReports)
+                                .ThenInclude(ar => ar.DeviceStatus).ToListAsync();
+            return View(items);
         }
 
         // GET: Wagons/Details/5

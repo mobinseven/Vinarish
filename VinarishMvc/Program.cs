@@ -24,10 +24,10 @@ namespace VinarishMvc
                 var userMgr = services.ServiceProvider.GetRequiredService<UserManager<VinarishUser>>();
                 var roleMgr = services.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                dbContext.Database.Migrate();
+                //dbContext.Database.Migrate();
                 var functional = services.ServiceProvider.GetRequiredService<IFunctional>();
 
-                DbInitializer.Initialize(dbContext, functional).Wait();
+                //DbInitializer.Initialize(dbContext, functional).Wait();
             }
 
             host.Run();
@@ -35,6 +35,6 @@ namespace VinarishMvc
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            .UseStartup<Startup>();
     }
 }

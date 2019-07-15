@@ -1,18 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using VinarishMvc.Areas.Authentication.Services;
 using VinarishMvc.Areas.Identity.Models;
 using VinarishMvc.Data;
@@ -22,8 +19,11 @@ namespace VinarishMvc
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment _environment;
+
+        public Startup(IHostingEnvironment environment, IConfiguration configuration)
         {
+            _environment = environment;
             Configuration = configuration;
         }
 
@@ -32,13 +32,8 @@ namespace VinarishMvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDataProtection().SetApplicationName("Vinarish");
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => false;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            services.AddDataProtection().SetApplicationName("Vinarish")
+                .PersistKeysToFileSystem(new DirectoryInfo(_environment.WebRootPath + @"\Keys"));
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("fa-IR");
@@ -46,17 +41,13 @@ namespace VinarishMvc
             });
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
+                    Configuration.GetConnectionString("DefaultConnection")));//.UseLazyLoadingProxies()
             // Get Identity Default Options
             IConfigurationSection identityDefaultOptionsConfigurationSection = Configuration.GetSection("IdentityDefaultOptions");
 
             services.Configure<IdentityDefaultOptions>(identityDefaultOptionsConfigurationSection);
 
-            var identityDefaultOptions = identityDefaultOptionsConfigurationSection.Get<IdentityDefaultOptions>();
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromDays(30);
-            });
+            IdentityDefaultOptions identityDefaultOptions = identityDefaultOptionsConfigurationSection.Get<IdentityDefaultOptions>();
             services.AddIdentity<VinarishUser, IdentityRole>(options =>
             {
                 // Password settings
@@ -78,9 +69,21 @@ namespace VinarishMvc
                 // email confirmation require
                 options.SignIn.RequireConfirmedEmail = identityDefaultOptions.SignInRequireConfirmedEmail;
             })
-                .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            // cookie settings
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = identityDefaultOptions.CookieHttpOnly;
+                options.Cookie.Expiration = TimeSpan.FromDays(identityDefaultOptions.CookieExpiration);
+                options.LoginPath = identityDefaultOptions.LoginPath; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = identityDefaultOptions.LogoutPath; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
+                options.AccessDeniedPath = identityDefaultOptions.AccessDeniedPath; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.SlidingExpiration = identityDefaultOptions.SlidingExpiration;
+            });
+
             // Get Super Admin Default options
             services.Configure<SuperAdminDefaultOptions>(Configuration.GetSection("SuperAdminDefaultOptions"));
 
@@ -97,6 +100,7 @@ namespace VinarishMvc
         {
             //if (env.IsDevelopment())
             //{
+            app.UseBrowserLink();
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
             //}
@@ -109,10 +113,10 @@ namespace VinarishMvc
             CultureInfo cultureInfo = new CultureInfo("fa-IR");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
-
+            //app.UseCookiePolicy();
+            //app.UseSession();
             app.UseAuthentication();
 
             app.UseMvc(routes =>

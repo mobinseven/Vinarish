@@ -25,7 +25,11 @@ namespace VinarishMvc.Controllers
         // GET: Trains
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Trains.Include(t => t.TrainTrips).ToListAsync());
+            return View(await _context.Trains
+                .Include(t => t.TrainTrips)
+                .ThenInclude(tr => tr.WagonsOfTrip)
+                .ThenInclude(wt => wt.Wagon)
+                .ToListAsync());
         }
 
         // GET: Trains/Details/5

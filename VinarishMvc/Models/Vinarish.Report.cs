@@ -54,18 +54,21 @@ namespace VinarishMvc.Models
         {
             get
             {
-                if (AppendixReports.Any(r => r.DeviceStatus.DeviceStatusType == DeviceStatusType.Repair))
-                {
-                    return ReportStatus.Processed;
-                }
-                else if (AppendixReports.Any(r => r.DeviceStatus.DeviceStatusType == DeviceStatusType.Unrepairable))
-                {
-                    return ReportStatus.Postponed;
-                }
+                if (AppendixReports.Count > 0)
+                    if (AppendixReports.Any(r => r.DeviceStatus.DeviceStatusType == DeviceStatusType.Repair))
+                    {
+                        return ReportStatus.Processed;
+                    }
+                    else if (AppendixReports.Any(r => r.DeviceStatus.DeviceStatusType == DeviceStatusType.Unrepairable))
+                    {
+                        return ReportStatus.Postponed;
+                    }
+                    else
+                    {
+                        return ReportStatus.Waiting;
+                    }
                 else
-                {
                     return ReportStatus.Waiting;
-                }
             }
         }
 

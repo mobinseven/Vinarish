@@ -168,7 +168,11 @@ namespace VinarishMvc.Controllers
         {
             CreateViewModel model = new CreateViewModel
             {
-                Report = _context.Reports.Find(id),
+                Report = _context.Reports
+                .Include(r => r.DevicePlace)
+                .Include(r => r.Wagon)
+                .Where(r => r.ReportId == id)
+                .FirstOrDefault(),
                 ParentReportId = id
             };
             ViewData["DeviceStatusId"] = new SelectList(_context.DeviceStatus
@@ -179,9 +183,15 @@ namespace VinarishMvc.Controllers
         // GET: Reports/CreateRepairingReport/[ReportId]
         public IActionResult CreateRepairingReport(int id)
         {
+            if (!ReportExists(id))
+                return NotFound();
             CreateViewModel model = new CreateViewModel
             {
-                Report = _context.Reports.Find(id),
+                Report = _context.Reports
+                .Include(r => r.DevicePlace)
+                .Include(r => r.Wagon)
+                .Where(r => r.ReportId == id)
+                .FirstOrDefault(),
                 ParentReportId = id,
                 Assistants = new Dictionary<string, bool>()
             };
@@ -201,7 +211,11 @@ namespace VinarishMvc.Controllers
         {
             CreateViewModel model = new CreateViewModel
             {
-                Report = _context.Reports.Find(id),
+                Report = _context.Reports
+                .Include(r => r.DevicePlace)
+                .Include(r => r.Wagon)
+                .Where(r => r.ReportId == id)
+                .FirstOrDefault(),
                 ParentReportId = id
             };
             ViewData["SiteId"] = new SelectList(_context.Sites, "SiteId", "Name");

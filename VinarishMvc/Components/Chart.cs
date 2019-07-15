@@ -19,7 +19,10 @@ namespace VinarishMvc.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var items = await _context.Reports.ToListAsync();
+            var items = await _context.Reports
+                .Include(r => r.AppendixReports)
+                .ThenInclude(ar => ar.DeviceStatus)
+                .ToListAsync();
             return View(items);
         }
     }

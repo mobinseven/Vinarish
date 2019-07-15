@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<VinarishMvc.Models.Report>
 @{
+
     var waiting = Model.Where(r => r.Status == ReportStatus.Waiting).Count();
 
     var postponed = Model.Where(r => r.Status == ReportStatus.Postponed).Count();
