@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VinarishMvc.Data;
+using VinarishMvc.Models;
 
 namespace VinarishMvc.ViewComponents
 {
@@ -19,11 +19,17 @@ namespace VinarishMvc.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var items = await _context.Reports
+            List<Report> items = await _context.Reports
                 .Include(r => r.AppendixReports)
                 .ThenInclude(ar => ar.DeviceStatus)
                 .ToListAsync();
-            return View(items);
+            IEnumerable<ReportStatus> status = items.Select(r => r.Status);
+            int waiting = status.Where(r => r == ReportStatus.Waiting).Count();
+
+            int postponed = status.Where(r => r == ReportStatus.Postponed).Count();
+
+            int processed = status.Where(r => r == ReportStatus.Processed).Count();
+            return View(status);
         }
     }
 }

@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using VinarishMvc.Areas.Authentication.Services;
 using VinarishMvc.Areas.Identity.Models;
 using VinarishMvc.Data;
@@ -20,11 +18,8 @@ namespace VinarishMvc
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _environment;
-
-        public Startup(IHostingEnvironment environment, IConfiguration configuration)
+        public Startup(IConfiguration configuration)
         {
-            _environment = environment;
             Configuration = configuration;
         }
 
@@ -35,7 +30,6 @@ namespace VinarishMvc
         {
             services.AddDataProtection().SetApplicationName("Vinarish")
                         .PersistKeysToDbContext<ApplicationDbContext>();
-            //.PersistKeysToRegistry(Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Vinarish\keys"));
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("fa-IR");

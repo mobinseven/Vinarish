@@ -67,6 +67,8 @@ namespace VinarishMvc.Models
                     {
                         return ReportStatus.Waiting;
                     }
+                else if (ParentReportId != null)
+                    return ReportStatus.IsChild;
                 else
                     return ReportStatus.Waiting;
             }

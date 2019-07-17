@@ -1,11 +1,11 @@
-﻿@model IEnumerable<VinarishMvc.Models.Report>
+﻿@model IEnumerable<VinarishMvc.Models.ReportStatus>
 @{
 
-    var waiting = Model.Where(r => r.Status == ReportStatus.Waiting).Count();
+    var waiting = Model.Where(r => r == ReportStatus.Waiting).Count();
 
-    var postponed = Model.Where(r => r.Status == ReportStatus.Postponed).Count();
+    var postponed = Model.Where(r => r == ReportStatus.Postponed).Count();
 
-    var processed = Model.Where(r => r.Status == ReportStatus.Processed).Count();
+    var processed = Model.Where(r => r == ReportStatus.Processed).Count();
 
 }
 <div class="chart-container" style="height: 100%">

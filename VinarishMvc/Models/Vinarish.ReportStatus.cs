@@ -23,6 +23,7 @@ namespace VinarishMvc.Models
         Waiting,
         InProgress,
         Processed,
-        Postponed
+        Postponed,
+        IsChild
     }
 }
