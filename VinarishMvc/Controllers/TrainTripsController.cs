@@ -138,7 +138,7 @@ namespace VinarishMvc.Controllers
             }
             _context.WagonTrips.AddRange(WagonTrips);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new { id = model.TrainTrip.TrainTripId });
         }
 
         // GET: TrainTrips/Edit/5

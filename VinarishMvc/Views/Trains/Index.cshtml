@@ -1,23 +1,23 @@
 ﻿@model IEnumerable<VinarishMvc.Models.Train>
 
-    @{
+@{
     ViewData["Title"] = Expressions.IndexTitle(Expressions.Trains);
-    }
-    @using VinarishMvc.Areas.Authentication.Data
+}
+@using VinarishMvc.Areas.Authentication.Data
 
-    <h1>@ViewData["Title"]</h1>
-    <style>
-        li {
-            display: block;
-        }
-    </style>
-    <p>
-        <a asp-action="Create" data-toggle="tooltip" data-placement="top" title="@Expressions.AddItemTitle(Expressions.Train)"><i class="fa fa-plus-square fa-2x"></i></a>
-    </p>
-    <div class="container">
-        <ul class="list-group">
-            @foreach (var item in Model)
-            {
+<h1>@ViewData["Title"]</h1>
+<style>
+    li {
+        display: block;
+    }
+</style>
+<p>
+    <a asp-action="Create" data-toggle="tooltip" data-placement="top" title="@Expressions.AddItemTitle(Expressions.Train)"><i class="fa fa-plus-square fa-2x"></i></a>
+</p>
+<div class="container">
+    <ul class="list-group">
+        @foreach (var item in Model)
+        {
             <li class="list-group-item d-flex justify-content-center align-items-center" style="transform:rotate(0);">
                 <a class="stretched-link" href="#accordion-@item.TrainId" data-toggle="collapse"></a>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -32,8 +32,8 @@
                         <div class="dropdown-menu">
                             @if (User.IsInRole(RolesList.Admin.RoleName))
                             {
-                            <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.EditItemTitle(Expressions.Train)<i class="fa fa-edit fa-lg m-2"></i></a>
-                            <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.DeleteItemTitle(Expressions.Train)<i class="fa fa-trash fa-lg m-2"></i></a>
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.EditItemTitle(Expressions.Train)<i class="fa fa-edit fa-lg m-2"></i></a>
+                                <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.TrainId" data-toggle="tooltip" data-placement="top" title="">@Expressions.DeleteItemTitle(Expressions.Train)<i class="fa fa-trash fa-lg m-2"></i></a>
                             }
                             <a class="dropdown-item" asp-action="CreateForTrain" asp-controller="TrainTrips" asp-route-id="@item.TrainId">
                                 <span>@Expressions.AddItemTitle(Expressions.Trip)</span>
@@ -44,22 +44,25 @@
                 </div>
                 @if (item.TrainTrips.Count == 0)
                 {
-                <span>بدون سفر</span>
+                    <span>بدون سفر</span>
                 }
                 else
                 {
-                @foreach (var tr in item.TrainTrips)
-                {
-                <a asp-controller="TrainTrips" asp-action="Details" asp-route-id="@tr.TrainTripId" class="list-group-item list-group-item-action @Utilities.ActiveToday(tr.DateTime)">
-                    @Html.DisplayFor(modelItem => tr.DateTime):
-                    @foreach (var w in tr.WagonsOfTrip)
                     {
-                    <span class="badge badge-dark">@w.Wagon.Number</span>
+                        var trips = item.TrainTrips.OrderByDescending(tt => tt.DateTime).ToList();
+                        @foreach (var tr in trips)
+                        {
+                            <a asp-controller="TrainTrips" asp-action="Details" asp-route-id="@tr.TrainTripId" class="list-group-item list-group-item-action @Utilities.ActiveToday(tr.DateTime)">
+                                @Html.DisplayFor(modelItem => tr.DateTime):
+                                @foreach (var w in tr.WagonsOfTrip)
+                                {
+                                    <span class="badge badge-dark">@w.Wagon.Number</span>
+                                }
+                            </a>
+                        }
                     }
-                </a>
-                }
                 }
             </li>
-            }
-        </ul>
-    </div>
+        }
+    </ul>
+</div>

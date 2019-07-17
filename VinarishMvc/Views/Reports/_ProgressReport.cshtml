@@ -33,7 +33,7 @@
         <div id="body-footer-@Model.ReportId" class="collapse hsparent">
             <div class="card-group">
                 <div class="card" style="margin:0;">
-                    <div class="card-footer btn-group" dir="ltr">
+                    <div class="card-footer btn-group-vertical" dir="ltr">
                         <a asp-controller="Reports" asp-action="Edit" asp-route-id="@Model.ReportId" role="button" class="btn btn-info">
                             @(Expressions.Edit)
                             <i class="fa fa-edit fa-lg m-2"></i>
@@ -50,39 +50,39 @@
                 </div>
                 @foreach (Report r in Model.AppendixReports)
                 {
-                    <div class="card" style="margin:0;">
-                        <div class="card-body">
-                            <div class="container">
-                                <span>
-                                    @Html.DisplayFor(modelItem => r.DateTimeCreated)
-                                </span>
-                                <span>
-                                    @Html.DisplayFor(modelItem => r.Site.Name)
-                                </span>
-                                <br />
-                                <span>
-                                    @Html.DisplayFor(modelItem => r.DeviceStatus.Text)
-                                </span>
-                                <br />
-                                <span>
-                                    @Html.DisplayFor(modelItem => r.Reporter.UserName)
-                                </span>
-                                <br />
-                                <span>
-                                    @foreach (var a in r.Assistants)
+                <div class="card" style="margin:0;">
+                    <div class="card-body">
+                        <div class="container">
+                            <span>
+                                @Html.DisplayFor(modelItem => r.DateTimeCreated)
+                            </span>
+                            <span>
+                                @Html.DisplayFor(modelItem => r.Site.Name)
+                            </span>
+                            <br />
+                            <span>
+                                @Html.DisplayFor(modelItem => r.DeviceStatus.Text)
+                            </span>
+                            <br />
+                            <span>
+                                @Html.DisplayFor(modelItem => r.Reporter.UserName)
+                            </span>
+                            <br />
+                            <span>
+                                @foreach (var a in r.Assistants)
                                     {
-                                        <span class="badge badge-info">@Html.DisplayFor(modelItem => a.Person.UserName)</span>
+                                <span class="badge badge-info">@Html.DisplayFor(modelItem => a.Person.UserName)</span>
                                     }
-                                </span>
-                            </div>
+                            </span>
                         </div>
-                        @*<div class="card-footer">
-                                <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@r.ReportId">
-                                    <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
-                                    <i class="fa fa-trash  fa-lg m-2"></i>
-                                </a>
-                            </div>*@
                     </div>
+                    @*<div class="card-footer">
+                            <a class="btn btn-dark" asp-action="Delete" asp-controller="Reports" asp-route-id="@r.ReportId">
+                                <span>@Expressions.DeleteItemTitle(Expressions.Report)</span>
+                                <i class="fa fa-trash  fa-lg m-2"></i>
+                            </a>
+                        </div>*@
+                </div>
                 }
             </div>
         </div>
