@@ -26,10 +26,11 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using VinarishMvc.Areas.Authentication.Models;
 using VinarishMvc.Areas.Identity.Models;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace VinarishMvc.Data
 {
-    public partial class ApplicationDbContext : IdentityDbContext<VinarishUser>
+    public partial class ApplicationDbContext : IdentityDbContext<VinarishUser>, IDataProtectionKeyContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

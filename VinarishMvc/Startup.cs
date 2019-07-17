@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -33,7 +34,8 @@ namespace VinarishMvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDataProtection().SetApplicationName("Vinarish")
-                .PersistKeysToFileSystem(new DirectoryInfo(_environment.WebRootPath + @"\Keys"));
+                        .PersistKeysToDbContext<ApplicationDbContext>();
+            //.PersistKeysToRegistry(Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Vinarish\keys"));
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("fa-IR");
