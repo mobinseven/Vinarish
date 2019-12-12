@@ -29,6 +29,10 @@ namespace VinarishApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddPolicy("AllowAnyOrigin", p => p.AllowAnyOrigin()
+                                                                    .AllowAnyMethod()
+                                                                     .AllowAnyHeader()));
+
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("fa-IR");
@@ -46,6 +50,7 @@ namespace VinarishApi
 
                     options.Audience = "VinarishApi";
                 });
+            services.AddRouting(r => r.SuppressCheckForUnhandledSecurityMetadata = true);// TODO: is it unsafe?
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +60,7 @@ namespace VinarishApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors("AllowAnyOrigin");
 
             app.UseHttpsRedirection();
 
