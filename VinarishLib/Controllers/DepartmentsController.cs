@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VinarishApi.Models;
+using VinarishLib.Models;
 
-namespace VinarishApi.Controllers
+namespace VinarishLib.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,6 +26,14 @@ namespace VinarishApi.Controllers
         public async Task<ActionResult<IEnumerable<Department>>> GetDepartments()
         {
             return await _context.Departments.ToListAsync();
+        }
+
+        [HttpGet("asyncsale")]
+        public async Task<ActionResult<IEnumerable<Department>>> GetDepartmentsAsync()
+        {
+            List<Department> deps = await _context.Departments.ToListAsync();
+            deps.Add(new Department { Name = "TEST" });
+            return deps;
         }
 
         // GET: api/Departments/5
@@ -83,7 +91,7 @@ namespace VinarishApi.Controllers
             _context.Departments.Add(department);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDepartment", new { id = department.DepartmentId }, department);
+            return department;
         }
 
         // DELETE: api/Departments/5

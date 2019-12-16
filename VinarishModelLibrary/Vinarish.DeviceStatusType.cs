@@ -17,7 +17,7 @@ using System.Data.Common;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace VinarishApi.Models
+namespace VinarishLib.Models
 {
     public enum DeviceStatusType : int
     {

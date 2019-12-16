@@ -8,22 +8,19 @@
 // the code is regenerated.
 //------------------------------------------------------------------------------
 
-using System;
-using System.Data;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Data.Common;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace VinarishLib.Models
 {
-    public enum ReportStatus : int
+    public enum DeviceStatusType : int
     {
-        Waiting,
-        InProgress,
-        Processed,
-        Postponed,
-        IsChild
+        [Display(Name = Expressions.DeviceStatusMalfunction)]
+        Malfunction,
+
+        [Display(Name = Expressions.DeviceStatusRepair)]
+        Repair,
+
+        [Display(Name = Expressions.DeviceStatusNRepair)]
+        Unrepairable
     }
 }
