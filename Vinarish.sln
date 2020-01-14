@@ -13,6 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinarishModelLibrary", "Vin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinarishLib", "VinarishLib\VinarishLib.csproj", "{95AF21E5-404A-4C14-B1AE-3DDDC20B60CC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinarishCsb.Server", "..\VinarishCSB\src\VinarishCsb.Server\VinarishCsb.Server.csproj", "{91F062C9-4C24-4887-824A-64CA2B36BAE6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinarishCsb.Client", "..\VinarishCSB\src\VinarishCsb.Client\VinarishCsb.Client.csproj", "{F8317086-FFB0-4850-8879-1FC52F777AAD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinarishCsb.Shared", "..\VinarishCSB\src\VinarishCsb.Shared\VinarishCsb.Shared.csproj", "{22124354-9E31-434E-A6AD-49C5664618A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +45,18 @@ Global
 		{95AF21E5-404A-4C14-B1AE-3DDDC20B60CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95AF21E5-404A-4C14-B1AE-3DDDC20B60CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95AF21E5-404A-4C14-B1AE-3DDDC20B60CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91F062C9-4C24-4887-824A-64CA2B36BAE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91F062C9-4C24-4887-824A-64CA2B36BAE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F062C9-4C24-4887-824A-64CA2B36BAE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91F062C9-4C24-4887-824A-64CA2B36BAE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8317086-FFB0-4850-8879-1FC52F777AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8317086-FFB0-4850-8879-1FC52F777AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8317086-FFB0-4850-8879-1FC52F777AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8317086-FFB0-4850-8879-1FC52F777AAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22124354-9E31-434E-A6AD-49C5664618A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22124354-9E31-434E-A6AD-49C5664618A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22124354-9E31-434E-A6AD-49C5664618A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22124354-9E31-434E-A6AD-49C5664618A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
