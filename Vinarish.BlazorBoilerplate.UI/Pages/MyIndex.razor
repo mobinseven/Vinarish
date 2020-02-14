@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/MyIndex"
 
 <h1><img src="_content/BlazorBoilerplate.CommonUI/images/blazor-boilerplate-title.png" alt="Loading" title="Blazor Boilerplate" style="max-width: 100%;" /></h1>
 
@@ -110,7 +110,8 @@
     {
         await base.OnInitializedAsync();
 
-        await Task.Delay(TimeSpan.FromSeconds(3)).ContinueWith((_) => {
+        await Task.Delay(TimeSpan.FromSeconds(3)).ContinueWith((_) =>
+        {
             this.lazySnackbarIsOpen = true;
         });
     }

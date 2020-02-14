@@ -65,7 +65,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: DeviceStatus/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -97,7 +97,7 @@ namespace VinarishMvc.Controllers
         }
 
         // POST: DeviceStatus/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -185,7 +185,8 @@ namespace VinarishMvc.Controllers
             public DeviceStatusType DeviceStatusType { get; set; }
             public IFormFile File { get; set; }
         }
-        // POST: DevicePlaces/Upload
+
+        // POST: DeviceStatus/Upload
         [HttpPost, ActionName("Upload")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upload(UploadViewModel model)
@@ -255,13 +256,9 @@ namespace VinarishMvc.Controllers
                         if (_context.DeviceStatus.Any(ds => ds.Code == code)) continue;
                         var text = (string)((object[,])(worksheet.Cells.Value))[i, 1];
                         if (_context.DeviceStatus.Any(ds => ds.Text == text)) continue;
-                        var dtidCell = (string)((object[,])(worksheet.Cells.Value))[i, 2];
-                        DeviceType dt = null;
-                        if (dtidCell != null)
-                            dt = _context.DeviceTypes.Where(x => x.Name == dtidCell).FirstOrDefault();
                         DeviceStatus.Add(new DeviceStatus
                         {
-                            DeviceTypeId = dt?.DeviceTypeId,
+                            DeviceTypeId = null,
                             Code = code,
                             Text = text,
                             DeviceStatusType = DeviceStatusType.Unrepairable
@@ -279,11 +276,14 @@ namespace VinarishMvc.Controllers
         {
             [DisplayName(Expressions.Code)]
             public string Code { get; set; }
+
             //[DisplayName(Expressions.DeviceStatusMalfunction)]
             public string Text { get; set; }
+
             [DisplayName(Expressions.DeviceTypes)]
             public string DeviceType { get; set; }
         }
+
         public FileResult Download()
         {
             string fileName = _env.WebRootPath + @"\Excel\DeviceStatus.xlsx";
@@ -311,7 +311,6 @@ namespace VinarishMvc.Controllers
                 worksheet.Cells["B2"].Value = Expressions.DeviceStatusRepair;
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
-
                 IList<DeviceStatusTableType> DeviceStatusNep = _context.DeviceStatus
                     .Where(ds => ds.DeviceStatusType == DeviceStatusType.Unrepairable)
                     .Select(ds => new DeviceStatusTableType { Code = ds.Code, Text = ds.Text, DeviceType = ds.DeviceType.Name })
@@ -321,7 +320,6 @@ namespace VinarishMvc.Controllers
                 worksheet.Cells["B2"].Value = Expressions.DeviceStatusNRepair;
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                 ExcelPackage.Save();
-
             }
             return PhysicalFile(fileName, "	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Expressions.DeviceStatus + ".xlsx");
         }

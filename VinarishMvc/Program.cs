@@ -27,7 +27,7 @@ namespace VinarishMvc
                 //dbContext.Database.Migrate();
                 var functional = services.ServiceProvider.GetRequiredService<IFunctional>();
 
-                //DbInitializer.Initialize(dbContext, functional).Wait();
+                DbInitializer.Initialize(dbContext, functional).Wait();
             }
 
             host.Run();

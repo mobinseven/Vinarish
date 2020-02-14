@@ -102,9 +102,9 @@ namespace VinarishMvc.Controllers
         }
 
         // GET: Reports/CreateTripReport/[WagonTripId]
-        public IActionResult CreateTripReport(Guid id)
+        public async Task<IActionResult> CreateTripReport(Guid id)
         {
-            WagonTrip wagonTrip = _context.WagonTrips.Find(id);
+            WagonTrip wagonTrip = await _context.WagonTrips.Include(wt => wt.Wagon).Where(wt => wt.WagonTripId == id).FirstOrDefaultAsync();
             Wagon wagon = wagonTrip.Wagon;
             CreateViewModel model = new CreateViewModel();
             model.Report.WagonId = wagon.WagonId;

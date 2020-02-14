@@ -46,10 +46,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\blazorboilerplate.customized\src\BlazorBoilerplate.Shared\BlazorBoilerplate.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\fonts\fontawesome\" />
   </ItemGroup>
 </Project>
